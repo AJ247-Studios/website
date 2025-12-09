@@ -94,7 +94,7 @@ export default function ChatWidget() {
       {/* Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 z-50"
+        className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 z-50"
         aria-label="Toggle chat"
       >
         {isOpen ? (
@@ -130,9 +130,9 @@ export default function ChatWidget() {
 
       {/* Chat Panel */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 h-[32rem] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl flex flex-col z-50 animate-in slide-in-from-bottom-4 duration-300">
+        <div className="fixed bottom-24 right-6 w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl flex flex-col z-50" style={{ height: '32rem' }}>
           {/* Header */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-2xl">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-blue-600 rounded-t-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
@@ -184,28 +184,29 @@ export default function ChatWidget() {
                 key={idx}
                 className={`flex ${
                   msg.role === "user" ? "justify-end" : "justify-start"
-                } animate-in fade-in slide-in-from-bottom-2 duration-300`}
+                }`}
+                style={{ animation: 'fadeIn 0.3s ease-in' }}
               >
                 <div
                   className={`max-w-[80%] px-4 py-3 rounded-2xl ${
                     msg.role === "user"
-                      ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-br-sm"
+                      ? "bg-blue-600 text-white rounded-br-sm"
                       : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded-bl-sm"
                   } shadow-sm`}
                 >
-                  <p className="text-sm whitespace-pre-wrap break-words">
+                  <p className="text-sm whitespace-pre-wrap" style={{ wordBreak: 'break-word' }}>
                     {msg.content}
                   </p>
                 </div>
               </div>
             ))}
             {loading && (
-              <div className="flex justify-start animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="flex justify-start" style={{ animation: 'fadeIn 0.3s ease-in' }}>
                 <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite 0.1s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite 0.2s' }}></div>
                   </div>
                 </div>
               </div>
@@ -229,7 +230,7 @@ export default function ChatWidget() {
               <button
                 onClick={sendMessage}
                 disabled={loading || !input.trim()}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-5 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg flex items-center justify-center"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg flex items-center justify-center"
                 title="Send message"
               >
                 {loading ? (
@@ -277,18 +278,13 @@ export default function ChatWidget() {
       )}
 
       <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         @keyframes bounce {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-4px); }
-        }
-        .animate-bounce {
-          animation: bounce 1s infinite;
-        }
-        .delay-100 {
-          animation-delay: 0.1s;
-        }
-        .delay-200 {
-          animation-delay: 0.2s;
         }
       `}</style>
     </>
