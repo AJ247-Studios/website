@@ -1,0 +1,256 @@
+SYSTEM INSTRUCTIONS FOR COPILOT (DO NOT ALTER):
+You are assisting in building a production-ready business website for AJ247 Studios using Next.js, TypeScript, Tailwind CSS, Supabase, and Vercel.
+Your output must follow the standards and architecture defined below.
+
+PROJECT GOAL
+
+Create a fast, modern, scalable website deployed on Vercel, with:
+
+A clean, minimal design system
+
+A dynamic portfolio fed by Supabase (images + optional YouTube links)
+
+A built-in AI chat powered by an internal API route that calls the OpenAI Chat Completions API
+
+A simple admin area for media uploads
+
+High performance, zero bloat, clean reusable components
+
+All code must be TypeScript, accessible, and easy to extend.
+
+TECH REQUIREMENTS
+Framework
+
+Next.js (latest version)
+
+App Router or Pages Router acceptable, but prefer App Router
+
+Use server components unless a client component is needed
+
+Deploy-ready structure for Vercel
+
+Styling
+
+Tailwind CSS with preflight
+
+Create utility-first components
+
+Minimal custom CSS unless required
+
+Components to Generate
+
+Copilot must generate the following reusable components when asked:
+
+Header
+
+Footer
+
+HeroSection
+
+PortfolioGrid (dynamic)
+
+PortfolioCard
+
+ContactButton
+
+ChatWidget (floating bubble → opens chat panel)
+
+UploadForm (admin only)
+
+YouTubeEmbed
+
+ImagePreview (responsive, uses next/image)
+
+All components must be TypeScript, functional, and exported cleanly.
+
+SUPABASE REQUIREMENTS
+Tables
+
+Copilot should assume the following table schema:
+
+Table: media
+
+column	type	notes
+id	uuid	primary key
+filename	text	path in Supabase storage
+url	text	public URL
+title	text	optional
+description	text	optional
+youtube_id	text	optional
+uploaded_by	text	user id
+created_at	timestamp	default now()
+Storage
+
+Bucket name: portfolio
+
+Use signed URL uploads for security
+
+Public read access only
+
+Admin UI must authenticate via Supabase Auth
+
+Admin Panel Requirements
+
+Login page (email + password)
+
+Upload page (drag-and-drop or file input)
+
+Multi-file upload supported
+
+After upload, metadata written into media table
+
+Automatic thumbnail support via Next.js Image component
+
+OPENAI CHAT INTEGRATION
+API Route
+
+Copilot must always create the following route:
+
+/app/api/chat/route.ts
+
+
+It must:
+
+Accept POST { messages: [...] }
+
+Call OpenAI Chat Completions API using environment variable:
+
+OPENAI_API_KEY
+
+Use model: "gpt-4o-mini"
+
+Never expose API key to the client
+
+Return the assistant message content as JSON
+
+Chat Widget Behavior
+
+Floating icon on bottom-right
+
+Opens a panel or modal
+
+Uses /api/chat to send/receive messages
+
+Maintains UI state locally
+
+Must be lightweight (<100 lines)
+
+STRUCTURE AND ARCHITECTURE
+/app
+  /api
+    /chat/route.ts
+  /admin
+    page.tsx
+    /upload
+      page.tsx
+  /portfolio
+    page.tsx
+  layout.tsx
+  page.tsx
+
+/components
+  Header.tsx
+  Footer.tsx
+  HeroSection.tsx
+  PortfolioGrid.tsx
+  PortfolioCard.tsx
+  ChatWidget.tsx
+  UploadForm.tsx
+  YouTubeEmbed.tsx
+  ImagePreview.tsx
+
+/lib
+  supabaseClient.ts
+  api.ts
+  utils.ts
+
+/styles
+  globals.css
+
+CODING STANDARDS
+
+TypeScript everywhere
+
+Use async/await
+
+No unused code or placeholder comments
+
+Clean imports, no relative hell; use @/components/... with configured tsconfig.paths
+
+Minimal dependencies
+
+Break code into smaller components instead of writing huge files
+
+Error handling required
+
+Performance optimization preferred (next/image, lazy loading, streaming server components)
+
+WHEN THE USER ASKS FOR ANY FEATURE:
+
+Copilot must:
+
+Create the file and folder paths automatically
+
+Generate complete working code
+
+Ensure it integrates cleanly with the rest of the architecture
+
+Avoid repetition; use shared components
+
+Add explanatory comments only when helpful
+
+WHEN GENERATING LAYOUTS AND PAGES
+
+Always include <Header /> and <Footer />
+
+Keep layout minimal and centered
+
+Use Tailwind spacing properly (max-w-7xl, mx-auto, px-4)
+
+WHEN GENERATING PORTFOLIO FEATURES
+
+Fetch from Supabase using the media table
+
+Sort by created_at desc
+
+If youtube_id exists → render YouTubeEmbed
+
+Otherwise → render responsive ImagePreview
+
+WHEN GENERATING THE ADMIN PANEL
+
+Protect routes using Supabase Auth client-side or server-side session check
+
+Include upload form + metadata fields
+
+After upload:
+
+Upload file to storage
+
+Insert metadata to table
+
+Refresh or show success message
+
+WHEN GENERATING DEPLOYMENT FILES
+
+Copilot must:
+
+Configure next.config.js for remote images (Supabase storage domain)
+
+Add .env.example with all required keys
+
+Prepare for Vercel deployment with zero modification
+
+YOUR ROLE (COPILOT)
+
+When the user writes code, asks for a new feature, modifies structure, or needs a component, you must:
+
+Extend the project consistently
+
+Generate code following these rules
+
+Never suggest frameworks outside the chosen stack
+
+Never output quick hacks
+
+Always follow production-quality standards

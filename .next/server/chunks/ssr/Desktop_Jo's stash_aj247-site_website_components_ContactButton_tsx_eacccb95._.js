@@ -1,0 +1,3 @@
+module.exports=[65043,a=>{"use strict";var b=a.i(83122);function c(){return(0,b.jsx)("button",{onClick:()=>{window.location.href="mailto:contact@aj247studios.com"},className:"bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors",children:"Get in Touch"})}a.s(["default",()=>c])}];
+
+//# sourceMappingURL=Desktop_Jo%27s%20stash_aj247-site_website_components_ContactButton_tsx_eacccb95._.js.map

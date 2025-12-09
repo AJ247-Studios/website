@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/joban/Desktop/Jo%27s%20stash/aj247-site/website/components/ContactButton.tsx"],"sourcesContent":["\"use client\";\r\n\r\nexport default function ContactButton() {\r\n  const handleContact = () => {\r\n    window.location.href = \"mailto:contact@aj247studios.com\";\r\n  };\r\n\r\n  return (\r\n    <button\r\n      onClick={handleContact}\r\n      className=\"bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors\"\r\n    >\r\n      Get in Touch\r\n    </button>\r\n  );\r\n}\r\n"],"names":[],"mappings":";;;;;AAAA;;AAEe,SAAS;IACtB,MAAM,gBAAgB;QACpB,OAAO,QAAQ,CAAC,IAAI,GAAG;IACzB;IAEA,qBACE,sPAAC;QACC,SAAS;QACT,WAAU;kBACX;;;;;;AAIL;KAbwB"}}]
+}
