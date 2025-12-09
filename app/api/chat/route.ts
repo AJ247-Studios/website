@@ -1,9 +1,4 @@
-import OpenAI from "openai";
-import { NextRequest, NextResponse } from "next/server";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { NextRequest } from "next/server";
 
 // System prompt with project context
 const SYSTEM_PROMPT = `You are an AI assistant for AJ247 Studios, a creative studio specializing in professional photography and videography services.
@@ -23,55 +18,64 @@ Your role is to:
 
 Keep responses concise and focused. Encourage visitors to view our portfolio and reach out for consultations or bookings.`;
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    // Check if API key is configured
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("OPENAI_API_KEY is not configured");
-      return NextResponse.json(
-        { error: "API key not configured" },
-        { status: 500 }
+    const { messages } = await req.json();
+
+    if (!messages || !Array.isArray(messages)) {
+      return Response.json(
+        { error: "Invalid request: messages array required" },
+        { status: 400 }
       );
     }
 
-    const { messages } = await request.json();
-
-    if (!messages || !Array.isArray(messages)) {
-      return NextResponse.json(
-        { error: "Invalid messages format" },
-        { status: 400 }
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      console.error("OPENAI_API_KEY is not configured");
+      return Response.json(
+        { error: "Server configuration error" },
+        { status: 500 }
       );
     }
 
     // Add system prompt to the beginning of messages
     const messagesWithSystem = [
-      { role: "system" as const, content: SYSTEM_PROMPT },
+      { role: "system", content: SYSTEM_PROMPT },
       ...messages,
     ];
 
     console.log("Sending request to OpenAI with", messages.length, "messages");
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: messagesWithSystem,
-      temperature: 0.7,
-      max_tokens: 500,
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: messagesWithSystem,
+        max_tokens: 600
+      })
     });
 
-    const message = completion.choices[0]?.message?.content || "No response";
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("OpenAI API error:", error);
+      return Response.json(
+        { error: "Failed to get response from AI" },
+        { status: response.status }
+      );
+    }
 
+    const data = await response.json();
     console.log("OpenAI response received successfully");
-
-    return NextResponse.json({ message });
+    
+    return Response.json(data);
   } catch (error: any) {
-    console.error("OpenAI API error details:", {
-      message: error.message,
-      type: error.type,
-      code: error.code,
-      status: error.status,
-    });
-    return NextResponse.json(
-      { error: "Failed to process chat request", details: error.message },
+    console.error("Chat API error:", error);
+    return Response.json(
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

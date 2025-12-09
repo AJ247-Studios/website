@@ -54,9 +54,15 @@ export default function ChatWidget() {
       }
 
       const data = await response.json();
+      
+      // Extract message from OpenAI response format
+      const assistantContent = data.choices?.[0]?.message?.content || 
+                              data.message || 
+                              "I apologize, but I couldn't generate a response.";
+      
       const assistantMessage: Message = {
         role: "assistant",
-        content: data.message || "I apologize, but I couldn't generate a response.",
+        content: assistantContent,
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
