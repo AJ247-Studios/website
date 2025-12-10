@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
+import type { Session } from "@supabase/supabase-js";
 
 interface Message {
   role: "user" | "assistant";
@@ -24,7 +25,7 @@ export default function ChatWidget() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [guestCount, setGuestCount] = useState(0);
   const GUEST_LIMIT = 3;
 
@@ -53,19 +54,48 @@ export default function ChatWidget() {
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
+    // Check guest limit before sending
+    if (!session && guestCount >= GUEST_LIMIT) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "You've reached the guest message limit. Please log in to continue chatting.",
+        },
+      ]);
+      return;
+    }
+
     const userMessage: Message = { role: "user", content: input.trim() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
+    // Increment guest count if not logged in
+    if (!session) {
+      setGuestCount((prev) => prev + 1);
+    }
+
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      
+      // Add Authorization header if user is logged in
+      if (session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      }
+
       const response = await fetch(chatEndpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ messages: [...messages, userMessage] }),
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.promptLogin) {
+          // Backend says login required
+          throw new Error(errorData.error || "Please log in to continue");
+        }
         throw new Error("Failed to get response");
       }
 
@@ -83,13 +113,13 @@ export default function ChatWidget() {
         content: assistantContent,
       };
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat error:", error);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "Sorry, I'm having trouble connecting right now. Please try again later.",
+          content: error.message || "Sorry, I'm having trouble connecting right now. Please try again later.",
         },
       ]);
     } finally {
@@ -123,8 +153,13 @@ export default function ChatWidget() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setSession(null);
-    setMessages([]);
     setGuestCount(0);
+    setMessages([
+      {
+        role: "assistant",
+        content: "Hi! I'm your AI assistant for AJ247 Studios. How can I help you today?",
+      },
+    ]);
   };
 
   return (
@@ -190,28 +225,41 @@ export default function ChatWidget() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">AI Assistant</h3>
-                  <p className="text-xs text-blue-100">Always here to help</p>
+                  <p className="text-xs text-blue-100">
+                    {session ? `Welcome, ${session.user?.email}` : `Guest (${guestCount}/${GUEST_LIMIT} messages)`}
+                  </p>
                 </div>
               </div>
-              <button
-                onClick={clearChat}
-                className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
-                title="Clear chat"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <div className="flex items-center gap-2">
+                {session && (
+                  <button
+                    onClick={handleLogout}
+                    className="text-white hover:bg-white/20 px-3 py-1 rounded-lg transition-colors text-xs"
+                    title="Logout"
+                  >
+                    Logout
+                  </button>
+                )}
+                <button
+                  onClick={clearChat}
+                  className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
+                  title="Clear chat"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -254,212 +302,105 @@ export default function ChatWidget() {
 
           {/* Input */}
           <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-            <div className="flex gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-shadow"
-                disabled={loading}
-              />
-              <button
-                onClick={sendMessage}
-                disabled={loading || !input.trim()}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg flex items-center justify-center"
-                title="Send message"
-              >
-                {loading ? (
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-              Powered by OpenAI GPT-4o-mini
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Auth Panel - Shown when not logged in */}
-      {!session && isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl flex flex-col z-50" style={{ height: '32rem' }}>
-          {/* Header */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-blue-600 rounded-t-2xl">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-6 h-6 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">AI Assistant</h3>
-                  <p className="text-xs text-blue-100">Always here to help</p>
-                </div>
-              </div>
-              <button
-                onClick={clearChat}
-                className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
-                title="Clear chat"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            {!session && guestCount >= GUEST_LIMIT ? (
+              <div className="space-y-3">
+                <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                  You've reached the guest limit. Log in to continue chatting!
+                </p>
+                <div className="space-y-2">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-950">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`flex ${
-                  msg.role === "user" ? "justify-end" : "justify-start"
-                }`}
-                style={{ animation: 'fadeIn 0.3s ease-in' }}
-              >
-                <div
-                  className={`max-w-[80%] px-4 py-3 rounded-2xl ${
-                    msg.role === "user"
-                      ? "bg-blue-600 text-white rounded-br-sm"
-                      : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded-bl-sm"
-                  } shadow-sm`}
-                >
-                  <p className="text-sm whitespace-pre-wrap" style={{ wordBreak: 'break-word' }}>
-                    {msg.content}
-                  </p>
-                </div>
-              </div>
-            ))}
-            {loading && (
-              <div className="flex justify-start" style={{ animation: 'fadeIn 0.3s ease-in' }}>
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite 0.1s' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite 0.2s' }}></div>
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleAuth("signInWithPassword")}
+                      disabled={loading}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg disabled:opacity-50 transition-colors"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() => handleAuth("signUp")}
+                      disabled={loading}
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg disabled:opacity-50 transition-colors"
+                    >
+                      Sign Up
+                    </button>
                   </div>
                 </div>
               </div>
+            ) : (
+              <>
+                <div className="flex gap-2">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Type your message..."
+                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-shadow"
+                    disabled={loading}
+                  />
+                  <button
+                    onClick={sendMessage}
+                    disabled={loading || !input.trim()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg flex items-center justify-center"
+                    title="Send message"
+                  >
+                    {loading ? (
+                      <svg
+                        className="animate-spin h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                  Powered by OpenAI GPT-4o-mini
+                </p>
+              </>
             )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-            <div className="flex gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-shadow"
-                disabled={loading}
-              />
-              <button
-                onClick={sendMessage}
-                disabled={loading || !input.trim()}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg flex items-center justify-center"
-                title="Send message"
-              >
-                {loading ? (
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-              Powered by OpenAI GPT-4o-mini
-            </p>
           </div>
         </div>
       )}
