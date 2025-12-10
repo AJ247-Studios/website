@@ -8,6 +8,9 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json()
 
+    console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log('Service key exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY)
+
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!  // safer for reading a single row
