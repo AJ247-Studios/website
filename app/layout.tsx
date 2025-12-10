@@ -9,6 +9,10 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 export const metadata: Metadata = {
   title: "AJ247 Studios",
   description: "Exceptional digital experiences through innovative design and cutting-edge technology",
+  icons: {
+    icon: '/favicon.ico',
+    // or: icon: '/favicon.png'
+  },
 };
 
 export default function RootLayout({
