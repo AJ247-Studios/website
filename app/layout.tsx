@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "AJ247 Studios",
@@ -23,6 +24,7 @@ export default function RootLayout({
         <Footer />
         <ChatWidget />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
