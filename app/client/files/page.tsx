@@ -22,18 +22,22 @@ type FileRecord = {
  * Displays files uploaded by the current user.
  */
 export default function ClientFilesPage() {
-  const { supabase, session, isLoading: sessionLoading } = useSupabase();
+  const { supabase, session } = useSupabase();
   const [files, setFiles] = useState<FileRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated (with delay to allow hydration)
   useEffect(() => {
-    if (!sessionLoading && !session) {
-      router.push("/login?redirect=/client/files");
+    if (session === null) {
+      // Small delay to ensure we're not redirecting during hydration
+      const timer = setTimeout(() => {
+        router.push("/login?redirect=/client/files");
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [session, sessionLoading, router]);
+  }, [session, router]);
 
   // Load files when session is available
   useEffect(() => {
@@ -61,10 +65,13 @@ export default function ClientFilesPage() {
 
     if (session) {
       loadFiles();
+    } else {
+      // No session - stop loading (redirect will happen)
+      setLoading(false);
     }
   }, [session, supabase]);
 
-  if (sessionLoading || loading) {
+  if (loading) {
     return (
       <div className="max-w-4xl mx-auto p-6">
         <div className="text-center">
