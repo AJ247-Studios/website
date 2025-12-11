@@ -15,12 +15,6 @@ interface UserProfile {
 
 export default function ProfilePage() {
   const { supabase, session, role: userRole } = useSupabase();
-  
-  console.log("[ProfilePage] Render with:", {
-    hasSession: !!session,
-    userId: session?.user?.id || "none",
-    userRole,
-  });
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("");
@@ -37,13 +31,11 @@ export default function ProfilePage() {
 
   // Redirect if not authenticated (only after confirming no session)
   useEffect(() => {
-    console.log("[ProfilePage] Redirect check - session:", !!session);
     // Don't redirect immediately - give time for session to be established
     // The session comes from initialSession in SupabaseProvider, which comes from server
     if (session === null) {
       // Small delay to ensure we're not redirecting during hydration
       const timer = setTimeout(() => {
-        console.log("[ProfilePage] No session after delay, redirecting to login");
         router.push("/login");
       }, 100);
       return () => clearTimeout(timer);
@@ -60,15 +52,11 @@ export default function ProfilePage() {
 
     const loadProfile = async () => {
       // Fetch user profile from user_profiles table
-      const { data: prof, error } = await supabase
+      const { data: prof } = await supabase
         .from('user_profiles')
         .select('role, display_name, avatar_url')
         .eq('id', session.user.id)
         .maybeSingle();
-      
-      if (error) {
-        console.error("[ProfilePage] Error fetching profile:", error.message);
-      }
 
       setProfile({
         email: session.user.email || "",

@@ -22,13 +22,6 @@ export const SupabaseProvider = ({
   initialSession?: Session | null;
   initialRole?: string | null;
 }) => {
-  // Log what we received from server
-  console.log("[SupabaseProvider] Initializing with:", {
-    hasInitialSession: !!initialSession,
-    initialUserId: initialSession?.user?.id || "none",
-    initialRole: initialRole,
-  });
-
   // Create a single Supabase client instance for browser (singleton)
   const [supabase] = useState(() => createClientBrowser());
   
@@ -40,33 +33,22 @@ export const SupabaseProvider = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    console.log("[SupabaseProvider] useEffect running, setting up auth listener");
-    
     // Listen for auth state changes (login, logout, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
-        console.log("[SupabaseProvider] Auth state change:", {
-          event,
-          hasNewSession: !!newSession,
-          newUserId: newSession?.user?.id || "none",
-        });
-        
         // Update session
         setSession(newSession);
         
         // Only refetch role on actual sign in/out (not token refresh)
         if (event === "SIGNED_IN" && newSession?.user) {
-          console.log("[SupabaseProvider] SIGNED_IN - fetching role...");
           // Fetch role from user_profiles
-          const { data: profile, error } = await supabase
+          const { data: profile } = await supabase
             .from("user_profiles")
             .select("role")
             .eq("id", newSession.user.id)
             .maybeSingle();
-          console.log("[SupabaseProvider] Role fetch result:", { profile, error: error?.message });
           setRole(profile?.role || "user");
         } else if (event === "SIGNED_OUT") {
-          console.log("[SupabaseProvider] SIGNED_OUT - clearing role");
           setRole(null);
         }
       }
@@ -74,7 +56,6 @@ export const SupabaseProvider = ({
 
     // Cleanup subscription on unmount
     return () => {
-      console.log("[SupabaseProvider] Cleaning up auth listener");
       subscription.unsubscribe();
     };
   }, [supabase]);
