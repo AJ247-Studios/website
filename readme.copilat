@@ -1,256 +1,385 @@
-SYSTEM INSTRUCTIONS FOR COPILOT (DO NOT ALTER):
-You are assisting in building a production-ready business website for AJ247 Studios using Next.js, TypeScript, Tailwind CSS, Supabase, and Vercel.
-Your output must follow the standards and architecture defined below.
+# AJ247 Studios — Website: Full Specification & RBAC
 
-PROJECT GOAL
+> Complete product spec: roles, permissions, data models, API endpoints, UI flows, admin tools, acceptance criteria, and prioritized MVP roadmap.
 
-Create a fast, modern, scalable website deployed on Vercel, with:
+---
 
-A clean, minimal design system
+## 1. Purpose & Scope
 
-A dynamic portfolio fed by Supabase (images + optional YouTube links)
+This document describes the current website architecture, all capabilities, and exact privileges for each user type: **Guest**, **Client**, **Team Member**, and **Admin** (future roles: **Vendor**, etc.). It is written to be a developer-facing product spec and a checklist for building the MVP and next phases.
 
-A built-in AI chat powered by an internal API route that calls the OpenAI Chat Completions API
+Target audience: developers (frontend/backend), product owner (you), and business stakeholders.
 
-A simple admin area for media uploads
+---
 
-High performance, zero bloat, clean reusable components
+## 2. High-level capabilities
 
-All code must be TypeScript, accessible, and easy to extend.
+* Public portfolio pages (galleries, project pages, highlight reels)
+* Client signup, quotes/booking, subscription & invoices
+* Media upload, delivery, and galleries (clients & public)
+* Secure, role-based dashboard for Clients, Team Members, and Admins
+* In-app chat / Q&A (GPT-powered or simple messaging)
+* File storage, transcoding, thumbnails, watermarks
+* Billing (one-off payments, subscriptions, invoices)
+* Team collaboration: assign tasks, mark deliverables, approve proofs
+* Audit logs and activity feed for compliance and accountability
 
-TECH REQUIREMENTS
-Framework
+---
 
-Next.js (latest version)
+## 3. Roles & Permissions (RBAC)
 
-App Router or Pages Router acceptable, but prefer App Router
+**Roles:**
 
-Use server components unless a client component is needed
+* `Admin` — full control (manage users/roles, billing, site content, settings)
+* `Team Member` — content creation and project work (upload assets, edit project pages, view assigned client projects)
+* `Client` — view and approve work, purchase services, upload client assets, message team
+* `Guest` — browse public content, request quote, limited chat
 
-Deploy-ready structure for Vercel
+> Permission principle: always deny by default; grant only specific capabilities per role.
 
-Styling
+### Permissions matrix (selected, developer-friendly)
 
-Tailwind CSS with preflight
+* Manage Users: Admin only
+* Invite Users: Admin -> Team Member; Team Member can invite Clients (by email) for projects they own
+* View All Projects: Admin; Team Member only for assigned projects; Client only for their projects
+* Create Projects: Admin & Team Member (Team Member creates under Client or internal)
+* Upload Media: Team Member (assigned projects), Client (their projects), Admin
+* Edit Public Pages/Portfolio: Admin only (or Admin + delegated editor role later)
+* Manage Billing / View Payments: Admin; Client views their invoices/payments
+* Generate Download Links: Admin & Team Member (for client delivery); Client only for their delivered assets
+* Approve Deliverables: Client; Admin can override
+* Access API keys / secrets: Admin only
+* Chat access: Guests (limited), Client (full), Team Member & Admin (full)
 
-Create utility-first components
+---
+
+## 4. User stories & flows (by role)
 
-Minimal custom CSS unless required
+### Guest
 
-Components to Generate
+* Browse portfolio and public galleries
+* Request a quote (submit form -> creates lead record)
+* Start a limited chat (3 messages -> prompt to login/signup)
+* View public pricing page
 
-Copilot must generate the following reusable components when asked:
+### Client
 
-Header
+* Sign up / accept invitation via email
+* See client dashboard: upcoming shoots, invoices, active projects
+* Pay invoices (Stripe) and save payment method
+* Upload assets, annotations, and comments for revisions
+* Approve final deliverables and request changes
+* Download high-res delivered files (expiring links)
+* Chat with team (persistent conversation per project)
+
+### Team Member
 
-Footer
+* Sign up via invite (email link)
+* See assigned projects and deadlines
+* Upload raw/edited media with metadata (tags, focal length, credits)
+* Create project galleries (private or public), mark deliverable status
+* Add time logs, expenses (optional)
+* Request client approval, send notifications
 
-HeroSection
+### Admin
 
-PortfolioGrid (dynamic)
+* Manage users, teams, roles
+* Global settings (site content, payment details, tax, default deliverable settings)
+* Billing admin: create manual invoices, issue refunds, view revenue dashboard
+* Manage public portfolio, featured projects, hero banners
+* View audit logs and change history
+* Configure integrations (Stripe, storage, CDN, GPT/chat service keys)
 
-PortfolioCard
+---
 
-ContactButton
+## 5. Data model (core entities)
 
-ChatWidget (floating bubble → opens chat panel)
+Summary fields only — developer should expand in DB schema.
 
-UploadForm (admin only)
+### User
 
-YouTubeEmbed
+* id (uuid)
+* email (unique)
+* name
+* role (enum)
+* avatar_url
+* invited_by (user id)
+* last_login_at
+* created_at
+* metadata (JSON for prefs)
+
+### Project
+
+* id
+* title
+* client_id (user)
+* description
+* status (lead, booked, in_progress, review, delivered, archived)
+* assigned_team_members [user ids]
+* scheduled_date(s)
+* location
+* created_at, updated_at
+
+### MediaAsset
+
+* id
+* project_id
+* uploaded_by (user)
+* filename, mime_type
+* storage_path / url
+* type (photo, video, raw, edited, deliverable)
+* duration, resolution, size
+* thumbnails (array urls)
+* watermarked_url (optional)
+* metadata (exif, tags, focal_length)
+* created_at
 
-ImagePreview (responsive, uses next/image)
+### Gallery / PublicPage
 
-All components must be TypeScript, functional, and exported cleanly.
+* id
+* title
+* description
+* visibility (public, client-only, team-only)
+* assets_order [media ids]
+* slug
 
-SUPABASE REQUIREMENTS
-Tables
+### Invoice
 
-Copilot should assume the following table schema:
+* id
+* client_id
+* project_id (optional)
+* amount_cents
+* currency
+* status (draft, sent, paid, overdue, refunded)
+* due_date
+* stripe_invoice_id
 
-Table: media
+### ChatSession (optional GPT-enhanced)
 
-column	type	notes
-id	uuid	primary key
-filename	text	path in Supabase storage
-url	text	public URL
-title	text	optional
-description	text	optional
-youtube_id	text	optional
-uploaded_by	text	user id
-created_at	timestamp	default now()
-Storage
+* id
+* project_id (optional)
+* participants [user ids + guest session id]
+* messages [{from, text, timestamp, system_flags}]
 
-Bucket name: portfolio
+### AuditLog
 
-Use signed URL uploads for security
+* id
+* actor_id
+* action_type
+* target_type, target_id
+* details (json)
+* timestamp
 
-Public read access only
+---
 
-Admin UI must authenticate via Supabase Auth
+## 6. API endpoints (examples)
 
-Admin Panel Requirements
+REST-style endpoints — adapt to GraphQL if preferred.
 
-Login page (email + password)
+**Auth**
 
-Upload page (drag-and-drop or file input)
+* `POST /auth/signup` (email, password) or invite flow
+* `POST /auth/login`
+* `POST /auth/forgot-password`
+* `POST /auth/invite/accept` (token)
 
-Multi-file upload supported
+**Users**
 
-After upload, metadata written into media table
+* `GET /users/me`
+* `GET /users/:id` (admin only)
+* `POST /users/invite` (admin or team member depending on policy)
+* `PATCH /users/:id` (profile updates)
 
-Automatic thumbnail support via Next.js Image component
+**Projects**
 
-OPENAI CHAT INTEGRATION
-API Route
+* `GET /projects` (filter by role)
+* `POST /projects`
+* `GET /projects/:id`
+* `PATCH /projects/:id`
 
-Copilot must always create the following route:
+**Media**
 
-/app/api/chat/route.ts
+* `POST /projects/:id/assets` (multipart upload, or presigned URL workflow)
+* `GET /assets/:id` (returns metadata + signed url)
+* `GET /projects/:id/gallery` (ordered assets)
+* `POST /assets/:id/transcode` (admin/team only)
 
+**Billing**
 
-It must:
+* `POST /invoices` (admin)
+* `GET /invoices/:id`
+* `POST /payments/charge` (client)
+* Webhook: `POST /webhooks/stripe` (payment events)
 
-Accept POST { messages: [...] }
+**Chat**
 
-Call OpenAI Chat Completions API using environment variable:
+* `GET /projects/:id/chat`
+* `POST /projects/:id/chat/messages`
 
-OPENAI_API_KEY
+**Admin**
 
-Use model: "gpt-4o-mini"
+* `GET /admin/users`
+* `GET /admin/audit-logs`
+* `PATCH /admin/settings`
 
-Never expose API key to the client
+---
 
-Return the assistant message content as JSON
+## 7. Frontend screens & UX flows (MVP focus)
 
-Chat Widget Behavior
+**Public**
 
-Floating icon on bottom-right
+* Home / hero / featured projects
+* Portfolio / galleries (filter by service: sport, event, commercial)
+* Pricing & packages page
+* Quote request form
 
-Opens a panel or modal
+**Auth flows**
 
-Uses /api/chat to send/receive messages
+* Invite link -> accept -> create password -> onboard wizard (upload logo, company info)
+* Email/password login (option: magic link)
 
-Maintains UI state locally
+**Client Dashboard (MVP)**
 
-Must be lightweight (<100 lines)
+* Overview: active projects, unpaid invoices, recent messages
+* Project view: timeline, media gallery, approvals, chat panel
+* Billing: invoices list + pay now
 
-STRUCTURE AND ARCHITECTURE
-/app
-  /api
-    /chat/route.ts
-  /admin
-    page.tsx
-    /upload
-      page.tsx
-  /portfolio
-    page.tsx
-  layout.tsx
-  page.tsx
+**Team Dashboard (MVP)**
 
-/components
-  Header.tsx
-  Footer.tsx
-  HeroSection.tsx
-  PortfolioGrid.tsx
-  PortfolioCard.tsx
-  ChatWidget.tsx
-  UploadForm.tsx
-  YouTubeEmbed.tsx
-  ImagePreview.tsx
+* Assigned projects list with due dates
+* Upload UI: drag & drop, tagging, auto-thumbnail generation
+* Delivery flow: select assets -> package -> deliver -> notify client
 
-/lib
-  supabaseClient.ts
-  api.ts
-  utils.ts
+**Admin Dashboard**
 
-/styles
-  globals.css
+* Site metrics (revenue this period, active clients, open requests)
+* User management UI
+* Content editor for public pages
 
-CODING STANDARDS
+---
 
-TypeScript everywhere
+## 8. Media handling & storage strategy
 
-Use async/await
+* Use presigned upload URLs (S3 / S3-compatible or Cloudflare R2) to avoid large file proxying.
+* Generate thumbnails and low-res proxies on upload (serverless worker / job queue)
+* Store EXIF and custom metadata in DB separate from file storage
+* Deliver via CDN with signed, expiring URLs for client downloads
+* Optional: automatic watermarking for preview assets
+* For video: transcode to H264/HEVC web-friendly variants and generate poster image
 
-No unused code or placeholder comments
+Limits and defaults (MVP): max 5GB per upload, image max 80MB; consider chunked uploads for reliability.
 
-Clean imports, no relative hell; use @/components/... with configured tsconfig.paths
+---
 
-Minimal dependencies
+## 9. Billing & payments
 
-Break code into smaller components instead of writing huge files
+* Use Stripe (recommended) for payments, subscriptions, and invoices.
+* Webhook processing for settled payments -> update Invoice.status
+* Admin interface for manual invoicing and refunds
+* Taxes: store tax_number on Client profile and optionally add tax calculation
 
-Error handling required
+---
 
-Performance optimization preferred (next/image, lazy loading, streaming server components)
+## 10. Security & compliance
 
-WHEN THE USER ASKS FOR ANY FEATURE:
+* Auth: recommended Supabase/Auth0/Clerk for managed auth. Support invite tokens and magic links.
+* Use HTTPS everywhere and secure cookies (httpOnly, secure, SameSite)
+* Role-based access checks on every API endpoint (server-side)
+* Rate-limit public endpoints (quote form, chat) to reduce abuse
+* GDPR: provide data export & delete for client accounts; cookie & privacy policy pages
+* Backups: regular DB backups and snapshotting for file storage
 
-Copilot must:
+---
 
-Create the file and folder paths automatically
+## 11. Notifications & emails
 
-Generate complete working code
+* Transactional emails: invite, password reset, invoice sent, delivery ready
+* In-app notifications and email digests (configurable) for comments and approvals
+* SMS optional for urgent notifications (Twilio)
 
-Ensure it integrates cleanly with the rest of the architecture
+---
 
-Avoid repetition; use shared components
+## 12. Analytics & monitoring
 
-Add explanatory comments only when helpful
+* Track key events: new lead, booked project, invoice paid, deliverable approved
+* Monitor error rates, background job queues, storage costs
+* Use simple dashboards (Admin) and exportable CSVs for accounting
 
-WHEN GENERATING LAYOUTS AND PAGES
+---
 
-Always include <Header /> and <Footer />
+## 13. Acceptance criteria & QA checklist (per feature)
 
-Keep layout minimal and centered
+* Auth: invite acceptance must create user and link projects correctly
+* Uploads: files upload via presigned URL; thumbnails generated within 60s
+* Delivery: client receives email + in-app notification; download link valid for configured period
+* Billing: paid invoices change status and mark project as paid where appropriate
+* Permissions: Team Member cannot access other clients' projects unless assigned
 
-Use Tailwind spacing properly (max-w-7xl, mx-auto, px-4)
+---
 
-WHEN GENERATING PORTFOLIO FEATURES
+## 14. MVP roadmap (priority order)
 
-Fetch from Supabase using the media table
+**Sprint 0 — Setup**
 
-Sort by created_at desc
+* Project repo, infra, CI, env management
+* Basic auth & RBAC
+* Storage bucket + presigned upload flow
 
-If youtube_id exists → render YouTubeEmbed
+**Sprint 1 — Core user experiences (2 weeks)**
 
-Otherwise → render responsive ImagePreview
+* Client signup/invite, dashboard, project CRUD
+* Media upload, thumbnail generation, gallery view
+* Delivery flow + client approvals
 
-WHEN GENERATING THE ADMIN PANEL
+**Sprint 2 — Billing + team flows (2 weeks)**
 
-Protect routes using Supabase Auth client-side or server-side session check
+* Stripe integration, invoices, webhooks
+* Team member invite & assignment, basic admin
+* Notifications
 
-Include upload form + metadata fields
+**Sprint 3 — Polish + Chat + Public site (2 weeks)**
 
-After upload:
+* Public portfolio pages, SEO-friendly slugs
+* In-app chat, small GPT assistant (if wanted)
+* Audit logs, analytics, GDPR features
 
-Upload file to storage
+---
 
-Insert metadata to table
+## 15. Tech stack recommendations (fast, cost-effective MVP)
 
-Refresh or show success message
+* Frontend: Next.js (React) or Remix on Vercel for fast deployment
+* Backend: Supabase (auth + Postgres + storage) or Node.js + Postgres on a managed DB
+* Storage: S3 or Cloudflare R2 + CDN
+* Payments: Stripe
+* Background jobs: serverless functions (Vercel workers) or a small managed worker queue
+* Image/video processing: Lambda / Cloud Run or third-party services (Cloudinary for faster MVP)
 
-WHEN GENERATING DEPLOYMENT FILES
+---
 
-Copilot must:
+## 16. Operational checklist before launch
 
-Configure next.config.js for remote images (Supabase storage domain)
+* Configure Stripe account and webhook endpoints
+* Set up storage buckets & CDN, ensure CORS rules correct for presigned uploads
+* Create admin user, seed test data, and run QA flows
+* Setup monitoring & alerts (errors, job failures)
+* Write privacy/cookie policy and terms of service pages
 
-Add .env.example with all required keys
+---
 
-Prepare for Vercel deployment with zero modification
+## 17. Next concrete deliverables (what I will produce for you next)
 
-YOUR ROLE (COPILOT)
+1. DB schema (Postgres) + migrations for MVP
+2. API route list with request/response schemas
+3. Minimal frontend page wireframes (client dashboard, upload flow, gallery)
 
-When the user writes code, asks for a new feature, modifies structure, or needs a component, you must:
+---
 
-Extend the project consistently
+## 18. Misc notes & edge cases
 
-Generate code following these rules
+* If social media is limited for you (per your constraints), supplier-collaboration flows must prefer email or WhatsApp notifications and downloadable packages.
+* Consider an "offline delivery" option where admin uploads a ZIP and we send an expiring download link.
+* For GDPR, implement a data retention policy (eg 3 years by default) and make it configurable.
 
-Never suggest frameworks outside the chosen stack
+---
 
-Never output quick hacks
-
-Always follow production-quality standards
+*Document authored for AJ247 Studios — keep this spec as living documentation. Update when adding Vendor or other roles.*
