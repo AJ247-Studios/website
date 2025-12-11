@@ -33,32 +33,32 @@ export async function middleware(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get: (name: string) => req.cookies.get(name)?.value,
-        set: (name: string, value: string, options: any) => {
-          // Update both request and response cookies for consistency
-          req.cookies.set({ name, value, ...options });
-          response.cookies.set({ name, value, ...options });
+        getAll() {
+          return req.cookies.getAll();
         },
-        remove: (name: string, options: any) => {
-          // Remove from both request and response
-          req.cookies.delete({ name, ...options });
-          response.cookies.delete({ name, ...options });
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            req.cookies.set(name, value);
+            response.cookies.set(name, value, options);
+          });
         },
       },
     }
   );
 
-  // Get session - this will also refresh the session if the access token is expired
-  // The refresh happens automatically and cookies are updated via the handlers above
+  // IMPORTANT: Use getUser() instead of getSession() for server-side validation
+  // getUser() validates the token with Supabase servers and refreshes if needed
+  // This also triggers cookie updates when tokens are refreshed
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
   const pathname = req.nextUrl.pathname;
 
   // Protect /client and /admin routes - require valid session
   if (pathname.startsWith("/client") || pathname.startsWith("/admin")) {
-    if (!session) {
+    if (!user) {
       const redirectUrl = new URL("/login", req.url);
       redirectUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(redirectUrl);
@@ -70,27 +70,21 @@ export async function middleware(req: NextRequest) {
    * 
    * Use SERVICE_ROLE_KEY (supabaseAdmin) to bypass RLS and fetch the user's role.
    * This is safe because:
-   * 1. We've already verified the session exists
+   * 1. We've already verified the user exists
    * 2. We're only reading the role for the authenticated user
    * 3. SERVICE_ROLE_KEY is server-side only and never exposed to client
    */
-  if (pathname.startsWith("/admin") && session) {
+  if (pathname.startsWith("/admin") && user) {
     try {
       // Use maybeSingle() to handle missing profiles gracefully
       const { data: profile, error: profileError } = await supabaseAdmin
         .from("user_profiles")
         .select("role")
-        .eq("id", session.user.id)
+        .eq("id", user.id)
         .maybeSingle();
 
       // If profile doesn't exist, error occurred, or user is not admin, redirect
       if (profileError || !profile || profile.role !== "admin") {
-        console.warn("[Middleware] Admin access denied:", {
-          userId: session.user.id,
-          email: session.user.email,
-          error: profileError?.message,
-          role: profile?.role || "no profile",
-        });
         // Redirect non-admins to home page
         return NextResponse.redirect(new URL("/", req.url));
       }
@@ -107,12 +101,18 @@ export async function middleware(req: NextRequest) {
 /**
  * Matcher configuration
  * 
- * Only run middleware on protected routes for performance.
- * Add more routes here as needed.
+ * Run middleware on ALL routes to ensure session cookies are refreshed.
+ * Exclude static files, images, and API routes for performance.
  */
 export const config = {
   matcher: [
-    "/client/:path*",
-    "/admin/:path*",
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder files
+     */
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

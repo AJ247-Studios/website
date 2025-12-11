@@ -37,25 +37,39 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get: (name: string) => cookieStore.get(name)?.value,
-        // Note: Server Components can't set cookies, but that's okay
-        // The middleware handles session refresh and cookie updates
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // Server Components can't set cookies - that's okay
+            // The middleware handles session refresh and cookie updates
+          }
+        },
       },
     }
   );
 
-  // Fetch session server-side using ANON_KEY (reads from cookies correctly)
+  // Use getUser() for proper server-side validation
+  // This validates the JWT with Supabase and refreshes if needed
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Also get the session for the client-side (contains access_token etc)
   const { data: { session } } = await supabase.auth.getSession();
 
   // Fetch role server-side using SERVICE_ROLE_KEY (bypasses RLS)
   // This ensures we can always get the role even with strict RLS policies
   // Use maybeSingle() to handle missing profiles gracefully
   let role: string | null = null;
-  if (session) {
+  if (user) {
     const { data: profile } = await supabaseAdmin
       .from("user_profiles")
       .select("role")
-      .eq("id", session.user.id)
+      .eq("id", user.id)
       .maybeSingle();
     role = profile?.role || "user";
   }
