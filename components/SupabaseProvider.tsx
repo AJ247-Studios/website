@@ -25,99 +25,42 @@ export const SupabaseProvider = ({
   // Create a single Supabase client instance for browser (singleton)
   const [supabase] = useState(() => createClientBrowser());
   
-  // Track session state - initialized from server but updates on auth changes
+  // Track session state - initialized from server
   const [session, setSession] = useState<Session | null>(initialSession);
   const [role, setRole] = useState<string | null>(initialRole);
-  // If we have initial data from server, we're not loading
-  const [isLoading, setIsLoading] = useState(!initialSession);
+  // IMPORTANT: If we have initialSession from server, we're NOT loading
+  // This prevents the "Loading..." flash
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-
-    // Function to fetch user role from user_profiles table
-    const fetchRole = async (userId: string): Promise<string> => {
-      try {
-        const { data: profile, error } = await supabase
-          .from("user_profiles")
-          .select("role")
-          .eq("id", userId)
-          .maybeSingle();
-        
-        if (error) {
-          console.error("[SupabaseProvider] Error fetching role:", error.message);
-          return "user";
-        }
-        
-        return profile?.role || "user";
-      } catch (err) {
-        console.error("[SupabaseProvider] Exception fetching role:", err);
-        return "user";
-      }
-    };
-
-    // Initialize session
-    const initializeSession = async () => {
-      try {
-        const { data: { session: browserSession } } = await supabase.auth.getSession();
-        
-        if (!isMounted) return;
-        
-        if (browserSession) {
-          setSession(browserSession);
-          
-          // Use initial role if available and user hasn't changed
-          if (initialRole && browserSession.user.id === initialSession?.user?.id) {
-            setRole(initialRole);
-          } else {
-            const fetchedRole = await fetchRole(browserSession.user.id);
-            if (isMounted) setRole(fetchedRole);
-          }
-        } else {
-          setSession(null);
-          setRole(null);
-        }
-      } catch (error) {
-        console.error("[SupabaseProvider] Error getting session:", error);
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    initializeSession();
-
     // Listen for auth state changes (login, logout, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
         console.log("[SupabaseProvider] Auth state change:", event);
         
-        if (!isMounted) return;
-        
-        // For TOKEN_REFRESHED, just update the session but don't refetch role
-        if (event === "TOKEN_REFRESHED") {
-          setSession(newSession);
-          return;
-        }
-        
-        // For SIGNED_IN or SIGNED_OUT, update everything
+        // Update session
         setSession(newSession);
         
-        if (newSession?.user) {
-          const fetchedRole = await fetchRole(newSession.user.id);
-          if (isMounted) setRole(fetchedRole);
-        } else {
+        // Only refetch role on actual sign in/out (not token refresh)
+        if (event === "SIGNED_IN" && newSession?.user) {
+          // Fetch role from user_profiles
+          const { data: profile } = await supabase
+            .from("user_profiles")
+            .select("role")
+            .eq("id", newSession.user.id)
+            .maybeSingle();
+          setRole(profile?.role || "user");
+        } else if (event === "SIGNED_OUT") {
           setRole(null);
         }
-        
-        if (isMounted) setIsLoading(false);
       }
     );
 
     // Cleanup subscription on unmount
     return () => {
-      isMounted = false;
       subscription.unsubscribe();
     };
-  }, [supabase, initialRole, initialSession]);
+  }, [supabase]);
 
   return (
     <SupabaseContext.Provider value={{ supabase, session, role, isLoading }}>

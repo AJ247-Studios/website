@@ -14,7 +14,7 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
-  const { supabase, session, role: userRole, isLoading: sessionLoading } = useSupabase();
+  const { supabase, session, role: userRole } = useSupabase();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("");
@@ -31,17 +31,14 @@ export default function ProfilePage() {
 
   // Redirect if not authenticated
   useEffect(() => {
-    if (!sessionLoading && !session) {
+    if (!session) {
       router.push("/login");
     }
-  }, [session, sessionLoading, router]);
+  }, [session, router]);
 
   // Load profile data when session is available
   useEffect(() => {
-    // Don't do anything while session is still loading
-    if (sessionLoading) return;
-    
-    // If no session after loading completes, stop loading (redirect will happen)
+    // If no session, stop loading (redirect will happen)
     if (!session) {
       setLoading(false);
       return;
@@ -72,7 +69,7 @@ export default function ProfilePage() {
     };
 
     loadProfile();
-  }, [session, sessionLoading, supabase, userRole]);
+  }, [session, supabase, userRole]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
