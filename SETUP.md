@@ -67,6 +67,7 @@ create policy "Authenticated users can insert"
    - Go to Storage in Supabase dashboard
   - Create new bucket: `portfolio` (public read)
   - Create new bucket: `avatars` (public read) for profile pictures
+  - (Optional) Create new bucket: `projects` (public read) for client portal assets
 
 4. Get your Supabase credentials:
    - Project URL: Settings → API → Project URL
@@ -150,6 +151,90 @@ create table if not exists public.guest_message_counts (
   count int not null default 0,
   last_message timestamp with time zone
 );
+```
+
+### 6.1 Client Portal Tables
+
+Create the minimal schema for client portals, media, memberships, and invoices:
+
+```sql
+create table if not exists public.projects (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  details text,
+  client_user_id uuid references auth.users(id) on delete set null,
+  status text default 'active',
+  created_at timestamp with time zone default timezone('utc', now()) not null
+);
+
+create table if not exists public.project_members (
+  project_id uuid references public.projects(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete cascade,
+  role text check (role in ('client','team','admin')) not null,
+  primary key (project_id, user_id)
+);
+
+create table if not exists public.project_media (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.projects(id) on delete cascade,
+  type text not null check (type in ('photo','video','youtube')),
+  url text,
+  youtube_id text,
+  title text,
+  description text,
+  category text,
+  created_by uuid references auth.users(id),
+  created_at timestamp with time zone default timezone('utc', now()) not null
+);
+
+create table if not exists public.project_invoices (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.projects(id) on delete cascade,
+  number text not null,
+  amount_cents int not null,
+  status text not null default 'unpaid',
+  link_url text,
+  issued_at timestamp with time zone default timezone('utc', now()),
+  due_at timestamp with time zone
+);
+
+alter table public.projects enable row level security;
+alter table public.project_members enable row level security;
+alter table public.project_media enable row level security;
+alter table public.project_invoices enable row level security;
+
+-- Basic RLS examples (tune as needed):
+-- Clients can read their projects via membership
+drop policy if exists "Clients/team read projects" on public.projects;
+create policy "Clients/team read projects" on public.projects
+  for select using (
+    exists(select 1 from public.project_members m where m.project_id = id and m.user_id = auth.uid())
+  );
+
+drop policy if exists "Clients/team read media" on public.project_media;
+create policy "Clients/team read media" on public.project_media
+  for select using (
+    exists(select 1 from public.project_members m where m.project_id = project_id and m.user_id = auth.uid())
+  );
+
+drop policy if exists "Clients/team read invoices" on public.project_invoices;
+create policy "Clients/team read invoices" on public.project_invoices
+  for select using (
+    exists(select 1 from public.project_members m where m.project_id = project_id and m.user_id = auth.uid())
+  );
+
+-- Team can insert media
+drop policy if exists "Team insert media" on public.project_media;
+create policy "Team insert media" on public.project_media
+  for insert with check (
+    exists(
+      select 1
+      from public.project_members m
+      where m.project_id = project_id
+        and m.user_id = auth.uid()
+        and m.role in ('team','admin')
+    )
+  );
 ```
 
 ### 7. Test Features
