@@ -1,3 +1,0 @@
-module.exports=[74327,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(22286);a.n(d("[project]/Desktop/Jo's stash/aj247-site/website/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},94127,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(22286);a.n(d("[project]/Desktop/Jo's stash/aj247-site/website/node_modules/next/dist/client/components/builtin/global-error.js"))},50548,a=>{"use strict";a.i(74327);var b=a.i(94127);a.n(b)}];
-
-//# sourceMappingURL=42554_next_dist_client_components_builtin_global-error_d09f4c93.js.map

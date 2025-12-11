@@ -1,6 +1,41 @@
 {
   "version": 3,
-  "middleware": {},
-  "sortedMiddleware": [],
+  "middleware": {
+    "/": {
+      "files": [
+        "server/edge/chunks/Desktop_Jo's stash_aj247-site_website_dc7452fe._.js",
+        "server/edge/chunks/42554_@supabase_realtime-js_dist_module_0c6227bb._.js",
+        "server/edge/chunks/42554_@supabase_storage-js_dist_module_5194525f._.js",
+        "server/edge/chunks/42554_@supabase_auth-js_dist_module_b21c6af1._.js",
+        "server/edge/chunks/42554_b233ca13._.js",
+        "server/edge/chunks/[root-of-the-server]__7fd192bf._.js",
+        "server/edge/chunks/turbopack-Desktop_Jo's stash_aj247-site_website_edge-wrapper_b709562f.js"
+      ],
+      "name": "middleware",
+      "page": "/",
+      "matchers": [
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/client(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/client/:path*"
+        },
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/admin(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\\\.json)?[\\/#\\?]?$",
+          "originalSource": "/admin/:path*"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "development",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "7sg7V5XLBgpvV0bbIgroKbHkESGg8UfY3GJSijNhy1E=",
+        "__NEXT_PREVIEW_MODE_ID": "c22ef85f69e634380c1354a8a91b5aa9",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "fb50a79c418d9bd26de85a1b67671d2dddfe1bde7e2a249070021c3d4577d6cc",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "4960c76905953f8a53e97e5470c4fb478c6d02d6a71d58805e2eba39e0eda7ce"
+      }
+    }
+  },
+  "sortedMiddleware": [
+    "/"
+  ],
   "functions": {}
 }

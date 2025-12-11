@@ -38,6 +38,19 @@ export async function middleware(req: NextRequest) {
     }
   }
 
+  // Admin-only: enforce role check for /admin
+  if (pathname.startsWith("/admin")) {
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", session!.user.id)
+      .single();
+
+    if (profileError || !profile || profile.role !== "admin") {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+  }
+
   return res;
 }
 
