@@ -17,30 +17,52 @@ export default function Header({ initialSession = null, initialRole = null }: He
   const [role, setRole] = useState<string | null>(initialRole);
   const [loading, setLoading] = useState(false);
 
+  // Fetch role when session changes
   useEffect(() => {
     let mounted = true;
 
-    // Listen for auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
-      if (!mounted) return;
-      setSession(sess);
-      if (sess) {
-        supabase
+    const fetchRole = async (currentSession: Session) => {
+      try {
+        const { data: profile } = await supabase
           .from("profiles")
           .select("role")
-          .eq("id", sess.user.id)
-          .single()
-          .then(({ data: profile }) => setRole(profile?.role || null));
+          .eq("id", currentSession.user.id)
+          .single();
+        
+        if (mounted) {
+          setRole(profile?.role || null);
+        }
+      } catch (error) {
+        console.error("[Header] Error fetching role:", error);
+        if (mounted) {
+          setRole(null);
+        }
+      }
+    };
+
+    // Listen for auth state changes
+    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, sess) => {
+      if (!mounted) return;
+      
+      setSession(sess);
+      
+      if (sess) {
+        await fetchRole(sess);
       } else {
         setRole(null);
       }
     });
 
+    // If we have an initial session but no role, fetch it
+    if (initialSession && !initialRole) {
+      fetchRole(initialSession);
+    }
+
     return () => {
       mounted = false;
       listener.subscription.unsubscribe();
     };
-  }, []);
+  }, [initialSession, initialRole]);
 
   // Prevent flash by rendering nothing until loading is complete
   if (loading) return null;

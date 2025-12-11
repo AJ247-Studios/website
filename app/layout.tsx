@@ -25,6 +25,7 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   
+  // Create Supabase client with ANON_KEY for reading session
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -37,16 +38,39 @@ export default async function RootLayout({
     }
   );
 
+  // Get session from cookies
   const { data: { session } } = await supabase.auth.getSession();
   
+  // Fetch user role if session exists
+  // NOTE: For admin role check, we use SERVICE_ROLE_KEY in a separate admin client
+  // to bypass RLS, since users can only see their own profile with ANON_KEY
   let role: string | null = null;
   if (session) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
-    role = profile?.role || null;
+    try {
+      // Create admin client to bypass RLS for role check
+      const adminSupabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        {
+          cookies: {
+            get(name: string) {
+              return cookieStore.get(name)?.value;
+            },
+          },
+        }
+      );
+
+      const { data: profile } = await adminSupabase
+        .from("profiles")
+        .select("role")
+        .eq("id", session.user.id)
+        .single();
+      
+      role = profile?.role || null;
+    } catch (error) {
+      console.error("[Layout] Error fetching role:", error);
+      role = null;
+    }
   }
 
   return (
