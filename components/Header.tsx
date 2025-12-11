@@ -1,25 +1,57 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { useEffect, useState } from "react";
+import { createClientBrowser } from "@/utils/supabase-browser";
 import type { Session } from "@supabase/supabase-js";
+
+const supabase = createClientBrowser();
 
 export default function Header() {
   const [session, setSession] = useState<Session | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+    let mounted = true;
+
+    async function fetchSession() {
+      const { data } = await supabase.auth.getSession();
+      if (!mounted) return;
+      setSession(data.session || null);
+
+      if (data.session) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", data.session.user.id)
+          .single();
+        setRole(profile?.role || null);
+      }
       setLoading(false);
-    });
+    }
+
+    fetchSession();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
+      if (!mounted) return;
       setSession(sess);
+      if (sess) {
+        supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", sess.user.id)
+          .single()
+          .then(({ data: profile }) => setRole(profile?.role || null));
+      } else {
+        setRole(null);
+      }
     });
 
-    return () => listener?.subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   return (
@@ -35,9 +67,11 @@ export default function Header() {
           <Link href="/portfolio" className="hover:text-gray-600 dark:hover:text-gray-400">
             Portfolio
           </Link>
-          <Link href="/admin" className="hover:text-gray-600 dark:hover:text-gray-400">
-            Admin
-          </Link>
+          {role === "admin" && (
+            <Link href="/admin" className="hover:text-gray-600 dark:hover:text-gray-400">
+              Admin
+            </Link>
+          )}
 
           {/* Auth Links */}
           <div className="flex gap-4 ml-4 pl-4 border-l border-gray-300 dark:border-gray-700">
