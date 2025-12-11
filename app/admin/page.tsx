@@ -34,17 +34,19 @@ export default function AdminPage() {
   }, [loading]);
 
   // Function to clear cookies and redirect to login
-  const handleClearSession = async () => {
-    await supabase.auth.signOut();
-    // Clear all Supabase cookies
-    document.cookie.split(";").forEach((c) => {
-      const cookie = c.trim();
-      if (cookie.startsWith("sb-")) {
-        const name = cookie.split("=")[0];
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  const handleClearSession = () => {
+    // Clear all Supabase cookies by setting them to expire
+    const cookies = document.cookie.split(";");
+    for (const cookie of cookies) {
+      const cookieName = cookie.split("=")[0].trim();
+      if (cookieName.startsWith("sb-")) {
+        // Clear with multiple path variants to ensure removal
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
       }
-    });
-    router.push("/login");
+    }
+    // Force a hard redirect to clear any cached state
+    window.location.href = "/login";
   };
 
   // Redirect is handled by middleware, but we double-check here
