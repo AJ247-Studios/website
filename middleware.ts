@@ -5,10 +5,11 @@ import type { NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
-  // Adapter to let Supabase read/write cookies in middleware
+  // Use ANON_KEY to read session from cookies (not service role key!)
+  // Service role key bypasses auth and doesn't parse session cookies correctly
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get: (name: string) => req.cookies.get(name)?.value,
@@ -26,12 +27,9 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // Temporary debug: confirm middleware sees the session
-  console.log("Middleware session:", session ? { user: session.user.id } : null);
-
   const pathname = req.nextUrl.pathname;
 
-  // Protect /client and /admin
+  // Protect /client and /admin - require valid session
   if (pathname.startsWith("/client") || pathname.startsWith("/admin")) {
     if (!session) {
       return NextResponse.redirect(new URL("/login", req.url));
@@ -39,7 +37,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // Admin-only: enforce role check for /admin
-  // Use SERVICE_ROLE_KEY for bypassing RLS to fetch role
+  // Use SERVICE_ROLE_KEY for bypassing RLS to fetch role safely
   if (pathname.startsWith("/admin")) {
     const adminSupabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
