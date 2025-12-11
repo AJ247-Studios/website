@@ -25,14 +25,22 @@ export async function POST(req: Request) {
     // Get the user info from auth/session
     const token = req.headers.get('Authorization')?.replace('Bearer ', '')
     let user = null
+    let role = 'guest'
     if (token) {
       const { data, error } = await supabase.auth.getUser(token)
       if (error) console.error('Auth error:', error)
       else user = data.user
+      if (user) {
+        const { data: profile, error: profileError } = await supabase
+          .from('user_profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        if (!profileError && profile?.role) {
+          role = profile.role
+        }
+      }
     }
-
-    // Determine role
-    const role = user?.role || 'guest'
 
     // Restrict access for unauthorized roles
     if (role === 'guest') {
@@ -101,9 +109,10 @@ export async function POST(req: Request) {
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
     console.log('OpenAI client created')
 
-    // Call GPT-4o-mini
+    // Role-based model/tooling (simple gate for now)
+    const model = 'gpt-4o-mini'
     const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model,
       messages: [{ role: 'system', content: systemPrompt }, ...messages]
     })
 

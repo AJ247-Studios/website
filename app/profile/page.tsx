@@ -8,6 +8,8 @@ import type { Session } from "@supabase/supabase-js";
 interface UserProfile {
   email: string;
   role?: string;
+  display_name?: string;
+  avatar_url?: string;
   projects?: string[];
   created_at?: string;
 }
@@ -16,6 +18,9 @@ export default function ProfilePage() {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [displayName, setDisplayName] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileMsg, setProfileMsg] = useState("");
   const [passwordOpen, setPasswordOpen] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -37,14 +42,21 @@ export default function ProfilePage() {
 
       setSession(data.session);
       
-      // Fetch user profile from database (if you have a users table)
-      // For now, we'll use the session data
+      // Fetch user profile from database
+      const { data: prof } = await supabase
+        .from('user_profiles')
+        .select('role, display_name, avatar_url')
+        .eq('id', data.session.user.id)
+        .single()
       setProfile({
         email: data.session.user.email || "",
-        role: "Client", // Default role, update based on your database
-        projects: [], // Fetch from your database
+        role: prof?.role || "guest",
+        display_name: prof?.display_name || "",
+        avatar_url: prof?.avatar_url || "",
+        projects: [],
         created_at: data.session.user.created_at,
       });
+      setDisplayName(prof?.display_name || "")
 
       setLoading(false);
     };
@@ -66,6 +78,42 @@ export default function ProfilePage() {
     await supabase.auth.signOut();
     router.push("/");
   };
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingProfile(true);
+    setProfileMsg("");
+    try {
+      if (!session?.user) return;
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ display_name: displayName })
+        .eq('id', session.user.id)
+      if (error) setProfileMsg(error.message)
+      else setProfileMsg('Profile updated')
+    } finally {
+      setSavingProfile(false);
+      setTimeout(() => setProfileMsg(""), 2000)
+    }
+  }
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !session?.user) return
+    const path = `${session.user.id}/${Date.now()}-${file.name}`
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(path, file, { upsert: true })
+    if (uploadError) {
+      setProfileMsg(uploadError.message)
+      return
+    }
+    const { data: publicUrl } = supabase.storage.from('avatars').getPublicUrl(uploadData.path)
+    await supabase.from('user_profiles').update({ avatar_url: publicUrl.publicUrl }).eq('id', session.user.id)
+    setProfile((p) => p ? { ...p, avatar_url: publicUrl.publicUrl } : p)
+    setProfileMsg('Avatar updated')
+    setTimeout(() => setProfileMsg(""), 2000)
+  }
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -164,6 +212,26 @@ export default function ProfilePage() {
           </h2>
 
           <div className="space-y-6">
+            {/* Avatar + Display Name */}
+            <div className="flex items-center gap-4">
+              <img src={profile.avatar_url || '/default-avatar.png'} alt="Avatar" className="w-16 h-16 rounded-full object-cover border" />
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Display Name</label>
+                <form onSubmit={handleSaveProfile} className="flex gap-2">
+                  <input
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                  />
+                  <button type="submit" disabled={savingProfile} className="px-3 py-2 bg-blue-600 text-white rounded-lg">{savingProfile ? 'Saving...' : 'Save'}</button>
+                </form>
+                {profileMsg && <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{profileMsg}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Avatar</label>
+                <input type="file" accept="image/*" onChange={handleAvatarUpload} />
+              </div>
+            </div>
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">

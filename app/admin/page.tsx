@@ -1,78 +1,98 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [users, setUsers] = useState<Array<{ id: string; email: string; role: string; display_name?: string }>>([])
+  const [search, setSearch] = useState("")
+  const [roleUpdating, setRoleUpdating] = useState<string | null>(null)
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        setError(error.message);
-      } else if (data.user) {
-        router.push("/admin/upload");
-      }
-    } catch (err) {
-      setError("Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const init = async () => {
+      const { data } = await supabase.auth.getSession()
+      if (!data.session) { router.push('/login'); return }
+      const token = data.session.access_token
+      // Check admin role
+      const { data: prof } = await supabase
+        .from('user_profiles')
+        .select('role')
+        .eq('id', data.session.user.id)
+        .single()
+      if (prof?.role !== 'admin') { router.push('/'); return }
+      // Load users list
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, role, display_name')
+      const emails: Record<string, string> = {}
+      // Fetch emails via auth admin list if available – fallback omitted here
+      // For simplicity, try mapping from session user email for self; others will show id
+      const usersMapped = (profiles || []).map(p => ({ id: p.id, email: emails[p.id] || p.id, role: p.role, display_name: p.display_name }))
+      setUsers(usersMapped)
     }
-  };
+    init()
+  }, [router])
+
+  const setRole = async (userId: string, role: 'guest' | 'client' | 'team' | 'admin') => {
+    setRoleUpdating(userId)
+    try {
+      const { data: sessionData } = await supabase.auth.getSession()
+      const token = sessionData.session?.access_token
+      const res = await fetch('/api/admin/set-role', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' },
+        body: JSON.stringify({ userId, role })
+      })
+      if (!res.ok) {
+        const body = await res.json();
+        setError(body.error || 'Failed to update role')
+      } else {
+        setUsers(u => u.map(x => x.id === userId ? { ...x, role } : x))
+      }
+    } finally {
+      setRoleUpdating(null)
+    }
+  }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-20">
-      <h1 className="text-3xl font-bold mb-8 text-center">Admin Login</h1>
-      <form onSubmit={handleLogin} className="space-y-6">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-2">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800"
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-2">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800"
-          />
-        </div>
-        {error && <div className="text-red-600 text-sm">{error}</div>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg disabled:opacity-50 transition-colors"
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+    <div className="max-w-4xl mx-auto px-4 py-10">
+      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      {error && <div className="mb-4 text-red-600 text-sm">{error}</div>}
+      <div className="mb-6">
+        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search users" className="w-full px-3 py-2 border rounded" />
+      </div>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
+        <table className="w-full text-left">
+          <thead>
+            <tr className="border-b">
+              <th className="py-2">User</th>
+              <th className="py-2">Role</th>
+              <th className="py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.filter(u => (u.email || '').toLowerCase().includes(search.toLowerCase()) || (u.display_name || '').toLowerCase().includes(search.toLowerCase())).map(u => (
+              <tr key={u.id} className="border-b">
+                <td className="py-2">
+                  <div className="font-medium">{u.display_name || u.email || u.id}</div>
+                  <div className="text-sm text-slate-600">{u.email}</div>
+                </td>
+                <td className="py-2"><span className="px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 text-sm">{u.role}</span></td>
+                <td className="py-2">
+                  <div className="flex gap-2">
+                    {(['guest','client','team','admin'] as const).map(r => (
+                      <button key={r} disabled={roleUpdating===u.id} onClick={() => setRole(u.id, r)} className={`px-2 py-1 text-sm rounded ${u.role===r? 'bg-blue-600 text-white':'bg-slate-200 dark:bg-slate-700'}`}>{r}</button>
+                    ))}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

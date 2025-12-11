@@ -63,10 +63,10 @@ create policy "Authenticated users can insert"
   with check (auth.role() = 'authenticated');
 ```
 
-3. Create a storage bucket named `portfolio`:
+3. Create storage buckets:
    - Go to Storage in Supabase dashboard
-   - Create new bucket: `portfolio`
-   - Make it public for reading
+  - Create new bucket: `portfolio` (public read)
+  - Create new bucket: `avatars` (public read) for profile pictures
 
 4. Get your Supabase credentials:
    - Project URL: Settings → API → Project URL
@@ -86,6 +86,7 @@ Edit `.env.local` with your actual credentials:
 NEXT_PUBLIC_SUPABASE_URL=https://yourproject.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-actual-anon-key
 OPENAI_API_KEY=sk-your-actual-openai-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key  # server-side only
 ```
 
 ### 4. Run the Development Server
@@ -103,14 +104,62 @@ In Supabase dashboard:
 2. Add user manually with email/password
 3. Use these credentials to log in at `/admin`
 
-### 6. Test Features
+Also, mark your admin user in the `user_profiles` table (see below) with role `admin`.
+
+### 6. Create User Profiles + Roles
+
+Create `user_profiles` to track roles, display name, and avatar:
+
+```sql
+create table if not exists public.user_profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  role text not null default 'guest' check (role in ('guest','client','team','admin')),
+  display_name text,
+  avatar_url text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.user_profiles enable row level security;
+
+create policy "Read own profile" on public.user_profiles
+  for select using (auth.uid() = id);
+
+create policy "Update own profile" on public.user_profiles
+  for update using (auth.uid() = id);
+
+-- Auto-create profile on signup
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.user_profiles (id, role)
+  values (new.id, 'guest');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+
+Optional guest chat limit table:
+```sql
+create table if not exists public.guest_message_counts (
+  guest_token text primary key,
+  count int not null default 0,
+  last_message timestamp with time zone
+);
+```
+
+### 7. Test Features
 
 - ✅ Browse the home page
 - ✅ Visit `/portfolio` to see the gallery
 - ✅ Click the chat bubble to test AI chat
 - ✅ Log in at `/admin` and upload media
 
-### 7. Deploy to Vercel
+### 8. Deploy to Vercel
 
 ```bash
 # Install Vercel CLI (optional)
