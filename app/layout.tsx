@@ -49,14 +49,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   // Fetch role server-side using SERVICE_ROLE_KEY (bypasses RLS)
   // This ensures we can always get the role even with strict RLS policies
+  // Use maybeSingle() to handle missing profiles gracefully
   let role: string | null = null;
   if (session) {
     const { data: profile } = await supabaseAdmin
       .from("profiles")
       .select("role")
       .eq("id", session.user.id)
-      .single();
-    role = profile?.role || null;
+      .maybeSingle();
+    role = profile?.role || "user";
   }
 
   return (

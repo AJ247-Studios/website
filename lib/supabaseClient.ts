@@ -1,9 +1,15 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClientBrowser } from "@/utils/supabase-browser";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+/**
+ * Re-export the singleton browser client for backward compatibility.
+ * 
+ * IMPORTANT: This uses the singleton from supabase-browser.ts to prevent
+ * "Multiple GoTrueClient instances" warnings in the browser.
+ * 
+ * For new code, prefer using `useSupabase()` hook from SupabaseProvider
+ * which gives you access to the same singleton instance.
+ */
+export const supabase = createClientBrowser();
 
 export interface Media {
   id: string;

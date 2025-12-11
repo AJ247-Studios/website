@@ -83,11 +83,12 @@ export async function middleware(req: NextRequest) {
    */
   if (pathname.startsWith("/admin") && session) {
     try {
+      // Use maybeSingle() to handle missing profiles gracefully
       const { data: profile, error: profileError } = await supabaseAdmin
         .from("profiles")
         .select("role")
         .eq("id", session.user.id)
-        .single();
+        .maybeSingle();
 
       // If profile doesn't exist, error occurred, or user is not admin, redirect
       if (profileError || !profile || profile.role !== "admin") {

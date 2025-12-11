@@ -33,21 +33,29 @@ export const SupabaseProvider = ({
   // Function to fetch user role from profiles table
   const fetchRole = useCallback(async (userId: string) => {
     try {
+      // Use maybeSingle() instead of single() to handle missing profiles gracefully
+      // single() throws an error if no row is found, maybeSingle() returns null
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("role")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
       
       if (error) {
         console.error("[SupabaseProvider] Error fetching role:", error.message);
-        setRole(null);
+        // Default to 'user' role if there's an error
+        setRole("user");
+      } else if (profile) {
+        setRole(profile.role || "user");
       } else {
-        setRole(profile?.role || null);
+        // Profile doesn't exist yet - this can happen if the trigger hasn't run
+        // or if the user signed up before the profiles table was created
+        console.log("[SupabaseProvider] No profile found for user, defaulting to 'user' role");
+        setRole("user");
       }
     } catch (err) {
       console.error("[SupabaseProvider] Exception fetching role:", err);
-      setRole(null);
+      setRole("user");
     }
   }, [supabase]);
 
