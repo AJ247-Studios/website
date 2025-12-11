@@ -25,8 +25,35 @@ export default function ClientFilesPage() {
   const { supabase, session } = useSupabase();
   const [files, setFiles] = useState<FileRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showSessionExpired, setShowSessionExpired] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  // Show "session expired" option after 2 seconds of loading
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        setShowSessionExpired(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowSessionExpired(false);
+    }
+  }, [loading]);
+
+  // Function to clear cookies and redirect to login
+  const handleClearSession = async () => {
+    await supabase.auth.signOut();
+    // Clear all Supabase cookies
+    document.cookie.split(";").forEach((c) => {
+      const cookie = c.trim();
+      if (cookie.startsWith("sb-")) {
+        const name = cookie.split("=")[0];
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      }
+    });
+    router.push("/login");
+  };
 
   // Redirect if not authenticated (with delay to allow hydration)
   useEffect(() => {
@@ -77,6 +104,19 @@ export default function ClientFilesPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-slate-600 dark:text-slate-400">Loading your files…</p>
+          {showSessionExpired && (
+            <div className="mt-6">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
+                Taking too long? Your session may have expired.
+              </p>
+              <button
+                onClick={handleClearSession}
+                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline text-sm font-medium"
+              >
+                Click here to re-login
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
