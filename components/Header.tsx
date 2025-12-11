@@ -7,32 +7,20 @@ import type { Session } from "@supabase/supabase-js";
 
 const supabase = createClientBrowser();
 
-export default function Header() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [role, setRole] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+interface HeaderProps {
+  initialSession?: Session | null;
+  initialRole?: string | null;
+}
+
+export default function Header({ initialSession = null, initialRole = null }: HeaderProps) {
+  const [session, setSession] = useState<Session | null>(initialSession);
+  const [role, setRole] = useState<string | null>(initialRole);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
-    async function fetchSession() {
-      const { data } = await supabase.auth.getSession();
-      if (!mounted) return;
-      setSession(data.session || null);
-
-      if (data.session) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", data.session.user.id)
-          .single();
-        setRole(profile?.role || null);
-      }
-      setLoading(false);
-    }
-
-    fetchSession();
-
+    // Listen for auth state changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
       if (!mounted) return;
       setSession(sess);
@@ -53,6 +41,9 @@ export default function Header() {
       listener.subscription.unsubscribe();
     };
   }, []);
+
+  // Prevent flash by rendering nothing until loading is complete
+  if (loading) return null;
 
   return (
     <header className="border-b border-gray-200 dark:border-gray-800">

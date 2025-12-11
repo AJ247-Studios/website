@@ -39,8 +39,25 @@ export async function middleware(req: NextRequest) {
   }
 
   // Admin-only: enforce role check for /admin
+  // Use SERVICE_ROLE_KEY for bypassing RLS to fetch role
   if (pathname.startsWith("/admin")) {
-    const { data: profile, error: profileError } = await supabase
+    const adminSupabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        cookies: {
+          get: (name: string) => req.cookies.get(name)?.value,
+          set: (name: string, value: string, options: any) => {
+            res.cookies.set({ name, value, ...options });
+          },
+          remove: (name: string, options: any) => {
+            res.cookies.delete({ name, ...options });
+          },
+        },
+      }
+    );
+
+    const { data: profile, error: profileError } = await adminSupabase
       .from("profiles")
       .select("role")
       .eq("id", session!.user.id)
