@@ -2,84 +2,40 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { createClientBrowser } from "@/utils/supabase-browser";
+import { useSupabase } from "@/components/SupabaseProvider";
 import type { Session } from "@supabase/supabase-js";
 
-const supabase = createClientBrowser();
-
 interface HeaderProps {
-  initialSession?: Session | null;
   initialRole?: string | null;
 }
 
-export default function Header({ initialSession = null, initialRole = null }: HeaderProps) {
-  const [session, setSession] = useState<Session | null>(initialSession);
+export default function Header({ initialRole = null }: HeaderProps) {
+  const { session } = useSupabase();
   const [role, setRole] = useState<string | null>(initialRole);
 
-  // Only listen for auth state changes (session only)
-  // Role is provided by server and doesn't change client-side
+  // Listen to session changes only
   useEffect(() => {
-    let mounted = true;
-
-    // Listen for auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
-      if (!mounted) return;
-      setSession(sess);
-      // When session changes, role remains as server-provided
-      // The page will reload on login/logout, so role will be refetched server-side
-    });
-
-    return () => {
-      mounted = false;
-      listener.subscription.unsubscribe();
-    };
-  }, []);
+    if (!session) setRole(null);
+  }, [session]);
 
   return (
     <header className="border-b border-gray-200 dark:border-gray-800">
       <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold">
-          AJ247 Studios
-        </Link>
+        <Link href="/" className="text-xl font-bold">AJ247 Studios</Link>
         <div className="flex gap-6 items-center">
-          <Link href="/" className="hover:text-gray-600 dark:hover:text-gray-400">
-            Home
-          </Link>
-          <Link href="/portfolio" className="hover:text-gray-600 dark:hover:text-gray-400">
-            Portfolio
-          </Link>
+          <Link href="/" className="hover:text-gray-600 dark:hover:text-gray-400">Home</Link>
+          <Link href="/portfolio" className="hover:text-gray-600 dark:hover:text-gray-400">Portfolio</Link>
           {role === "admin" && (
-            <Link href="/admin" className="hover:text-gray-600 dark:hover:text-gray-400">
-              Admin
-            </Link>
+            <Link href="/admin" className="hover:text-gray-600 dark:hover:text-gray-400">Admin</Link>
           )}
-
-          {/* Auth Links */}
           <div className="flex gap-4 ml-4 pl-4 border-l border-gray-300 dark:border-gray-700">
             {!session ? (
               <>
-                <Link
-                  href="/login"
-                  className="px-4 py-2 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-                >
-                  Sign Up
-                </Link>
+                <Link href="/login" className="px-4 py-2 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Sign In</Link>
+                <Link href="/signup" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">Sign Up</Link>
               </>
             ) : (
-              <>
-                <Link
-                  href="/profile"
-                  className="px-4 py-2 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-                >
-                  Profile
-                </Link>
-              </>
+              <Link href="/profile" className="px-4 py-2 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Profile</Link>
             )}
           </div>
         </div>
