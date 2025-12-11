@@ -13,6 +13,12 @@ import { useRouter } from "next/navigation";
  */
 export default function AdminPage() {
   const { supabase, session, role } = useSupabase();
+  
+  console.log("[AdminPage] Render with:", {
+    hasSession: !!session,
+    userId: session?.user?.id || "none",
+    role,
+  });
   const [error, setError] = useState("");
   const [users, setUsers] = useState<Array<{ id: string; email: string; role: string; display_name?: string }>>([]);
   const [search, setSearch] = useState("");
@@ -20,11 +26,16 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Debug: Log on every render
+  console.log("[AdminPage] Component render - loading:", loading, "session:", !!session);
+
   // Redirect is handled by middleware, but we double-check here
   useEffect(() => {
+    console.log("[AdminPage] Redirect check - session:", !!session, "role:", role);
     if (session === null) {
       // Small delay to ensure we're not redirecting during hydration
       const timer = setTimeout(() => {
+        console.log("[AdminPage] No session after delay, redirecting to login");
         router.push("/login");
       }, 100);
       return () => clearTimeout(timer);
@@ -33,20 +44,28 @@ export default function AdminPage() {
 
   // Load users on mount (middleware ensures user is admin)
   useEffect(() => {
+    console.log("[AdminPage] Load users effect - session:", !!session);
+    
     // If no session, stop loading (middleware will redirect)
     if (!session) {
+      console.log("[AdminPage] No session, setting loading=false");
       setLoading(false);
       return;
     }
 
     const loadUsers = async () => {
+      console.log("[AdminPage] loadUsers() starting...");
       try {
         // Load users list from user_profiles table
+        console.log("[AdminPage] Fetching from user_profiles...");
         const { data: profiles, error: profilesError } = await supabase
           .from('user_profiles')
           .select('id, role, display_name');
         
+        console.log("[AdminPage] Fetch result:", { profiles, error: profilesError?.message });
+        
         if (profilesError) {
+          console.error("[AdminPage] Error loading profiles:", profilesError.message);
           setError("Failed to load users: " + profilesError.message);
           setUsers([]);
         } else {
@@ -56,11 +75,14 @@ export default function AdminPage() {
             role: p.role || 'user',
             display_name: p.display_name
           }));
+          console.log("[AdminPage] Users mapped:", usersMapped);
           setUsers(usersMapped);
         }
       } catch (err) {
+        console.error("[AdminPage] Error loading users:", err);
         setError("Failed to load users");
       } finally {
+        console.log("[AdminPage] Setting loading=false");
         setLoading(false);
       }
     };

@@ -21,6 +21,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
 
+  // Debug: Log all cookie names to see what we have
+  const allCookies = cookieStore.getAll();
+  console.log("[Layout] All cookies:", allCookies.map(c => ({ name: c.name, valueLength: c.value.length })));
+
   /**
    * CRITICAL: Use ANON_KEY to read session from cookies
    * 
@@ -45,20 +49,36 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   );
 
   // Fetch session server-side using ANON_KEY (reads from cookies correctly)
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  
+  console.log("[Layout] Server-side session check:", {
+    hasSession: !!session,
+    userId: session?.user?.id || "none",
+    error: sessionError?.message || "none",
+  });
 
   // Fetch role server-side using SERVICE_ROLE_KEY (bypasses RLS)
   // This ensures we can always get the role even with strict RLS policies
   // Use maybeSingle() to handle missing profiles gracefully
   let role: string | null = null;
   if (session) {
-    const { data: profile } = await supabaseAdmin
+    const { data: profile, error: roleError } = await supabaseAdmin
       .from("user_profiles")
       .select("role")
       .eq("id", session.user.id)
       .maybeSingle();
     role = profile?.role || "user";
+    console.log("[Layout] Role fetch result:", {
+      role,
+      profile,
+      error: roleError?.message || "none",
+    });
   }
+
+  console.log("[Layout] Passing to SupabaseProvider:", {
+    hasSession: !!session,
+    role,
+  });
 
   return (
     <html lang="en">
