@@ -1,7 +1,7 @@
 "use client";
 
 import { createClientBrowser } from "@/utils/supabase-browser";
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import type { SupabaseClient, Session } from "@supabase/supabase-js";
 
 type SupabaseContextType = {
@@ -22,54 +22,65 @@ export const SupabaseProvider = ({
   initialSession?: Session | null;
   initialRole?: string | null;
 }) => {
-  // Create a single Supabase client instance for browser
+  // Create a single Supabase client instance for browser (singleton)
   const [supabase] = useState(() => createClientBrowser());
   
   // Track session state - initialized from server but updates on auth changes
   const [session, setSession] = useState<Session | null>(initialSession);
   const [role, setRole] = useState<string | null>(initialRole);
-  const [isLoading, setIsLoading] = useState(!initialSession);
-
-  // Function to fetch user role from profiles table
-  const fetchRole = useCallback(async (userId: string) => {
-    try {
-      // Use maybeSingle() instead of single() to handle missing profiles gracefully
-      // single() throws an error if no row is found, maybeSingle() returns null
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", userId)
-        .maybeSingle();
-      
-      if (error) {
-        console.error("[SupabaseProvider] Error fetching role:", error.message);
-        // Default to 'user' role if there's an error
-        setRole("user");
-      } else if (profile) {
-        setRole(profile.role || "user");
-      } else {
-        // Profile doesn't exist yet - this can happen if the trigger hasn't run
-        // or if the user signed up before the profiles table was created
-        console.log("[SupabaseProvider] No profile found for user, defaulting to 'user' role");
-        setRole("user");
-      }
-    } catch (err) {
-      console.error("[SupabaseProvider] Exception fetching role:", err);
-      setRole("user");
-    }
-  }, [supabase]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Track if we've already initialized to prevent double-initialization
+  const initialized = useRef(false);
+  // Track last fetched user ID to prevent duplicate fetches
+  const lastFetchedUserId = useRef<string | null>(null);
 
   useEffect(() => {
-    // Get initial session from browser cookies (in case server session is stale)
+    // Prevent double-initialization in React Strict Mode
+    if (initialized.current) return;
+    initialized.current = true;
+
+    // Function to fetch user role from profiles table
+    const fetchRole = async (userId: string): Promise<string> => {
+      // Skip if we already fetched for this user
+      if (lastFetchedUserId.current === userId && role) {
+        return role;
+      }
+      
+      try {
+        const { data: profile, error } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", userId)
+          .maybeSingle();
+        
+        if (error) {
+          console.error("[SupabaseProvider] Error fetching role:", error.message);
+          return "user";
+        }
+        
+        lastFetchedUserId.current = userId;
+        return profile?.role || "user";
+      } catch (err) {
+        console.error("[SupabaseProvider] Exception fetching role:", err);
+        return "user";
+      }
+    };
+
+    // Initialize session
     const initializeSession = async () => {
       try {
         const { data: { session: browserSession } } = await supabase.auth.getSession();
         
         if (browserSession) {
           setSession(browserSession);
-          // Only fetch role if we don't have it or user changed
-          if (!initialRole || browserSession.user.id !== initialSession?.user?.id) {
-            await fetchRole(browserSession.user.id);
+          
+          // Use initial role if available and user hasn't changed
+          if (initialRole && browserSession.user.id === initialSession?.user?.id) {
+            setRole(initialRole);
+          } else {
+            const fetchedRole = await fetchRole(browserSession.user.id);
+            setRole(fetchedRole);
           }
         } else {
           setSession(null);
@@ -89,14 +100,26 @@ export const SupabaseProvider = ({
       async (event, newSession) => {
         console.log("[SupabaseProvider] Auth state change:", event);
         
+        // Ignore INITIAL_SESSION as we handle it in initializeSession
+        if (event === "INITIAL_SESSION") {
+          return;
+        }
+        
+        // For TOKEN_REFRESHED, just update the session but don't refetch role
+        if (event === "TOKEN_REFRESHED") {
+          setSession(newSession);
+          return;
+        }
+        
+        // For SIGNED_IN or SIGNED_OUT, update everything
         setSession(newSession);
         
         if (newSession?.user) {
-          // Fetch role when user logs in or session is refreshed
-          await fetchRole(newSession.user.id);
+          const fetchedRole = await fetchRole(newSession.user.id);
+          setRole(fetchedRole);
         } else {
-          // Clear role on logout
           setRole(null);
+          lastFetchedUserId.current = null;
         }
         
         setIsLoading(false);
@@ -107,7 +130,7 @@ export const SupabaseProvider = ({
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase, fetchRole, initialRole, initialSession?.user?.id]);
+  }, []); // Empty dependency array - only run once on mount
 
   return (
     <SupabaseContext.Provider value={{ supabase, session, role, isLoading }}>
