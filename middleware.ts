@@ -85,7 +85,7 @@ export async function middleware(req: NextRequest) {
     try {
       // Use maybeSingle() to handle missing profiles gracefully
       const { data: profile, error: profileError } = await supabaseAdmin
-        .from("profiles")
+        .from("user_profiles")
         .select("role")
         .eq("id", session.user.id)
         .maybeSingle();

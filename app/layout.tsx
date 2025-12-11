@@ -53,7 +53,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let role: string | null = null;
   if (session) {
     const { data: profile } = await supabaseAdmin
-      .from("profiles")
+      .from("user_profiles")
       .select("role")
       .eq("id", session.user.id)
       .maybeSingle();

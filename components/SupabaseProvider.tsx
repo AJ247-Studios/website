@@ -34,11 +34,11 @@ export const SupabaseProvider = ({
   useEffect(() => {
     let isMounted = true;
 
-    // Function to fetch user role from profiles table
+    // Function to fetch user role from user_profiles table
     const fetchRole = async (userId: string): Promise<string> => {
       try {
         const { data: profile, error } = await supabase
-          .from("profiles")
+          .from("user_profiles")
           .select("role")
           .eq("id", userId)
           .maybeSingle();

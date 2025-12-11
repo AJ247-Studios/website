@@ -32,31 +32,21 @@ export default function AdminPage() {
     }
 
     const loadUsers = async () => {
-      
       try {
-        // Load users list from user_profiles (or profiles table)
+        // Load users list from user_profiles table
         const { data: profiles, error: profilesError } = await supabase
           .from('user_profiles')
           .select('id, role, display_name');
         
         if (profilesError) {
-          // Try fallback to profiles table
-          const { data: fallbackProfiles } = await supabase
-            .from('profiles')
-            .select('id, role');
-          
-          const usersMapped = (fallbackProfiles || []).map(p => ({
-            id: p.id,
-            email: p.id,
-            role: p.role,
-            display_name: undefined
-          }));
-          setUsers(usersMapped);
+          console.error("[AdminPage] Error loading profiles:", profilesError.message);
+          setError("Failed to load users: " + profilesError.message);
+          setUsers([]);
         } else {
           const usersMapped = (profiles || []).map(p => ({
             id: p.id,
             email: p.id,
-            role: p.role,
+            role: p.role || 'user',
             display_name: p.display_name
           }));
           setUsers(usersMapped);

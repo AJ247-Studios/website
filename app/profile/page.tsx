@@ -48,29 +48,15 @@ export default function ProfilePage() {
     }
 
     const loadProfile = async () => {
-
-      // Fetch user profile from database
-      // Try both tables for compatibility
-      // Define a type for profile data
-      let prof: { role?: string; display_name?: string; avatar_url?: string } | null = null;
-      
-      // Try user_profiles first (legacy)
-      const { data: userProf } = await supabase
+      // Fetch user profile from user_profiles table
+      const { data: prof, error } = await supabase
         .from('user_profiles')
         .select('role, display_name, avatar_url')
         .eq('id', session.user.id)
-        .single();
+        .maybeSingle();
       
-      if (userProf) {
-        prof = userProf;
-      } else {
-        // Fall back to profiles table (only has role)
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-        prof = profileData ? { role: profileData.role, display_name: undefined, avatar_url: undefined } : null;
+      if (error) {
+        console.error("[ProfilePage] Error fetching profile:", error.message);
       }
 
       setProfile({
