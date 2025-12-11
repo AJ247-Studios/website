@@ -15,3 +15,15 @@ export interface Media {
   uploaded_by?: string;
   created_at: string;
 }
+
+export interface FileRecord {
+  id: string;
+  user_id: string | null;
+  filename: string;
+  mime_type: string;
+  size: number;
+  url: string;
+  bucket: string;
+  created_at: string;
+  updated_at: string;
+}

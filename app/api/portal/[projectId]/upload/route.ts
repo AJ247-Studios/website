@@ -39,16 +39,32 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
     if (youtube_id && !file) {
       type = 'youtube'
     } else if (file) {
+      // Import R2 utilities at the top of the file
+      const { uploadToR2, generateFileKey } = await import('@/lib/r2')
+      
       const ext = file.name.split('.').pop()?.toLowerCase() || 'bin'
       const isVideo = ['mp4','mov','webm','mkv','avi'].includes(ext)
       type = isVideo ? 'video' : 'photo'
-      const path = `${projectId}/${Date.now()}-${file.name}`
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('portfolio') // reuse existing public bucket
-        .upload(path, file, { upsert: true })
-      if (uploadError) return NextResponse.json({ error: uploadError.message }, { status: 500 })
-      const { data: pub } = supabase.storage.from('portfolio').getPublicUrl(uploadData.path)
-      url = pub.publicUrl
+      
+      // Convert File to Buffer
+      const arrayBuffer = await file.arrayBuffer()
+      const fileBuffer = Buffer.from(arrayBuffer)
+      
+      // Generate key with project folder prefix
+      const key = generateFileKey(file.name, `projects/${projectId}`)
+      
+      // Upload to R2
+      url = await uploadToR2(fileBuffer, key, file.type)
+      
+      // Also save to files table
+      await supabase.from('files').insert([{
+        user_id: authData.user.id,
+        filename: file.name,
+        mime_type: file.type,
+        size: file.size,
+        url,
+        bucket: process.env.R2_BUCKET
+      }])
     } else {
       return NextResponse.json({ error: 'Provide a file or YouTube ID' }, { status: 400 })
     }

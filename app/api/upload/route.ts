@@ -1,37 +1,48 @@
-import { NextRequest, NextResponse } from "next/server";
-import { uploadMediaFile } from "@/lib/api";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { r2 } from "@/lib/r2";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const formData = await request.formData();
-    const file = formData.get("file") as File;
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const youtube_id = formData.get("youtube_id") as string;
+    const form = await req.formData();
+    const file = form.get("file") as File;
+    const clientId = (form.get("user_id") as string) || null;
+    if (!file) return new Response("No file uploaded", { status: 400 });
 
-    if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
-    }
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    const result = await uploadMediaFile(file, {
-      title,
-      description,
-      youtube_id,
-    });
+    const key = `uploads/${Date.now()}-${file.name}`;
 
-    if (result.success) {
-      return NextResponse.json({ success: true, media: result.media });
-    } else {
-      return NextResponse.json(
-        { error: result.error || "Upload failed" },
-        { status: 500 }
-      );
-    }
-  } catch (error) {
-    console.error("Upload error:", error);
-    return NextResponse.json(
-      { error: "Failed to process upload" },
-      { status: 500 }
+    await r2.send(
+      new PutObjectCommand({
+        Bucket: process.env.R2_BUCKET!,
+        Key: key,
+        Body: buffer,
+        ContentType: file.type,
+      })
     );
+
+    const publicUrl = `${process.env.R2_PUBLIC_DOMAIN}/${key}`;
+    
+    // Store metadata in Supabase (client_files table)
+    if (clientId) {
+      const { error } = await supabaseAdmin
+        .from("client_files")
+        .insert({
+          user_id: clientId,
+          file_url: publicUrl,
+          file_name: file.name,
+        });
+      if (error) {
+        console.error("Supabase insert error:", error);
+        // continue to return URL even if DB insert fails
+      }
+    }
+
+    return Response.json({ url: publicUrl, user_id: clientId });
+  } catch (err) {
+    console.error(err);
+    return new Response("Upload failed", { status: 500 });
   }
 }
