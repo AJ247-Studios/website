@@ -15,6 +15,12 @@ interface UserProfile {
 
 export default function ProfilePage() {
   const { supabase, session, role: userRole } = useSupabase();
+  
+  console.log("[ProfilePage] Render with:", {
+    hasSession: !!session,
+    userId: session?.user?.id || "none",
+    userRole,
+  });
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("");
@@ -29,10 +35,18 @@ export default function ProfilePage() {
   const [passwordLoading, setPasswordLoading] = useState(false);
   const router = useRouter();
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated (only after confirming no session)
   useEffect(() => {
-    if (!session) {
-      router.push("/login");
+    console.log("[ProfilePage] Redirect check - session:", !!session);
+    // Don't redirect immediately - give time for session to be established
+    // The session comes from initialSession in SupabaseProvider, which comes from server
+    if (session === null) {
+      // Small delay to ensure we're not redirecting during hydration
+      const timer = setTimeout(() => {
+        console.log("[ProfilePage] No session after delay, redirecting to login");
+        router.push("/login");
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [session, router]);
 

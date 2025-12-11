@@ -13,12 +13,31 @@ import { useRouter } from "next/navigation";
  */
 export default function AdminPage() {
   const { supabase, session, role } = useSupabase();
+  
+  console.log("[AdminPage] Render with:", {
+    hasSession: !!session,
+    userId: session?.user?.id || "none",
+    role,
+  });
   const [error, setError] = useState("");
   const [users, setUsers] = useState<Array<{ id: string; email: string; role: string; display_name?: string }>>([]);
   const [search, setSearch] = useState("");
   const [roleUpdating, setRoleUpdating] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  // Redirect is handled by middleware, but we double-check here
+  useEffect(() => {
+    console.log("[AdminPage] Redirect check - session:", !!session, "role:", role);
+    if (session === null) {
+      // Small delay to ensure we're not redirecting during hydration
+      const timer = setTimeout(() => {
+        console.log("[AdminPage] No session after delay, redirecting to login");
+        router.push("/login");
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [session, role, router]);
 
   // Load users on mount (middleware ensures user is admin)
   useEffect(() => {
