@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import type { Session } from "@supabase/supabase-js";
+import type { Session, EmailOtpType, MobileOtpType } from "@supabase/supabase-js";
 
 /**
  * Get the current user session
@@ -80,10 +80,18 @@ export async function updateEmail(newEmail: string) {
 }
 
 /**
- * Verify OTP for multi-factor authentication
+ * Verify OTP for multi-factor authentication (supports email and SMS)
  */
-export async function verifyOTP(phone: string, token: string, type: string) {
-  return supabase.auth.verifyOtp({ phone, token, type: type as "sms" | "recovery_code" });
+export async function verifyOTP(
+  identifier: { email?: string; phone?: string },
+  token: string,
+  type: EmailOtpType | MobileOtpType
+) {
+  return supabase.auth.verifyOtp({
+    ...identifier,
+    token,
+    type
+  });
 }
 
 /**
