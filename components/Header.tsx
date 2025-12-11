@@ -15,57 +15,25 @@ interface HeaderProps {
 export default function Header({ initialSession = null, initialRole = null }: HeaderProps) {
   const [session, setSession] = useState<Session | null>(initialSession);
   const [role, setRole] = useState<string | null>(initialRole);
-  const [loading, setLoading] = useState(false);
 
-  // Fetch role when session changes
+  // Only listen for auth state changes (session only)
+  // Role is provided by server and doesn't change client-side
   useEffect(() => {
     let mounted = true;
 
-    const fetchRole = async (currentSession: Session) => {
-      try {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", currentSession.user.id)
-          .single();
-        
-        if (mounted) {
-          setRole(profile?.role || null);
-        }
-      } catch (error) {
-        console.error("[Header] Error fetching role:", error);
-        if (mounted) {
-          setRole(null);
-        }
-      }
-    };
-
     // Listen for auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, sess) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
       if (!mounted) return;
-      
       setSession(sess);
-      
-      if (sess) {
-        await fetchRole(sess);
-      } else {
-        setRole(null);
-      }
+      // When session changes, role remains as server-provided
+      // The page will reload on login/logout, so role will be refetched server-side
     });
-
-    // If we have an initial session but no role, fetch it
-    if (initialSession && !initialRole) {
-      fetchRole(initialSession);
-    }
 
     return () => {
       mounted = false;
       listener.subscription.unsubscribe();
     };
-  }, [initialSession, initialRole]);
-
-  // Prevent flash by rendering nothing until loading is complete
-  if (loading) return null;
+  }, []);
 
   return (
     <header className="border-b border-gray-200 dark:border-gray-800">
@@ -88,7 +56,7 @@ export default function Header({ initialSession = null, initialRole = null }: He
 
           {/* Auth Links */}
           <div className="flex gap-4 ml-4 pl-4 border-l border-gray-300 dark:border-gray-700">
-            {!loading && !session ? (
+            {!session ? (
               <>
                 <Link
                   href="/login"
