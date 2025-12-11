@@ -43,7 +43,7 @@ export default function ProfilePage() {
         email: data.session.user.email || "",
         role: "Client", // Default role, update based on your database
         projects: [], // Fetch from your database
-        created_at: data.session.created_at,
+        created_at: data.session.user.created_at,
       });
 
       setLoading(false);
