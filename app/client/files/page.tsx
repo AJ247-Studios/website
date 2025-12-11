@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { useSupabase } from "@/components/SupabaseProvider";
+import { useRouter } from "next/navigation";
 
 type FileRecord = {
   id: string;
@@ -14,28 +15,40 @@ type FileRecord = {
   created_at: string;
 };
 
+/**
+ * Client Files Page
+ * 
+ * Protected by middleware - only accessible to authenticated users.
+ * Displays files uploaded by the current user.
+ */
 export default function ClientFilesPage() {
+  const { supabase, session, isLoading: sessionLoading } = useSupabase();
   const [files, setFiles] = useState<FileRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
+  // Redirect if not authenticated
   useEffect(() => {
-    const run = async () => {
+    if (!sessionLoading && !session) {
+      router.push("/login?redirect=/client/files");
+    }
+  }, [session, sessionLoading, router]);
+
+  // Load files when session is available
+  useEffect(() => {
+    const loadFiles = async () => {
+      if (!session?.user?.id) return;
+      
       try {
-        const { data: sessionData } = await supabase.auth.getSession();
-        const userId = sessionData.session?.user?.id;
-        if (!userId) {
-          setError("Please log in to view your files.");
-          setLoading(false);
-          return;
-        }
-        const { data, error } = await supabase
+        const { data, error: fetchError } = await supabase
           .from("files")
           .select("id, user_id, filename, mime_type, size, url, bucket, created_at")
-          .eq("user_id", userId)
+          .eq("user_id", session.user.id)
           .order("created_at", { ascending: false });
-        if (error) {
-          setError(error.message);
+        
+        if (fetchError) {
+          setError(fetchError.message);
         } else {
           setFiles((data || []) as FileRecord[]);
         }
@@ -45,14 +58,31 @@ export default function ClientFilesPage() {
         setLoading(false);
       }
     };
-    run();
-  }, []);
 
-  if (loading) {
-    return <div className="max-w-4xl mx-auto p-6">Loading your files…</div>;
+    if (session) {
+      loadFiles();
+    }
+  }, [session, supabase]);
+
+  if (sessionLoading || loading) {
+    return (
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400">Loading your files…</p>
+        </div>
+      </div>
+    );
   }
+
   if (error) {
-    return <div className="max-w-4xl mx-auto p-6 text-red-600">{error}</div>;
+    return (
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-red-600">
+          {error}
+        </div>
+      </div>
+    );
   }
 
   return (

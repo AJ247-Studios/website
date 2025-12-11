@@ -1,37 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSupabase } from "@/components/SupabaseProvider";
 import Link from "next/link";
-import type { Session } from "@supabase/supabase-js";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { supabase, session } = useSupabase();
+  
+  // Get redirect URL from query params (set by middleware)
+  const redirectTo = searchParams.get("redirect") || "/profile";
 
-  // Check if user is already logged in
+  // Redirect if already logged in
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) {
-        setSession(data.session);
-        router.push("/profile");
-      }
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
-      setSession(sess);
-      if (sess) {
-        router.push("/profile");
-      }
-    });
-
-    return () => listener?.subscription.unsubscribe();
-  }, [router]);
+    if (session) {
+      router.push(redirectTo);
+    }
+  }, [session, router, redirectTo]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +41,7 @@ export default function LoginPage() {
         return;
       }
 
-      // Session will be set by the auth listener, which will trigger the redirect
+      // Session will be updated by SupabaseProvider, which triggers the redirect
     } catch (err) {
       setError("An unexpected error occurred");
       setLoading(false);
@@ -61,8 +52,13 @@ export default function LoginPage() {
     router.push("/signup");
   };
 
+  // Show loading while checking session or already logged in
   if (session) {
-    return null; // Will redirect via useEffect
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-slate-600 dark:text-slate-400">Redirecting...</p>
+      </div>
+    );
   }
 
   return (

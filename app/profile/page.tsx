@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
-import type { Session } from "@supabase/supabase-js";
+import { useSupabase } from "@/components/SupabaseProvider";
 
 interface UserProfile {
   email: string;
@@ -15,7 +14,7 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
-  const [session, setSession] = useState<Session | null>(null);
+  const { supabase, session, role: userRole, isLoading: sessionLoading } = useSupabase();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [displayName, setDisplayName] = useState("");
@@ -30,49 +29,58 @@ export default function ProfilePage() {
   const [passwordLoading, setPasswordLoading] = useState(false);
   const router = useRouter();
 
-  // Check authentication and load profile
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!sessionLoading && !session) {
+      router.push("/login");
+    }
+  }, [session, sessionLoading, router]);
+
+  // Load profile data when session is available
   useEffect(() => {
     const loadProfile = async () => {
-      const { data } = await supabase.auth.getSession();
-      
-      if (!data.session) {
-        router.push("/login");
-        return;
-      }
+      if (!session) return;
 
-      setSession(data.session);
-      
       // Fetch user profile from database
-      const { data: prof } = await supabase
+      // Try both tables for compatibility
+      // Define a type for profile data
+      let prof: { role?: string; display_name?: string; avatar_url?: string } | null = null;
+      
+      // Try user_profiles first (legacy)
+      const { data: userProf } = await supabase
         .from('user_profiles')
         .select('role, display_name, avatar_url')
-        .eq('id', data.session.user.id)
-        .single()
+        .eq('id', session.user.id)
+        .single();
+      
+      if (userProf) {
+        prof = userProf;
+      } else {
+        // Fall back to profiles table (only has role)
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
+        prof = profileData ? { role: profileData.role, display_name: undefined, avatar_url: undefined } : null;
+      }
+
       setProfile({
-        email: data.session.user.email || "",
-        role: prof?.role || "guest",
+        email: session.user.email || "",
+        role: prof?.role || userRole || "user",
         display_name: prof?.display_name || "",
         avatar_url: prof?.avatar_url || "",
         projects: [],
-        created_at: data.session.user.created_at,
+        created_at: session.user.created_at,
       });
-      setDisplayName(prof?.display_name || "")
-
+      setDisplayName(prof?.display_name || "");
       setLoading(false);
     };
 
-    loadProfile();
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
-      if (!sess) {
-        router.push("/login");
-      } else {
-        setSession(sess);
-      }
-    });
-
-    return () => listener?.subscription.unsubscribe();
-  }, [router]);
+    if (session) {
+      loadProfile();
+    }
+  }, [session, supabase, userRole]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -88,32 +96,32 @@ export default function ProfilePage() {
       const { error } = await supabase
         .from('user_profiles')
         .update({ display_name: displayName })
-        .eq('id', session.user.id)
-      if (error) setProfileMsg(error.message)
-      else setProfileMsg('Profile updated')
+        .eq('id', session.user.id);
+      if (error) setProfileMsg(error.message);
+      else setProfileMsg('Profile updated');
     } finally {
       setSavingProfile(false);
-      setTimeout(() => setProfileMsg(""), 2000)
+      setTimeout(() => setProfileMsg(""), 2000);
     }
-  }
+  };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file || !session?.user) return
-    const path = `${session.user.id}/${Date.now()}-${file.name}`
+    const file = e.target.files?.[0];
+    if (!file || !session?.user) return;
+    const path = `${session.user.id}/${Date.now()}-${file.name}`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(path, file, { upsert: true })
+      .upload(path, file, { upsert: true });
     if (uploadError) {
-      setProfileMsg(uploadError.message)
-      return
+      setProfileMsg(uploadError.message);
+      return;
     }
-    const { data: publicUrl } = supabase.storage.from('avatars').getPublicUrl(uploadData.path)
-    await supabase.from('user_profiles').update({ avatar_url: publicUrl.publicUrl }).eq('id', session.user.id)
-    setProfile((p) => p ? { ...p, avatar_url: publicUrl.publicUrl } : p)
-    setProfileMsg('Avatar updated')
-    setTimeout(() => setProfileMsg(""), 2000)
-  }
+    const { data: publicUrl } = supabase.storage.from('avatars').getPublicUrl(uploadData.path);
+    await supabase.from('user_profiles').update({ avatar_url: publicUrl.publicUrl }).eq('id', session.user.id);
+    setProfile((p) => p ? { ...p, avatar_url: publicUrl.publicUrl } : p);
+    setProfileMsg('Avatar updated');
+    setTimeout(() => setProfileMsg(""), 2000);
+  };
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();

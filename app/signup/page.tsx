@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { useSupabase } from "@/components/SupabaseProvider";
 import Link from "next/link";
-import type { Session } from "@supabase/supabase-js";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -13,27 +12,15 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
+  const { supabase, session } = useSupabase();
 
-  // Check if user is already logged in
+  // Redirect if already logged in
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) {
-        setSession(data.session);
-        router.push("/profile");
-      }
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
-      setSession(sess);
-      if (sess) {
-        router.push("/profile");
-      }
-    });
-
-    return () => listener?.subscription.unsubscribe();
-  }, [router]);
+    if (session) {
+      router.push("/profile");
+    }
+  }, [session, router]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,8 +77,13 @@ export default function SignUpPage() {
     }
   };
 
+  // Show loading state while redirecting
   if (session) {
-    return null; // Will redirect via useEffect
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-slate-600 dark:text-slate-400">Redirecting...</p>
+      </div>
+    );
   }
 
   return (
