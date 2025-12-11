@@ -26,6 +26,9 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
+  // Temporary debug: confirm middleware sees the session
+  console.log("Middleware session:", session ? { user: session.user.id } : null);
+
   const pathname = req.nextUrl.pathname;
 
   // Protect /client and /admin
