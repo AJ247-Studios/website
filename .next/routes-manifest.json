@@ -19,7 +19,32 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/api/portal/[projectId]",
+      "regex": "^/api/portal/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPprojectId": "nxtPprojectId"
+      },
+      "namedRegex": "^/api/portal/(?<nxtPprojectId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/portal/[projectId]/upload",
+      "regex": "^/api/portal/([^/]+?)/upload(?:/)?$",
+      "routeKeys": {
+        "nxtPprojectId": "nxtPprojectId"
+      },
+      "namedRegex": "^/api/portal/(?<nxtPprojectId>[^/]+?)/upload(?:/)?$"
+    },
+    {
+      "page": "/portal/[projectId]",
+      "regex": "^/portal/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPprojectId": "nxtPprojectId"
+      },
+      "namedRegex": "^/portal/(?<nxtPprojectId>[^/]+?)(?:/)?$"
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",
@@ -52,6 +77,12 @@
       "namedRegex": "^/admin/upload(?:/)?$"
     },
     {
+      "page": "/api/admin/set-role",
+      "regex": "^/api/admin/set\\-role(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/set\\-role(?:/)?$"
+    },
+    {
       "page": "/api/chat",
       "regex": "^/api/chat(?:/)?$",
       "routeKeys": {},
@@ -64,10 +95,40 @@
       "namedRegex": "^/api/upload(?:/)?$"
     },
     {
+      "page": "/client/files",
+      "regex": "^/client/files(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/client/files(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
       "page": "/portfolio",
       "regex": "^/portfolio(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/portfolio(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    },
+    {
+      "page": "/team/upload",
+      "regex": "^/team/upload(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/team/upload(?:/)?$"
     }
   ],
   "dataRoutes": [],

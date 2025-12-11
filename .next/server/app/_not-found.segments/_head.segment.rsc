@@ -1,7 +1,8 @@
 1:"$Sreact.fragment"
-2:I[34204,["/_next/static/chunks/45e8d141d593f33d.js","/_next/static/chunks/4236aa382c239566.js"],"ViewportBoundary"]
-4:I[34204,["/_next/static/chunks/45e8d141d593f33d.js","/_next/static/chunks/4236aa382c239566.js"],"MetadataBoundary"]
+2:I[34204,["/_next/static/chunks/ee8f3def38aeb24b.js","/_next/static/chunks/04ac73b485372feb.js","/_next/static/chunks/4236aa382c239566.js"],"ViewportBoundary"]
+4:I[34204,["/_next/static/chunks/ee8f3def38aeb24b.js","/_next/static/chunks/04ac73b485372feb.js","/_next/static/chunks/4236aa382c239566.js"],"MetadataBoundary"]
 5:"$Sreact.suspense"
-0:{"buildId":"AQw7hQspijDtDAjM-jMLh","rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":"$@3"}],["$","div",null,{"hidden":true,"children":["$","$L4",null,{"children":["$","$5",null,{"name":"Next.Metadata","children":"$@6"}]}]}],null]}],"loading":null,"isPartial":false}
+7:I[34519,["/_next/static/chunks/ee8f3def38aeb24b.js","/_next/static/chunks/04ac73b485372feb.js","/_next/static/chunks/4236aa382c239566.js"],"IconMark"]
+0:{"buildId":"Ir-1d3CDjqJSf5koVgR4S","rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":"$@3"}],["$","div",null,{"hidden":true,"children":["$","$L4",null,{"children":["$","$5",null,{"name":"Next.Metadata","children":"$@6"}]}]}],null]}],"loading":null,"isPartial":false}
 3:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-6:[["$","title","0",{"children":"AJ247 Studios"}],["$","meta","1",{"name":"description","content":"Exceptional digital experiences through innovative design and cutting-edge technology"}]]
+6:[["$","title","0",{"children":"AJ247 Studios"}],["$","meta","1",{"name":"description","content":"Exceptional digital experiences through innovative design and cutting-edge technology"}],["$","link","2",{"rel":"icon","href":"/favicon.ico"}],["$","$L7","3",{}]]

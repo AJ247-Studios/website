@@ -1,4 +1,9 @@
 {
   "version": 1,
-  "functions": {}
+  "functions": {
+    "/api/portal/[projectId]": {},
+    "/api/admin/set-role": {},
+    "/api/chat": {},
+    "/api/portal/[projectId]/upload": {}
+  }
 }
