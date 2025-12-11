@@ -12,10 +12,6 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
  * 3. Handle cookie refresh for session token updates
  */
 export async function middleware(req: NextRequest) {
-  // Debug: Log all cookie names
-  const allCookies = req.cookies.getAll();
-  console.log("[Middleware] All cookies:", allCookies.map(c => ({ name: c.name, valueLength: c.value.length })));
-  
   // Create a new NextResponse to modify - this allows us to update cookies
   let response = NextResponse.next({
     request: {
@@ -56,27 +52,13 @@ export async function middleware(req: NextRequest) {
   // The refresh happens automatically and cookies are updated via the handlers above
   const {
     data: { session },
-    error: sessionError,
   } = await supabase.auth.getSession();
-
-  console.log("[Middleware] Session check:", {
-    path: req.nextUrl.pathname,
-    hasSession: !!session,
-    userId: session?.user?.id || "none",
-    error: sessionError?.message || "none",
-  });
-
-  // Log session errors for debugging (but don't block the request)
-  if (sessionError) {
-    console.error("[Middleware] Session error:", sessionError.message);
-  }
 
   const pathname = req.nextUrl.pathname;
 
   // Protect /client and /admin routes - require valid session
   if (pathname.startsWith("/client") || pathname.startsWith("/admin")) {
     if (!session) {
-      console.log("[Middleware] No session, redirecting to login from:", pathname);
       const redirectUrl = new URL("/login", req.url);
       redirectUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(redirectUrl);
@@ -112,10 +94,8 @@ export async function middleware(req: NextRequest) {
         // Redirect non-admins to home page
         return NextResponse.redirect(new URL("/", req.url));
       }
-
-      console.log("[Middleware] Admin access granted for:", session.user.email);
     } catch (error) {
-      console.error("[Middleware] Error checking admin role:", error);
+      // Log error for debugging but redirect to home
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
