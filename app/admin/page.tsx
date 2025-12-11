@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
  * so this page can focus on admin functionality.
  */
 export default function AdminPage() {
-  const { supabase, session, role } = useSupabase();
+  const { supabase, session, role, isLoading: sessionLoading } = useSupabase();
   const [error, setError] = useState("");
   const [users, setUsers] = useState<Array<{ id: string; email: string; role: string; display_name?: string }>>([]);
   const [search, setSearch] = useState("");
@@ -22,8 +22,16 @@ export default function AdminPage() {
 
   // Load users on mount (middleware ensures user is admin)
   useEffect(() => {
+    // Don't do anything while session is still loading
+    if (sessionLoading) return;
+    
+    // If no session after loading completes, stop loading (middleware will redirect)
+    if (!session) {
+      setLoading(false);
+      return;
+    }
+
     const loadUsers = async () => {
-      if (!session) return;
       
       try {
         // Load users list from user_profiles (or profiles table)
@@ -62,7 +70,7 @@ export default function AdminPage() {
     };
 
     loadUsers();
-  }, [session, supabase]);
+  }, [session, sessionLoading, supabase]);
 
   const setRole = async (userId: string, newRole: 'guest' | 'client' | 'team' | 'admin' | 'user') => {
     setRoleUpdating(userId);

@@ -38,8 +38,16 @@ export default function ProfilePage() {
 
   // Load profile data when session is available
   useEffect(() => {
+    // Don't do anything while session is still loading
+    if (sessionLoading) return;
+    
+    // If no session after loading completes, stop loading (redirect will happen)
+    if (!session) {
+      setLoading(false);
+      return;
+    }
+
     const loadProfile = async () => {
-      if (!session) return;
 
       // Fetch user profile from database
       // Try both tables for compatibility
@@ -77,10 +85,8 @@ export default function ProfilePage() {
       setLoading(false);
     };
 
-    if (session) {
-      loadProfile();
-    }
-  }, [session, supabase, userRole]);
+    loadProfile();
+  }, [session, sessionLoading, supabase, userRole]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
