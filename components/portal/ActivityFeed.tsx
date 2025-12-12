@@ -78,11 +78,11 @@ function ActivityRow({ activity }: ActivityRowProps) {
           {" "}
           <span className="font-medium">{activity.target_title}</span>
         </p>
-        {activity.metadata?.comment && (
+        {activity.metadata?.comment ? (
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 italic">
             &ldquo;{String(activity.metadata.comment)}&rdquo;
           </p>
-        )}
+        ) : null}
         <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
           {formatTimeAgo(activity.created_at)}
         </p>
