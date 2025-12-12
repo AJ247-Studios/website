@@ -11,10 +11,62 @@ import { createServerClient } from "@supabase/ssr";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const metadata: Metadata = {
-  title: "AJ247 Studios",
-  description: "Exceptional digital experiences through innovative design and cutting-edge technology",
+  title: {
+    default: "AJ247 Studios | Premium Photo & Video Production in Kraków",
+    template: "%s | AJ247 Studios",
+  },
+  description:
+    "Professional photo and video production in Kraków. Sports events, concerts, weddings, portraits & corporate. 500+ projects delivered. Get a free quote today.",
+  keywords: [
+    "photo production Kraków",
+    "video production Kraków",
+    "event photographer Poland",
+    "sports photography",
+    "concert videography",
+    "wedding photographer Kraków",
+    "corporate video production",
+    "professional photography services",
+  ],
+  authors: [{ name: "AJ247 Studios" }],
+  creator: "AJ247 Studios",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://aj247studios.com",
+    siteName: "AJ247 Studios",
+    title: "AJ247 Studios | Premium Photo & Video Production in Kraków",
+    description:
+      "Professional photo and video production in Kraków. Sports events, concerts, weddings, portraits & corporate. Get a free quote today.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AJ247 Studios - Premium Photo & Video Production",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AJ247 Studios | Premium Photo & Video Production",
+    description:
+      "Professional photo and video production in Kraków. Sports, concerts, weddings, portraits & corporate.",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 
