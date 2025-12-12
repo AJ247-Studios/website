@@ -3,7 +3,7 @@
  * Barrel export for clean imports
  */
 
-export { KpiRow, type KpiCardProps } from "./KpiRow";
+export { KpiRow } from "./KpiRow";
 export { AlertsFeed } from "./AlertsFeed";
 export { ProjectsTable } from "./ProjectsTable";
 export { QuickClientView } from "./QuickClientView";
