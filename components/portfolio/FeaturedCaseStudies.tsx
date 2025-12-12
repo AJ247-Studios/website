@@ -57,7 +57,7 @@ export default function FeaturedCaseStudies({
               className="group relative bg-slate-50 dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10"
             >
               {/* Image Container */}
-              <div className="relative aspect-[4/3] overflow-hidden">
+              <div className="relative aspect-4/3 overflow-hidden">
                 <Image
                   src={project.heroMedia.thumbnailUrl}
                   alt={project.heroMedia.alt}

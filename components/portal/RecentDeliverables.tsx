@@ -100,7 +100,7 @@ function DeliverableCard({
       {/* Thumbnail */}
       <button
         onClick={onOpenLightbox}
-        className="w-full aspect-[4/3] relative focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+        className="w-full aspect-4/3 relative focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
         aria-label={`Preview ${deliverable.title}`}
       >
         <img
