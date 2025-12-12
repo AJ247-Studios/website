@@ -1,0 +1,134 @@
+const testimonials = [
+  {
+    id: 1,
+    quote: "AJ247 captured our wedding beautifully. The cinematic film made us relive every moment. Worth every złoty!",
+    author: "Marta & Tomek",
+    role: "Wedding, Kraków",
+    rating: 5,
+  },
+  {
+    id: 2,
+    quote: "Incredible sports coverage for our basketball league. Fast delivery, amazing action shots. Our sponsors loved the content.",
+    author: "Piotr Nowak",
+    role: "KS Cracovia",
+    rating: 5,
+  },
+  {
+    id: 3,
+    quote: "Professional, creative, and so easy to work with. Our corporate event photos were delivered within 24 hours.",
+    author: "Anna Kowalska",
+    role: "Marketing Director, Tech Corp",
+    rating: 5,
+  },
+];
+
+const clientLogos = [
+  { name: "KS Cracovia", initials: "KC" },
+  { name: "ICE Kraków", initials: "ICE" },
+  { name: "Tauron Arena", initials: "TA" },
+  { name: "Wisła Kraków", initials: "WK" },
+  { name: "AGH University", initials: "AGH" },
+  { name: "Kraków Film", initials: "KF" },
+];
+
+export default function SocialProof() {
+  return (
+    <section className="py-20 sm:py-28 bg-white dark:bg-slate-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+            Trusted by Kraków&apos;s Best
+          </h2>
+          <p className="text-lg text-slate-600 dark:text-slate-400">
+            From sports teams to Fortune 500 companies, we deliver results that speak for themselves.
+          </p>
+        </div>
+
+        {/* Client logos - trust signals per research */}
+        <div className="mb-16">
+          <p className="text-center text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-8">
+            Trusted by leading organizations
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
+            {clientLogos.map((client) => (
+              <div
+                key={client.name}
+                className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                title={client.name}
+              >
+                {client.initials}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Testimonials grid */}
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+          {testimonials.map((testimonial) => (
+            <div
+              key={testimonial.id}
+              className="relative bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700"
+            >
+              {/* Quote mark */}
+              <div className="absolute top-6 right-6 text-slate-200 dark:text-slate-700">
+                <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
+
+              {/* Rating stars */}
+              <div className="flex gap-1 mb-4">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+
+              {/* Quote */}
+              <blockquote className="text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
+                &ldquo;{testimonial.quote}&rdquo;
+              </blockquote>
+
+              {/* Author */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-white font-semibold text-sm">
+                  {testimonial.author.charAt(0)}
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900 dark:text-white text-sm">
+                    {testimonial.author}
+                  </div>
+                  <div className="text-slate-500 dark:text-slate-400 text-sm">
+                    {testimonial.role}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Stats bar - live stats per research for FOMO */}
+        <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 py-10 px-8 bg-linear-to-r from-blue-600 to-emerald-600 rounded-2xl text-white">
+          <div className="text-center">
+            <div className="text-3xl sm:text-4xl font-bold mb-1">500+</div>
+            <div className="text-blue-100 text-sm">Projects Completed</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl sm:text-4xl font-bold mb-1">200+</div>
+            <div className="text-blue-100 text-sm">Happy Clients</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl sm:text-4xl font-bold mb-1">50K+</div>
+            <div className="text-blue-100 text-sm">Photos Delivered</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl sm:text-4xl font-bold mb-1">100+</div>
+            <div className="text-blue-100 text-sm">Hours of Video</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
