@@ -92,7 +92,7 @@ For public portfolio/website assets, you can enable public access:
 ### Option A: R2.dev Subdomain
 1. Go to bucket settings → **Public Access**
 2. Enable **R2.dev subdomain**
-3. Your public URL will be: `https://pub-xxxxx.r2.dev/path/to/file`
+3. Your public URL will be: `https://pub-a2a87610a991462eb9a67ee2f3755e98.r2.dev`
 
 ### Option B: Custom Domain
 1. Add a custom domain in bucket settings
