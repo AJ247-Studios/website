@@ -31,8 +31,8 @@ export const SupabaseProvider = ({
   const [user, setUser] = useState<User | null>(initialSession?.user ?? null);
   const [role, setRole] = useState<string | null>(initialRole);
   
-  // If we have initialSession from server, we're NOT loading
-  // Otherwise, we need to try to recover session from storage
+  // If we have initialSession from server, we're NOT loading.
+  // Otherwise, we need to try to recover session from storage/cookies.
   const [isLoading, setIsLoading] = useState(!initialSession);
   
   // Track if we've initialized to prevent double-fetching
@@ -45,35 +45,54 @@ export const SupabaseProvider = ({
 
     /**
      * CRITICAL: Rehydrate session on mount
-     * 
-     * If initialSession is null (e.g., SSR failed to read cookies, hard refresh,
-     * or race condition), try to recover session from browser storage.
-     * supabase-js persists sessions to localStorage by default.
+     *
+     * Handles both cases:
+     * 1) No initialSession (recover from browser storage)
+     * 2) We have initialSession from the server but the browser client doesn't
+     *    yet have it (after OAuth/magic-link redirect). In that case, push the
+     *    server session into the browser client so future refreshes stay logged in.
      */
     async function initializeAuth() {
       try {
-        // Always call getSession to ensure we have the latest session from storage
+        // Read whatever the browser currently knows (localStorage/sessionStorage)
         const { data: { session: storedSession }, error } = await supabase.auth.getSession();
-        
+
         if (error) {
           console.error("Auth init error:", error.message);
-          setIsLoading(false);
-          return;
         }
 
-        if (storedSession) {
-          setSession(storedSession);
-          setUser(storedSession.user);
-          
+        let effectiveSession = storedSession;
+
+        // If the browser has no session but the server sent one, hydrate it now
+        if (!storedSession && initialSession?.access_token && initialSession?.refresh_token) {
+          const { data, error: setError } = await supabase.auth.setSession({
+            access_token: initialSession.access_token,
+            refresh_token: initialSession.refresh_token,
+          });
+
+          if (setError) {
+            console.error("Auth setSession error:", setError.message);
+          } else if (data?.session) {
+            effectiveSession = data.session;
+          }
+        }
+
+        if (effectiveSession) {
+          setSession(effectiveSession);
+          setUser(effectiveSession.user);
+
           // Fetch role if we recovered a session but don't have a role yet
-          if (!role && storedSession.user) {
+          if (!role && effectiveSession.user) {
             const { data: profile } = await supabase
               .from("user_profiles")
               .select("role")
-              .eq("id", storedSession.user.id)
+              .eq("id", effectiveSession.user.id)
               .maybeSingle();
             setRole(profile?.role || "user");
           }
+        } else {
+          setSession(null);
+          setUser(null);
         }
       } catch (err) {
         console.error("Auth initialization failed:", err);
@@ -82,10 +101,7 @@ export const SupabaseProvider = ({
       }
     }
 
-    // Only rehydrate if we don't have an initial session from server
-    if (!initialSession) {
-      initializeAuth();
-    }
+    initializeAuth();
 
     /**
      * Subscribe to auth state changes
