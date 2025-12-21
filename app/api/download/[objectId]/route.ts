@@ -89,6 +89,14 @@ export async function GET(
       storageObject = legacyObject;
     }
 
+    // Ensure storageObject is not null at this point
+    if (!storageObject) {
+      return NextResponse.json(
+        { error: "File not found" },
+        { status: 404 }
+      );
+    }
+
     // Private files require authentication
     if (!user) {
       return NextResponse.json(
