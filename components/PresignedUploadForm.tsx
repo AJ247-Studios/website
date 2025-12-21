@@ -346,16 +346,9 @@ export default function PresignedUploadForm({
                 <span className="text-gray-700 dark:text-gray-300 truncate">
                   {file.filename}
                 </span>
-                {file.url && (
-                  <a
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline shrink-0 ml-2"
-                  >
-                    View
-                  </a>
-                )}
+                <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0 ml-2">
+                  {formatFileSize(file.size)}
+                </span>
               </li>
             ))}
           </ul>

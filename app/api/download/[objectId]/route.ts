@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClientServer } from "@/utils/supabase-server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { createPresignedGetUrl, isPublicPath, getPublicUrl } from "@/lib/r2";
+import { createSignedUrl, STORAGE_BUCKET } from "@/lib/supabase-storage";
 
 /**
  * GET /api/download/[objectId]
  * 
- * Generates a presigned download URL for a storage object.
+ * Generates a signed download URL for a storage object using Supabase Storage.
  * Validates user permissions before generating URL.
- * 
- * For public files, returns the public CDN URL directly.
- * For private files, generates a short-lived presigned URL.
  */
 
 export async function GET(
@@ -24,11 +21,27 @@ export async function GET(
     const supabase = await createClientServer();
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Fetch the storage object
-    const { data: storageObject, error: fetchError } = await supabaseAdmin
-      .from("storage_objects")
+    // First try to find in media_assets (new Supabase Storage flow)
+    let storageObject: {
+      id: string;
+      storage_path?: string;
+      r2_path?: string;
+      filename?: string;
+      is_public?: boolean;
+      access_level?: string;
+      uploaded_by?: string;
+      project_id?: string;
+      projects?: { id: string; client_id: string } | null;
+    } | null = null;
+
+    const { data: mediaAsset, error: mediaError } = await supabaseAdmin
+      .from("media_assets")
       .select(`
-        *,
+        id,
+        storage_path,
+        filename,
+        uploaded_by,
+        project_id,
         projects (
           id,
           client_id
@@ -37,21 +50,38 @@ export async function GET(
       .eq("id", objectId)
       .single();
 
-    if (fetchError || !storageObject) {
-      return NextResponse.json(
-        { error: "File not found" },
-        { status: 404 }
-      );
-    }
+    if (mediaAsset) {
+      storageObject = {
+        id: mediaAsset.id,
+        storage_path: mediaAsset.storage_path,
+        filename: mediaAsset.filename,
+        uploaded_by: mediaAsset.uploaded_by,
+        project_id: mediaAsset.project_id,
+        projects: mediaAsset.projects as { id: string; client_id: string } | null,
+        is_public: false, // All media assets use signed URLs
+        access_level: 'private',
+      };
+    } else {
+      // Fallback to storage_objects table (legacy R2 data)
+      const { data: legacyObject, error: fetchError } = await supabaseAdmin
+        .from("storage_objects")
+        .select(`
+          *,
+          projects (
+            id,
+            client_id
+          )
+        `)
+        .eq("id", objectId)
+        .single();
 
-    // Public files - return public URL directly
-    if (storageObject.is_public && isPublicPath(storageObject.r2_path)) {
-      return NextResponse.json({
-        url: getPublicUrl(storageObject.r2_path),
-        filename: storageObject.filename,
-        isPublic: true,
-        expiresAt: null,
-      });
+      if (fetchError || !legacyObject) {
+        return NextResponse.json(
+          { error: "File not found" },
+          { status: 404 }
+        );
+      }
+      storageObject = legacyObject;
     }
 
     // Private files require authentication
@@ -101,15 +131,37 @@ export async function GET(
       );
     }
 
-    // Generate presigned URL (1 hour expiry for downloads)
-    const presignedUrl = await createPresignedGetUrl(storageObject.r2_path, 3600);
+    // Generate signed URL (1 hour expiry for downloads)
+    const storagePath = storageObject.storage_path || storageObject.r2_path;
+    
+    if (!storagePath) {
+      return NextResponse.json(
+        { error: "File path not found" },
+        { status: 404 }
+      );
+    }
+
+    const { url: signedUrl, error: signError } = await createSignedUrl(
+      supabaseAdmin,
+      storagePath,
+      3600 // 1 hour
+    );
+
+    if (signError || !signedUrl) {
+      console.error("Failed to create signed URL:", signError);
+      return NextResponse.json(
+        { error: "Failed to generate download URL" },
+        { status: 500 }
+      );
+    }
+
     const expiresAt = new Date(Date.now() + 3600 * 1000);
 
     // Log download activity (non-critical, fire and forget)
     void supabaseAdmin.rpc('log_activity', {
       p_user_id: user.id,
       p_action: 'download',
-      p_entity_type: 'storage_object',
+      p_entity_type: 'media_asset',
       p_entity_id: objectId,
       p_metadata: {
         filename: storageObject.filename,
@@ -117,7 +169,7 @@ export async function GET(
     });
 
     return NextResponse.json({
-      url: presignedUrl,
+      url: signedUrl,
       filename: storageObject.filename,
       isPublic: false,
       expiresAt: expiresAt.toISOString(),

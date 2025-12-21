@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { buildStoragePath, STORAGE_BUCKET } from '@/lib/supabase-storage'
 
 export const runtime = 'nodejs'
 
@@ -34,36 +35,52 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
     const youtube_id = (formData.get('youtube_id') as string) || null
 
     let url: string | null = null
+    let storagePath: string | null = null
     let type: 'photo' | 'video' | 'youtube' = 'photo'
 
     if (youtube_id && !file) {
       type = 'youtube'
     } else if (file) {
-      // Import R2 utilities at the top of the file
-      const { uploadToR2, generateFileKey } = await import('@/lib/r2')
-      
       const ext = file.name.split('.').pop()?.toLowerCase() || 'bin'
       const isVideo = ['mp4','mov','webm','mkv','avi'].includes(ext)
       type = isVideo ? 'video' : 'photo'
       
-      // Convert File to Buffer
-      const arrayBuffer = await file.arrayBuffer()
-      const fileBuffer = Buffer.from(arrayBuffer)
-      
-      // Generate key with project folder prefix
-      const key = generateFileKey(file.name, `projects/${projectId}`)
-      
-      // Upload to R2
-      url = await uploadToR2(fileBuffer, key, file.type)
-      
-      // Also save to files table
-      await supabase.from('files').insert([{
-        user_id: authData.user.id,
+      // Build storage path for Supabase Storage
+      storagePath = buildStoragePath({
+        assetType: 'deliverable',
+        projectId,
         filename: file.name,
+      })
+      
+      // Upload directly to Supabase Storage
+      const { data: uploadData, error: uploadErr } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .upload(storagePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        })
+
+      if (uploadErr) {
+        return NextResponse.json({ error: uploadErr.message }, { status: 500 })
+      }
+
+      // Create signed URL for immediate use (optional)
+      const { data: signedData } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .createSignedUrl(storagePath, 3600)
+      
+      url = signedData?.signedUrl || null
+
+      // Save to media_assets table
+      await supabase.from('media_assets').insert([{
+        uploaded_by: authData.user.id,
+        project_id: projectId,
+        filename: file.name,
+        file_size: file.size,
         mime_type: file.type,
-        size: file.size,
-        url,
-        bucket: process.env.R2_BUCKET
+        storage_path: storagePath,
+        asset_type: 'deliverable',
+        status: 'uploaded',
       }])
     } else {
       return NextResponse.json({ error: 'Provide a file or YouTube ID' }, { status: 400 })
@@ -75,6 +92,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
         project_id: projectId,
         type,
         url,
+        storage_path: storagePath,
         youtube_id,
         title,
         description,
@@ -84,7 +102,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
     if (insertErr) return NextResponse.json({ error: insertErr.message }, { status: 500 })
 
     return NextResponse.json({ ok: true })
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Server error'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
