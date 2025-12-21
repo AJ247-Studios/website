@@ -51,13 +51,18 @@ export async function GET(
       .single();
 
     if (mediaAsset) {
+      // Handle projects join - Supabase may return array or single object
+      const projectData = Array.isArray(mediaAsset.projects) 
+        ? mediaAsset.projects[0] 
+        : mediaAsset.projects;
+      
       storageObject = {
         id: mediaAsset.id,
         storage_path: mediaAsset.storage_path,
         filename: mediaAsset.filename,
         uploaded_by: mediaAsset.uploaded_by,
         project_id: mediaAsset.project_id,
-        projects: mediaAsset.projects as { id: string; client_id: string } | null,
+        projects: projectData as { id: string; client_id: string } | null,
         is_public: false, // All media assets use signed URLs
         access_level: 'private',
       };
