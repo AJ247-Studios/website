@@ -38,19 +38,24 @@ export default function AdminProjectsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [userRole, setUserRole] = useState<string | null>(null);
 
+  // Store session for API calls
+  const [session, setSession] = useState<{ access_token: string } | null>(null);
+
   useEffect(() => {
     const init = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      if (!currentSession) {
         router.push("/login");
         return;
       }
+
+      setSession(currentSession);
 
       // Check user role
       const { data: profile } = await supabase
         .from("user_profiles")
         .select("role")
-        .eq("id", session.user.id)
+        .eq("id", currentSession.user.id)
         .single();
 
       if (!profile || !["admin", "team"].includes(profile.role)) {
@@ -59,19 +64,32 @@ export default function AdminProjectsPage() {
       }
 
       setUserRole(profile.role);
-      await loadProjects();
+      await loadProjects(currentSession.access_token);
     };
 
     init();
   }, [router]);
 
-  const loadProjects = async () => {
+  const loadProjects = async (token?: string) => {
+    // Use passed token or current session token
+    const accessToken = token || session?.access_token;
+    if (!accessToken) {
+      console.error("No access token available");
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await fetch("/api/projects");
+      const res = await fetch("/api/projects", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (res.ok) {
         const data = await res.json();
         setProjects(data.projects || []);
+      } else {
+        console.error("Failed to load projects:", res.status, await res.text());
       }
     } catch (err) {
       console.error("Failed to load projects:", err);
