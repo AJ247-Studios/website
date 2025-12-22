@@ -100,8 +100,8 @@ export default function AdminProjectsPage() {
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.client?.full_name?.toLowerCase().includes(searchQuery.toLowerCase());
+      (project.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (project.client?.full_name || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || project.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
