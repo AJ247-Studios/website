@@ -48,8 +48,8 @@ export function ProjectsTable({
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(p => 
-        p.title.toLowerCase().includes(query) ||
-        p.service_type.toLowerCase().includes(query)
+        (p.title || '').toLowerCase().includes(query) ||
+        (p.service_type || '').toLowerCase().includes(query)
       );
     }
 
@@ -60,8 +60,8 @@ export function ProjectsTable({
 
       switch (sortField) {
         case "title":
-          aVal = a.title.toLowerCase();
-          bVal = b.title.toLowerCase();
+          aVal = (a.title || '').toLowerCase();
+          bVal = (b.title || '').toLowerCase();
           break;
         case "status":
           aVal = a.status;

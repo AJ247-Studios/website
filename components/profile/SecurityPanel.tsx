@@ -85,7 +85,7 @@ export function SecurityPanel({
   };
 
   const getDeviceIcon = (device: string) => {
-    const lower = device.toLowerCase();
+    const lower = (device || '').toLowerCase();
     if (lower.includes("mobile") || lower.includes("phone") || lower.includes("iphone") || lower.includes("android")) {
       return (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

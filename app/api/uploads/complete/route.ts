@@ -98,6 +98,7 @@ export async function POST(request: NextRequest) {
         uploaded_by: user.id,
         project_id: upload.project_id,
         filename: upload.filename,
+        storage_path: upload.r2_path,  // Required field for storage location
         r2_path: upload.r2_path,
         mime_type: upload.mime_type,
         file_size: upload.total_size,
