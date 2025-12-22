@@ -234,6 +234,12 @@ export default function AdminPage() {
             Overview
           </button>
           <button
+            onClick={() => router.push("/admin/projects")}
+            className="px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+          >
+            Projects
+          </button>
+          <button
             onClick={() => setActiveTab("users")}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === "users"
