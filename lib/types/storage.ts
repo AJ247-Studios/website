@@ -96,14 +96,20 @@ export interface SignedUrlResult {
   expiresAt: Date;
 }
 
-// Project and member types for the frontend flow
+// ============================================
+// Project and Member Types
+// ============================================
+
+export type ProjectRole = 'client' | 'team' | 'admin';
 
 export interface Project {
   id: string;
   title: string;
   description?: string;
   client_id: string;
-  status?: string;
+  status: string;
+  shoot_date?: string;
+  delivery_date?: string;
   created_at: string;
   updated_at: string;
 }
@@ -112,7 +118,7 @@ export interface ProjectMember {
   id: string;
   project_id: string;
   user_id: string;
-  role: 'client' | 'team' | 'admin';
+  role: ProjectRole;
   created_at: string;
 }
 
@@ -126,6 +132,44 @@ export interface AddProjectMembersPayload {
   project_id: string;
   members: Array<{
     user_id: string;
-    role: 'client' | 'team';
+    role: ProjectRole;
   }>;
+}
+
+// ============================================
+// API Response Types
+// ============================================
+
+export interface ApiResponse<T> {
+  data: T | null;
+  error: string | null;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+}
+
+// ============================================
+// Upload Event Types
+// ============================================
+
+export interface UploadProgressEvent {
+  loaded: number;
+  total: number;
+  percentage: number;
+}
+
+export interface UploadCompleteEvent {
+  asset: MediaAsset;
+  storagePath: string;
+}
+
+export interface UploadErrorEvent {
+  message: string;
+  code?: string;
+  filename?: string;
 }
