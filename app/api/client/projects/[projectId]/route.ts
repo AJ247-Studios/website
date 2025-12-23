@@ -295,37 +295,43 @@ export async function GET(
       },
       stats,
       deliverables: transformedDeliverables,
-      comments: comments.map(c => ({
-        id: c.id,
-        deliverable_id: c.deliverable_id,
-        media_asset_id: c.media_asset_id,
-        body: c.body,
-        timecode: c.timecode,
-        x_position: c.x_position,
-        y_position: c.y_position,
-        resolved: c.resolved,
-        created_at: c.created_at,
-        author: {
-          id: c.user?.id,
-          name: c.user?.display_name || 'Unknown',
-          avatar: c.user?.avatar_path,
-          is_team: c.user?.role === 'admin' || c.user?.role === 'team',
-        },
-      })),
-      activity: (activity || []).map(a => ({
-        id: a.id,
-        action: a.action,
-        entity_type: a.entity_type,
-        entity_id: a.entity_id,
-        metadata: a.metadata,
-        created_at: a.created_at,
-        actor: {
-          id: a.user?.id,
-          name: a.user?.display_name || 'System',
-          avatar: a.user?.avatar_path,
-          is_team: a.user?.role === 'admin' || a.user?.role === 'team',
-        },
-      })),
+      comments: comments.map(c => {
+        const author = Array.isArray(c.user) ? c.user[0] : c.user;
+        return {
+          id: c.id,
+          deliverable_id: c.deliverable_id,
+          media_asset_id: c.media_asset_id,
+          body: c.body,
+          timecode: c.timecode,
+          x_position: c.x_position,
+          y_position: c.y_position,
+          resolved: c.resolved,
+          created_at: c.created_at,
+          author: {
+            id: author?.id,
+            name: author?.display_name || 'Unknown',
+            avatar: author?.avatar_path,
+            is_team: author?.role === 'admin' || author?.role === 'team',
+          },
+        };
+      }),
+      activity: (activity || []).map(a => {
+        const actor = Array.isArray(a.user) ? a.user[0] : a.user;
+        return {
+          id: a.id,
+          action: a.action,
+          entity_type: a.entity_type,
+          entity_id: a.entity_id,
+          metadata: a.metadata,
+          created_at: a.created_at,
+          actor: {
+            id: actor?.id,
+            name: actor?.display_name || 'System',
+            avatar: actor?.avatar_path,
+            is_team: actor?.role === 'admin' || actor?.role === 'team',
+          },
+        };
+      }),
     });
   } catch (error: any) {
     console.error('Client project API error:', error);

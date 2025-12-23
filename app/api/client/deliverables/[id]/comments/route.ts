@@ -96,27 +96,30 @@ export async function GET(
     }
     
     // Transform comments
-    const transformed = (comments || []).map(c => ({
-      id: c.id,
-      deliverable_id: c.deliverable_id,
-      media_asset_id: c.media_asset_id,
-      body: c.body,
-      timecode: c.timecode,
-      x_position: c.x_position,
-      y_position: c.y_position,
-      parent_id: c.parent_id,
-      resolved: c.resolved,
-      resolved_at: c.resolved_at,
-      created_at: c.created_at,
-      updated_at: c.updated_at,
-      author: {
-        id: c.user?.id,
-        name: c.user?.display_name || 'Unknown',
-        avatar: c.user?.avatar_path,
-        is_team: c.user?.role === 'admin' || c.user?.role === 'team',
-      },
-      is_own: c.user?.id === user.id,
-    }));
+    const transformed = (comments || []).map(c => {
+      const author = Array.isArray(c.user) ? c.user[0] : c.user;
+      return {
+        id: c.id,
+        deliverable_id: c.deliverable_id,
+        media_asset_id: c.media_asset_id,
+        body: c.body,
+        timecode: c.timecode,
+        x_position: c.x_position,
+        y_position: c.y_position,
+        parent_id: c.parent_id,
+        resolved: c.resolved,
+        resolved_at: c.resolved_at,
+        created_at: c.created_at,
+        updated_at: c.updated_at,
+        author: {
+          id: author?.id,
+          name: author?.display_name || 'Unknown',
+          avatar: author?.avatar_path,
+          is_team: author?.role === 'admin' || author?.role === 'team',
+        },
+        is_own: author?.id === user.id,
+      };
+    });
     
     return NextResponse.json({
       comments: transformed,
