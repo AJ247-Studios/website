@@ -37,12 +37,10 @@ export async function POST(req: Request) {
       .insert({
         uploaded_by: clientId,
         project_id: projectId,
-        filename: file.name,
-        file_size: file.size,
+        size: file.size,
         mime_type: file.type,
         storage_path: data.path,
         asset_type: 'deliverable',
-        status: 'uploaded',
       })
       .select('id')
       .single();

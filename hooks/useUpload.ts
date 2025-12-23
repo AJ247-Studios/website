@@ -138,10 +138,8 @@ export function useUpload(): UseUploadReturn {
           uploaded_by: user.id,
           storage_path: path,
           asset_type: assetType,
-          filename: file.name,
-          file_size: file.size,
+          size: file.size,
           mime_type: file.type,
-          status: 'uploaded',
         })
         .select('id')
         .single();

@@ -280,14 +280,9 @@ export async function uploadProjectMedia(
       project_id: input.projectId,
       uploaded_by: input.uploadedBy,
       storage_path: uploadData.path,
-      filename: input.file.name,
-      file_size: input.file.size,
+      size: input.file.size,
       mime_type: input.file.type,
       asset_type: input.assetType,
-      status: 'uploaded',
-      title: input.title,
-      caption: input.caption,
-      tags: input.tags,
     })
     .select()
     .single();
