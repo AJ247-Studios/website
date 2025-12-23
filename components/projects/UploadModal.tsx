@@ -162,12 +162,9 @@ export function UploadModal({
         project_id: projectId,
         uploaded_by: user.id,
         storage_path: uploadData.path,
-        filename: file.name,
-        file_size: file.size,
+        size: file.size,
         mime_type: file.type,
         asset_type: assetType,
-        status: "uploaded",
-        tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : null,
       });
 
       if (dbError) throw dbError;

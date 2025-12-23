@@ -75,12 +75,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
       await supabase.from('media_assets').insert([{
         uploaded_by: authData.user.id,
         project_id: projectId,
-        filename: file.name,
-        file_size: file.size,
+        size: file.size,
         mime_type: file.type,
         storage_path: storagePath,
         asset_type: 'deliverable',
-        status: 'uploaded',
       }])
     } else {
       return NextResponse.json({ error: 'Provide a file or YouTube ID' }, { status: 400 })
