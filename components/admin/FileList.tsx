@@ -174,13 +174,18 @@ export function FileRow({
       <div className="shrink-0 w-12 h-12 rounded bg-white/10 overflow-hidden flex items-center justify-center">
         {asset.thumbnail_path ? (
           <img 
-            src={asset.thumbnail_path} 
+            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/media/${asset.thumbnail_path}`}
             alt={asset.filename}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
           />
-        ) : (
-          <span className="text-white/40">{getFileIcon(asset.mime_type)}</span>
-        )}
+        ) : null}
+        <span className={`text-white/40 ${asset.thumbnail_path ? 'hidden' : ''}`}>
+          {getFileIcon(asset.mime_type)}
+        </span>
       </div>
 
       {/* File info */}

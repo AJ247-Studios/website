@@ -254,7 +254,21 @@ export function FileGallery({
               >
                 {/* Thumbnail/Icon */}
                 <div className="w-full h-full flex items-center justify-center bg-zinc-900">
-                  {getFileIcon(asset.mime_type)}
+                  {asset.mime_type?.startsWith("image/") && asset.thumbnail_path ? (
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/media/${asset.thumbnail_path}`}
+                      alt={asset.filename}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to icon if thumbnail fails to load
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                      }}
+                    />
+                  ) : null}
+                  <div className={asset.mime_type?.startsWith("image/") && asset.thumbnail_path ? "hidden" : ""}>
+                    {getFileIcon(asset.mime_type)}
+                  </div>
                 </div>
 
                 {/* Selection checkbox */}
@@ -360,8 +374,21 @@ export function FileGallery({
                     )}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center shrink-0">
-                          {getFileIcon(asset.mime_type)}
+                        <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                          {asset.mime_type?.startsWith("image/") && asset.thumbnail_path ? (
+                            <img
+                              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/media/${asset.thumbnail_path}`}
+                              alt={asset.filename}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                          ) : null}
+                          <div className={asset.mime_type?.startsWith("image/") && asset.thumbnail_path ? "hidden" : ""}>
+                            {getFileIcon(asset.mime_type)}
+                          </div>
                         </div>
                         <span className="text-sm text-white truncate max-w-[200px]">{asset.filename}</span>
                       </div>

@@ -257,15 +257,18 @@ export default function PublishModal({
               >
                 {asset.thumbnail_path ? (
                   <img 
-                    src={asset.thumbnail_path} 
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/media/${asset.thumbnail_path}`}
                     alt={asset.filename}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
                   />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white/30">
-                    <PhotoIcon className="w-6 h-6" />
-                  </div>
-                )}
+                ) : null}
+                <div className={`w-full h-full flex items-center justify-center text-white/30 ${asset.thumbnail_path ? 'hidden' : ''}`}>
+                  <PhotoIcon className="w-6 h-6" />
+                </div>
               </div>
             ))}
             {selectedAssets.length > 8 && (

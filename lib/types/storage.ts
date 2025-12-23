@@ -24,6 +24,7 @@ export interface MediaAsset {
   resolution?: string;
   
   // Thumbnails
+  thumbnail_path?: string;  // Path to generated thumbnail in storage bucket
   thumbnails?: Record<string, string>;
   thumbnail_status?: ThumbnailStatus;
   
