@@ -27,8 +27,11 @@ interface GenerateRequest {
 }
 
 export async function POST(request: NextRequest) {
+  console.log("🖼️ THUMBNAIL ROUTE HIT");
+  
   try {
     const body: GenerateRequest = await request.json();
+    console.log("🖼️ THUMBNAIL REQUEST BODY:", body);
     const { mediaId, size = 'medium' } = body;
 
     if (!mediaId) {
