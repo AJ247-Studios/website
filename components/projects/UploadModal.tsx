@@ -158,16 +158,25 @@ export function UploadModal({
       if (uploadError) throw uploadError;
 
       // Save metadata
-      const { error: dbError } = await supabase.from("media_assets").insert({
+      const { data: mediaAsset, error: dbError } = await supabase.from("media_assets").insert({
         project_id: projectId,
         uploaded_by: user.id,
         storage_path: uploadData.path,
         size: file.size,
         mime_type: file.type,
         asset_type: assetType,
-      });
+      }).select('id').single();
 
       if (dbError) throw dbError;
+
+      // Trigger thumbnail generation for images (fire and forget)
+      if (file.type.startsWith('image/')) {
+        fetch('/api/thumbnails/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mediaId: mediaAsset.id }),
+        }).catch(err => console.warn('Thumbnail request failed:', err));
+      }
 
       // Update status
       setFiles((prev) =>

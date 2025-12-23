@@ -50,6 +50,15 @@ export async function POST(req: Request) {
       // continue to return path even if DB insert fails
     }
 
+    // Trigger thumbnail generation for images (fire and forget)
+    if (mediaAsset?.id && file.type.startsWith('image/')) {
+      fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/api/thumbnails/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mediaId: mediaAsset.id }),
+      }).catch(err => console.warn('Thumbnail request failed:', err));
+    }
+
     return Response.json({ 
       storage_path: data.path, 
       id: mediaAsset?.id,

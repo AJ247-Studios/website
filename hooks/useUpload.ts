@@ -8,6 +8,7 @@ import {
   STORAGE_BUCKET,
   type AssetType 
 } from "@/lib/supabase-storage";
+import { canGenerateThumbnail } from "@/lib/thumbnails";
 
 export type FileType = 'raw' | 'deliverable' | 'avatar' | 'portfolio' | 'public-asset' | 'team-wip';
 
@@ -148,6 +149,21 @@ export function useUpload(): UseUploadReturn {
         // Attempt to clean up the uploaded file
         await supabase.storage.from(STORAGE_BUCKET).remove([path]);
         throw { message: dbError.message, code: "DB_INSERT_FAILED" };
+      }
+
+      setProgress(90);
+      options.onProgress?.(90);
+
+      // Trigger thumbnail generation for images (fire and forget)
+      if (canGenerateThumbnail(file.type)) {
+        fetch('/api/thumbnails/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mediaId: mediaAsset.id }),
+        }).catch(err => {
+          // Don't fail upload if thumbnail generation fails
+          console.warn('Thumbnail generation request failed:', err);
+        });
       }
 
       setProgress(100);
