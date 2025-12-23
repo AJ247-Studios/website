@@ -72,14 +72,32 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
       url = signedData?.signedUrl || null
 
       // Save to media_assets table
-      await supabase.from('media_assets').insert([{
-        uploaded_by: authData.user.id,
-        project_id: projectId,
-        size: file.size,
-        mime_type: file.type,
-        storage_path: storagePath,
-        asset_type: 'deliverable',
-      }])
+      const { data: mediaAsset, error: mediaError } = await supabase
+        .from('media_assets')
+        .insert([{
+          uploaded_by: authData.user.id,
+          project_id: projectId,
+          size: file.size,
+          mime_type: file.type,
+          storage_path: storagePath,
+          asset_type: 'deliverable',
+        }])
+        .select('id')
+        .single();
+
+      if (mediaError) {
+        console.error('media_assets insert error:', mediaError);
+      }
+
+      // Trigger thumbnail generation for images
+      if (mediaAsset?.id && file.type.startsWith('image/')) {
+        console.log('🖼️ PORTAL: Triggering thumbnail for', mediaAsset.id);
+        fetch(`${request.nextUrl.origin}/api/thumbnails/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mediaId: mediaAsset.id }),
+        }).catch(err => console.warn('Thumbnail request failed:', err));
+      }
     } else {
       return NextResponse.json({ error: 'Provide a file or YouTube ID' }, { status: 400 })
     }

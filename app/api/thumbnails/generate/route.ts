@@ -10,6 +10,10 @@ import {
 } from "@/lib/thumbnails";
 import sharp from "sharp";
 
+// Force Node.js runtime - Sharp does not work in Edge runtime
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/thumbnails/generate
  * 

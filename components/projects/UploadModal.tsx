@@ -171,6 +171,7 @@ export function UploadModal({
 
       // Trigger thumbnail generation for images (fire and forget)
       if (file.type.startsWith('image/')) {
+        console.log('🖼️ MODAL: Triggering thumbnail for', mediaAsset.id);
         fetch('/api/thumbnails/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

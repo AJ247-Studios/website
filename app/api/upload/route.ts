@@ -52,6 +52,7 @@ export async function POST(req: Request) {
 
     // Trigger thumbnail generation for images (fire and forget)
     if (mediaAsset?.id && file.type.startsWith('image/')) {
+      console.log('🖼️ API/UPLOAD: Triggering thumbnail for', mediaAsset.id);
       fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/api/thumbnails/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
