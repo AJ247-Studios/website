@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { MediaAsset, AssetType, MediaStatus } from "@/lib/types/storage";
 import { getPreviewUrl, formatFileSize, formatDuration, getFileTypeFromMime } from "@/utils/getPreviewUrl";
+import { safeStatus, getStatusLabel } from "@/utils/safeStatus";
 
 export interface AssetDetailDrawerProps {
   asset: MediaAsset | null;
@@ -416,7 +417,7 @@ export function AssetDetailDrawer({
                       </div>
                       <div>
                         <span className="text-zinc-500">Status</span>
-                        <p className="text-white capitalize">{asset.status}</p>
+                        <p className="text-white capitalize">{getStatusLabel(safeStatus(asset))}</p>
                       </div>
                       {asset.mime_type && (
                         <div>

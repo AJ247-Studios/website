@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import type { AssetType, MediaStatus } from "@/lib/types/storage";
+import type { AssetType } from "@/lib/types/storage";
+import { 
+  MediaWorkflowStatus, 
+  STATUS_CONFIG as SAFE_STATUS_CONFIG,
+  ALL_STATUSES,
+  safeStatus 
+} from "@/utils/safeStatus";
 
 export type SortOption = 'newest' | 'oldest' | 'largest' | 'smallest' | 'name_asc' | 'name_desc';
 
@@ -21,7 +27,7 @@ export interface FilterCounts {
 
 export interface FilterState {
   assetTypes: AssetType[];
-  statuses: MediaStatus[];
+  statuses: string[]; // Using string to allow all status values
   tags: string[];
   uploaders: string[];
   search: string;
@@ -48,12 +54,13 @@ const ASSET_TYPE_CONFIG: Record<AssetType, { label: string; color: string }> = {
   portfolio: { label: "Portfolio", color: "bg-pink-500/20 text-pink-400 border-pink-500/30" },
 };
 
-const STATUS_CONFIG: Record<MediaStatus, { label: string; color: string }> = {
-  uploaded: { label: "Uploaded", color: "bg-zinc-500/20 text-zinc-400 border-zinc-500/30" },
-  processing: { label: "Processing", color: "bg-amber-500/20 text-amber-400 border-amber-500/30" },
-  ready: { label: "Ready", color: "bg-green-500/20 text-green-400 border-green-500/30" },
-  failed: { label: "Failed", color: "bg-red-500/20 text-red-400 border-red-500/30" },
-};
+// Use the safe status config with all status values
+const STATUS_CONFIG: Record<string, { label: string; color: string }> = Object.fromEntries(
+  Object.entries(SAFE_STATUS_CONFIG).map(([key, val]) => [key, { label: val.label, color: val.color }])
+);
+
+// Filter to show only relevant statuses in the UI (skip 'unknown')
+const DISPLAY_STATUSES: MediaWorkflowStatus[] = ALL_STATUSES;
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'newest', label: 'Newest First' },
@@ -99,7 +106,7 @@ export function FilterPanel({
   }, [filters, onFiltersChange]);
 
   // Toggle status filter
-  const toggleStatus = useCallback((status: MediaStatus) => {
+  const toggleStatus = useCallback((status: string) => {
     const newStatuses = filters.statuses.includes(status)
       ? filters.statuses.filter(s => s !== status)
       : [...filters.statuses, status];
@@ -276,23 +283,23 @@ export function FilterPanel({
             Status
           </label>
           <div className="space-y-2">
-            {(Object.keys(STATUS_CONFIG) as MediaStatus[]).map(status => {
-              const config = STATUS_CONFIG[status];
+            {DISPLAY_STATUSES.map(status => {
+              const config = STATUS_CONFIG[status] || { label: status, color: 'bg-zinc-500/20 text-zinc-400' };
               const count = counts.byStatus[status] || 0;
               const isActive = filters.statuses.includes(status);
+              
+              // Only show statuses that have count > 0 OR are currently active
+              if (count === 0 && !isActive) return null;
               
               return (
                 <button
                   key={status}
                   onClick={() => toggleStatus(status)}
-                  disabled={count === 0 && !isActive}
                   className={`
                     w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all
                     ${isActive 
                       ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
-                      : count > 0
-                        ? 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800 border border-transparent'
-                        : 'bg-zinc-800/30 text-zinc-600 cursor-not-allowed border border-transparent'
+                      : 'bg-zinc-800/50 text-zinc-300 hover:bg-zinc-800 border border-transparent'
                     }
                   `}
                 >

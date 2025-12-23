@@ -83,14 +83,23 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     }
 
     // First, get ALL assets for this project to calculate facet counts
+    // Include thumbnail_path and thumbnail_status for safe status fallback
     const { data: allAssets, error: allAssetsError } = await supabase
       .from('media_assets')
-      .select('id, asset_type, status, tags, uploaded_by')
+      .select('id, asset_type, status, thumbnail_status, thumbnail_path, tags, uploaded_by')
       .eq('project_id', projectId);
 
     if (allAssetsError) {
       return NextResponse.json({ error: allAssetsError.message }, { status: 500 });
     }
+
+    // Safe status helper - handles missing status column gracefully
+    const getSafeStatus = (asset: any): string => {
+      if (asset?.status) return asset.status;
+      if (asset?.thumbnail_status) return asset.thumbnail_status;
+      if (asset?.thumbnail_path) return 'ready';
+      return 'uploaded';
+    };
 
     // Calculate facet counts from all assets
     const counts = {
@@ -106,8 +115,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       // Count by type
       counts.byType[asset.asset_type] = (counts.byType[asset.asset_type] || 0) + 1;
       
-      // Count by status
-      counts.byStatus[asset.status] = (counts.byStatus[asset.status] || 0) + 1;
+      // Count by status (using safe accessor)
+      const status = getSafeStatus(asset);
+      counts.byStatus[status] = (counts.byStatus[status] || 0) + 1;
       
       // Count by tags
       if (asset.tags && Array.isArray(asset.tags)) {

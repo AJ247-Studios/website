@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { MediaAsset, AssetType } from "@/lib/types/storage";
 import { getPreviewUrl, formatFileSize, formatDuration, getFileTypeFromMime } from "@/utils/getPreviewUrl";
+import { safeStatus, getStatusColor } from "@/utils/safeStatus";
 
 export type ViewMode = 'grid' | 'list' | 'timeline';
 export type ThumbnailSize = 'sm' | 'md' | 'lg';
@@ -461,14 +462,14 @@ export function MediaGrid({
                       {formatFileSize(asset.file_size)}
                     </td>
                     <td className="px-4 py-3 hidden lg:table-cell">
-                      <span className={`px-2 py-0.5 text-xs font-medium rounded ${
-                        asset.status === 'ready' ? 'bg-green-500/20 text-green-400' :
-                        asset.status === 'processing' ? 'bg-amber-500/20 text-amber-400' :
-                        asset.status === 'failed' ? 'bg-red-500/20 text-red-400' :
-                        'bg-zinc-500/20 text-zinc-400'
-                      }`}>
-                        {asset.status}
-                      </span>
+                      {(() => {
+                        const status = safeStatus(asset);
+                        return (
+                          <span className={`px-2 py-0.5 text-xs font-medium rounded ${getStatusColor(status)}`}>
+                            {status}
+                          </span>
+                        );
+                      })()}
                     </td>
                     <td className="px-4 py-3 text-sm text-zinc-400 hidden lg:table-cell">
                       {formatDate(asset.created_at)}
