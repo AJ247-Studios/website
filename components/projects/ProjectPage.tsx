@@ -10,7 +10,7 @@ import type { MediaAsset } from "@/lib/types/storage";
 import { ProjectHeader } from "./ProjectHeader";
 import { ProjectTabs, TabId } from "./ProjectTabs";
 import { ProjectOverview } from "./ProjectOverview";
-import { FileGallery } from "./FileGallery";
+import { StudioFileGallery } from "./StudioFileGallery";
 import { ProjectTimeline } from "./ProjectTimeline";
 import { ProjectMembers } from "./ProjectMembers";
 import { UploadModal } from "./UploadModal";
@@ -201,15 +201,14 @@ export function ProjectPage({ projectId, initialProject }: ProjectPageProps) {
         )}
 
         {activeTab === "files" && (
-          <FileGallery
-            assets={assets}
-            isLoading={isLoadingAssets}
+          <StudioFileGallery
+            projectId={projectId}
             canUpload={canUpload}
             canSelect={canDeliver}
-            selectedAssets={selectedAssets}
+            canEdit={isTeam}
+            canDelete={isAdmin}
             onUploadClick={() => setShowUploadModal(true)}
-            onSelectAsset={handleSelectForDelivery}
-            onRefresh={() => loadAssets(projectId)}
+            onSelectionChange={setSelectedAssets}
           />
         )}
 

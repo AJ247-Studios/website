@@ -28,6 +28,19 @@ export type { ProjectTimelineProps } from "./ProjectTimeline";
 export { ProjectMembers } from "./ProjectMembers";
 export type { ProjectMembersProps } from "./ProjectMembers";
 
+// Studio-grade gallery components
+export { StudioFileGallery } from "./StudioFileGallery";
+export type { StudioFileGalleryProps } from "./StudioFileGallery";
+
+export { FilterPanel } from "./FilterPanel";
+export type { FilterPanelProps, FilterState, FilterCounts, SortOption } from "./FilterPanel";
+
+export { MediaGrid } from "./MediaGrid";
+export type { MediaGridProps, ViewMode, ThumbnailSize } from "./MediaGrid";
+
+export { AssetDetailDrawer } from "./AssetDetailDrawer";
+export type { AssetDetailDrawerProps } from "./AssetDetailDrawer";
+
 // Modal components
 export { UploadModal } from "./UploadModal";
 export type { UploadModalProps } from "./UploadModal";
