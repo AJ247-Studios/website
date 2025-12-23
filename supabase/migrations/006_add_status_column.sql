@@ -33,3 +33,18 @@ WHERE thumbnail_path IS NULL
 -- Add comment for documentation
 COMMENT ON COLUMN public.media_assets.status IS 
   'Workflow status: raw, in_progress, deliverable (studio), uploaded, processing, ready, failed, skipped (pipeline)';
+
+-- ============================================
+-- Tags column for filtering and organization
+-- ============================================
+
+-- Add tags array column (simple, extensible)
+ALTER TABLE public.media_assets
+  ADD COLUMN IF NOT EXISTS tags text[] DEFAULT '{}';
+
+-- GIN index for fast array containment queries (@>, &&)
+CREATE INDEX IF NOT EXISTS idx_media_assets_tags
+  ON public.media_assets USING GIN(tags);
+
+COMMENT ON COLUMN public.media_assets.tags IS 
+  'Flexible text array for filtering: type tags, custom labels, etc.';

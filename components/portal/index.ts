@@ -10,3 +10,4 @@ export { InvoicesPanel } from "./InvoicesPanel";
 export { ActivityFeed } from "./ActivityFeed";
 export { UploadsPanel } from "./UploadsPanel";
 export { PortalLightbox } from "./PortalLightbox";
+export { NotificationBell } from "./NotificationBell";
