@@ -92,7 +92,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pro
       // Trigger thumbnail generation for images
       if (mediaAsset?.id && file.type.startsWith('image/')) {
         console.log('🖼️ PORTAL: Triggering thumbnail for', mediaAsset.id);
-        fetch(`${request.nextUrl.origin}/api/thumbnails/generate`, {
+        fetch(`${req.nextUrl.origin}/api/thumbnails/generate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mediaId: mediaAsset.id }),
