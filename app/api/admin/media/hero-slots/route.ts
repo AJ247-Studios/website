@@ -51,8 +51,18 @@ export async function GET(req: NextRequest) {
       .order('sort_order');
     
     if (error) {
-      console.error('Query error:', error);
-      return NextResponse.json({ error: 'Failed to fetch hero slots' }, { status: 500 });
+      console.error('Hero slots query error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+      });
+      return NextResponse.json({ 
+        error: 'Failed to fetch hero slots',
+        detail: error.message,
+        code: error.code,
+        hint: error.hint,
+      }, { status: 500 });
     }
     
     return NextResponse.json(slots || []);

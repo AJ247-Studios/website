@@ -130,9 +130,20 @@ export async function POST(req: NextRequest) {
     });
     
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error('Upload error:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      name: error instanceof Error ? error.name : undefined,
+      stack: error instanceof Error ? error.stack : undefined,
+      // Log R2/S3 specific error details if present
+      ...(error && typeof error === 'object' && '$metadata' in error 
+        ? { httpStatusCode: (error as { $metadata?: { httpStatusCode?: number } }).$metadata?.httpStatusCode }
+        : {}),
+    });
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Upload failed' },
+      { 
+        error: error instanceof Error ? error.message : 'Upload failed',
+        type: error instanceof Error ? error.name : 'UnknownError',
+      },
       { status: 500 }
     );
   }

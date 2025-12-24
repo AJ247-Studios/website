@@ -62,8 +62,18 @@ export async function GET(req: NextRequest) {
     const { data: items, error } = await query;
     
     if (error) {
-      console.error('Query error:', error);
-      return NextResponse.json({ error: 'Failed to fetch portfolio items' }, { status: 500 });
+      console.error('Portfolio items query error:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+      });
+      return NextResponse.json({ 
+        error: 'Failed to fetch portfolio items',
+        detail: error.message,
+        code: error.code,
+        hint: error.hint,
+      }, { status: 500 });
     }
     
     return NextResponse.json(items || []);
