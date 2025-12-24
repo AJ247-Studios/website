@@ -5,7 +5,7 @@
  * Works with site_images, hero_slots, and portfolio_items tables.
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClientBrowser } from "@/utils/supabase-browser";
 
 // Types
 export interface SiteImage {
@@ -116,6 +116,38 @@ export const BREAKPOINT_SIZES = {
   desktop: { width: 1920, label: 'Desktop', maxWidth: 1920 },
   retina: { width: 3840, label: 'Retina/4K', maxWidth: 3840 },
 };
+
+/**
+ * Get auth headers for authenticated API requests
+ * Returns headers with Authorization bearer token if logged in
+ */
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  const supabase = createClientBrowser();
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (!session?.access_token) {
+    throw new Error('Not authenticated. Please log in to access admin features.');
+  }
+  
+  return {
+    'Authorization': `Bearer ${session.access_token}`,
+  };
+}
+
+/**
+ * Authenticated fetch wrapper for admin API calls
+ */
+async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const authHeaders = await getAuthHeaders();
+  
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...authHeaders,
+      ...options.headers,
+    },
+  });
+}
 
 /**
  * Get image dimensions from a File or Blob
@@ -238,7 +270,7 @@ export async function uploadSiteImage(
   formData.append('width', String(dimensions.width));
   formData.append('height', String(dimensions.height));
   
-  const response = await fetch('/api/admin/media/upload', {
+  const response = await authFetch('/api/admin/media/upload', {
     method: 'POST',
     body: formData,
   });
@@ -259,7 +291,7 @@ export async function updateSiteImage(
   imageId: string,
   updates: Partial<Pick<SiteImage, 'focal_x' | 'focal_y' | 'alt_text' | 'caption' | 'tags' | 'category'>>
 ): Promise<SiteImage> {
-  const response = await fetch(`/api/admin/media/${imageId}`, {
+  const response = await authFetch(`/api/admin/media/${imageId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
@@ -277,7 +309,7 @@ export async function updateSiteImage(
  * Delete a site image
  */
 export async function deleteSiteImage(imageId: string): Promise<void> {
-  const response = await fetch(`/api/admin/media/${imageId}`, {
+  const response = await authFetch(`/api/admin/media/${imageId}`, {
     method: 'DELETE',
   });
   
@@ -291,7 +323,7 @@ export async function deleteSiteImage(imageId: string): Promise<void> {
  * Fetch all hero slots with their images
  */
 export async function fetchHeroSlots(): Promise<HeroSlot[]> {
-  const response = await fetch('/api/admin/media/hero-slots');
+  const response = await authFetch('/api/admin/media/hero-slots');
   if (!response.ok) throw new Error('Failed to fetch hero slots');
   return response.json();
 }
@@ -303,7 +335,7 @@ export async function updateHeroSlot(
   slotId: string,
   updates: Partial<Pick<HeroSlot, 'image_id' | 'mobile_image_id' | 'alt_text_override' | 'aspect_ratio' | 'object_fit' | 'hide_on_mobile' | 'is_active'>>
 ): Promise<HeroSlot> {
-  const response = await fetch(`/api/admin/media/hero-slots/${slotId}`, {
+  const response = await authFetch(`/api/admin/media/hero-slots/${slotId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
@@ -321,7 +353,7 @@ export async function updateHeroSlot(
  * Fetch all portfolio items with their images
  */
 export async function fetchPortfolioItems(): Promise<PortfolioItem[]> {
-  const response = await fetch('/api/admin/media/portfolio-items');
+  const response = await authFetch('/api/admin/media/portfolio-items');
   if (!response.ok) throw new Error('Failed to fetch portfolio items');
   return response.json();
 }
@@ -333,7 +365,7 @@ export async function updatePortfolioItem(
   itemId: string,
   updates: Partial<Omit<PortfolioItem, 'id' | 'created_at' | 'updated_at' | 'cover_image' | 'thumbnail_image' | 'hover_image'>>
 ): Promise<PortfolioItem> {
-  const response = await fetch(`/api/admin/media/portfolio-items/${itemId}`, {
+  const response = await authFetch(`/api/admin/media/portfolio-items/${itemId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
@@ -353,7 +385,7 @@ export async function updatePortfolioItem(
 export async function createPortfolioItem(
   data: Pick<PortfolioItem, 'title' | 'slug'> & Partial<PortfolioItem>
 ): Promise<PortfolioItem> {
-  const response = await fetch('/api/admin/media/portfolio-items', {
+  const response = await authFetch('/api/admin/media/portfolio-items', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -371,7 +403,7 @@ export async function createPortfolioItem(
  * Delete a portfolio item
  */
 export async function deletePortfolioItem(itemId: string): Promise<void> {
-  const response = await fetch(`/api/admin/media/portfolio-items/${itemId}`, {
+  const response = await authFetch(`/api/admin/media/portfolio-items/${itemId}`, {
     method: 'DELETE',
   });
   
@@ -396,7 +428,7 @@ export async function fetchSiteImages(options?: {
   if (options?.limit) params.set('limit', String(options.limit));
   if (options?.offset) params.set('offset', String(options.offset));
   
-  const response = await fetch(`/api/admin/media?${params}`);
+  const response = await authFetch(`/api/admin/media?${params}`);
   if (!response.ok) throw new Error('Failed to fetch images');
   return response.json();
 }
@@ -405,7 +437,7 @@ export async function fetchSiteImages(options?: {
  * Request generation of image variants
  */
 export async function requestImageVariants(imageId: string): Promise<void> {
-  const response = await fetch('/api/admin/media/generate-variants', {
+  const response = await authFetch('/api/admin/media/generate-variants', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ imageId }),
