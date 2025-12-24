@@ -20,3 +20,10 @@ export { default as PublishModal } from "./PublishModal";
 export type { PublishConfig, SelectedAsset } from "./PublishModal";
 export { default as ProcessingPanel } from "./ProcessingPanel";
 export type { ProcessingJob } from "./ProcessingPanel";
+
+// Visual Editor Components (Hero & Portfolio)
+export { default as FocalPointPicker } from "./FocalPointPicker";
+export { default as ImageEditorPanel } from "./ImageEditorPanel";
+export { default as ResponsivePreview } from "./ResponsivePreview";
+export { default as VisualPageEditor } from "./VisualPageEditor";
+export { default as MediaLibrary } from "./MediaLibrary";

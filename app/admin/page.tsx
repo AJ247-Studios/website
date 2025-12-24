@@ -249,6 +249,12 @@ export default function AdminPage() {
           >
             User Management
           </button>
+          <button
+            onClick={() => router.push("/admin/media")}
+            className="px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+          >
+            Media Manager
+          </button>
         </div>
       </div>
 
