@@ -46,6 +46,11 @@ CREATE INDEX IF NOT EXISTS idx_deliverables_due_date ON deliverables(due_date);
 
 ALTER TABLE deliverables ENABLE ROW LEVEL SECURITY;
 
+-- DROP existing policies first (idempotent pattern)
+DROP POLICY IF EXISTS "Team can manage deliverables" ON deliverables;
+DROP POLICY IF EXISTS "Clients can view own project deliverables" ON deliverables;
+DROP POLICY IF EXISTS "Clients can update own deliverable status" ON deliverables;
+
 -- Team can manage all deliverables
 CREATE POLICY "Team can manage deliverables"
   ON deliverables FOR ALL
@@ -106,6 +111,10 @@ CREATE INDEX IF NOT EXISTS idx_deliverable_assets_deliverable ON deliverable_ass
 CREATE INDEX IF NOT EXISTS idx_deliverable_assets_asset ON deliverable_assets(media_asset_id);
 
 ALTER TABLE deliverable_assets ENABLE ROW LEVEL SECURITY;
+
+-- DROP existing policies first (idempotent pattern)
+DROP POLICY IF EXISTS "Team can manage deliverable assets" ON deliverable_assets;
+DROP POLICY IF EXISTS "Clients can view own deliverable assets" ON deliverable_assets;
 
 -- Team can manage deliverable assets
 CREATE POLICY "Team can manage deliverable assets"
@@ -176,6 +185,13 @@ CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent_id);
 
 ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
 
+-- DROP existing policies first (idempotent pattern)
+DROP POLICY IF EXISTS "Team can view all comments" ON comments;
+DROP POLICY IF EXISTS "Clients can view comments on their deliverables" ON comments;
+DROP POLICY IF EXISTS "Users can insert own comments" ON comments;
+DROP POLICY IF EXISTS "Users can update own comments" ON comments;
+DROP POLICY IF EXISTS "Team can manage comments" ON comments;
+
 -- Users can view comments on deliverables/assets they have access to
 CREATE POLICY "Team can view all comments"
   ON comments FOR SELECT
@@ -196,8 +212,7 @@ CREATE POLICY "Clients can view comments on their deliverables"
     OR
     (media_asset_id IS NOT NULL AND EXISTS (
       SELECT 1 FROM media_assets ma
-      JOIN storage_objects so ON so.id = ma.storage_object_id
-      JOIN projects p ON p.id = so.project_id
+      JOIN projects p ON p.id = ma.project_id
       JOIN client_users cu ON cu.client_id = p.client_id
       WHERE cu.user_id = auth.uid()
       AND ma.id = comments.media_asset_id
@@ -268,6 +283,10 @@ CREATE INDEX IF NOT EXISTS idx_notifications_unread ON notifications(user_id, re
 CREATE INDEX IF NOT EXISTS idx_notifications_created ON notifications(created_at DESC);
 
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+
+-- DROP existing policies first (idempotent pattern)
+DROP POLICY IF EXISTS "Users can view own notifications" ON notifications;
+DROP POLICY IF EXISTS "Users can update own notifications" ON notifications;
 
 -- Users can only view their own notifications
 CREATE POLICY "Users can view own notifications"
