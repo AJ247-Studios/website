@@ -222,7 +222,7 @@ export default function FAQPage() {
                 Contact Us
               </Link>
               <a
-                href="tel:+48123456789"
+                href="tel:+48503685377"
                 className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-slate-700 dark:text-slate-300 border-2 border-slate-200 dark:border-slate-700 rounded-xl hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

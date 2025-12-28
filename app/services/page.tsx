@@ -188,7 +188,7 @@ const portraitPackages = [
   },
   {
     name: "Premium",
-    description: "VIP treatment with full styling",
+    description: "VIP treatment with full styling consultation",
     price: "950",
     priceNote: "3 hour session",
     popular: true,
@@ -198,7 +198,7 @@ const portraitPackages = [
       { text: "Online gallery + USB", included: true },
       { text: "Unlimited outfits/looks", included: true },
       { text: "48-hour delivery", included: true },
-      { text: "Professional makeup included", included: true, highlight: true },
+      { text: "Styling consultation included", included: true, highlight: true },
       { text: "Location of choice", included: true },
       { text: "5 premium prints included", included: true },
     ],
@@ -386,7 +386,7 @@ export default function ServicesPage() {
                   </svg>
                 </Link>
                 <a
-                  href="tel:+48123456789"
+                  href="tel:+48503685377"
                   className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-xl hover:bg-white/10 hover:border-white/50 transition-all duration-200"
                 >
                   <svg className="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

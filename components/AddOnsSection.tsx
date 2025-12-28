@@ -2,6 +2,16 @@ import Link from "next/link";
 
 const addOns = [
   {
+    name: "USB Drive (All Media)",
+    description: "Branded USB with all final files. Physical archive & easy handoff.",
+    price: "150",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+      </svg>
+    ),
+  },
+  {
     name: "Drone Coverage",
     description: "Aerial shots and cinematic flyovers",
     price: "500–1,500",

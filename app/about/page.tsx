@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 };
 
 const stats = [
-  { value: "500+", label: "Projects Delivered" },
-  { value: "200+", label: "Happy Clients" },
-  { value: "5+", label: "Years Experience" },
-  { value: "50K+", label: "Photos Delivered" },
+  { value: "15+", label: "Projects Delivered" },
+  { value: "10+", label: "Happy Clients" },
+  { value: "1000+", label: "Photos & Clips Delivered" },
+  { value: "3", label: "Team Members" },
 ];
 
 const values = [
@@ -55,32 +55,32 @@ const values = [
 
 const team = [
   {
-    name: "Adrian Jankowski",
-    role: "Founder & Lead Photographer",
-    bio: "10+ years capturing sports, concerts, and weddings. Passionate about freezing moments that matter.",
-    image: "/team/adrian.jpg",
+    name: "Josiah Ennis",
+    role: "Videographer / Co-founder",
+    bio: "2–3 years experience. Lead videographer for commercial shoots and social-video campaigns. Shot planning, DOP, final edit.",
+    image: "/team/josiah.jpg",
   },
   {
-    name: "Marta Wiśniewska",
-    role: "Lead Videographer",
-    bio: "Cinematic storyteller with a background in film. Brings Hollywood quality to every project.",
-    image: "/team/marta.jpg",
+    name: "Anthony Certeza",
+    role: "Photographer / Co-founder",
+    bio: "2–3 years experience. Stills photographer focused on product, lifestyle, and event photography. Client liaison, studio setups.",
+    image: "/team/anthony.jpg",
   },
   {
-    name: "Jakub Nowak",
-    role: "Editor & Colorist",
-    bio: "Post-production specialist ensuring every image and frame looks stunning.",
-    image: "/team/jakub.jpg",
+    name: "Szymon",
+    role: "Videographer & Photographer",
+    bio: "4–5 years experience. Senior shooter handling complex shoots for sports and photoshoots. Secondary DOP, lighting and color workflows, main editor.",
+    image: "/team/szymon.jpg",
   },
 ];
 
 const equipment = [
-  "Sony Alpha Series (A7 IV, A7S III)",
-  "Canon EOS R5 / R6",
-  "DJI Mavic 3 Pro Drone",
-  "Profoto Lighting Systems",
-  "DJI Ronin Gimbals",
-  "Atomos Monitors & Recorders",
+  "Sony FX2 — Cinematic 4K, main cinema body",
+  "Nikon D500 — Sports & action",
+  "Nikon D3 — Professional stills",
+  "Nikon D7000 — Versatile backup",
+  "Sony A6000 — Compact & travel",
+  "Mixed new & well-maintained used gear",
 ];
 
 export default function AboutPage() {
@@ -98,9 +98,11 @@ export default function AboutPage() {
                 </span>
               </h1>
               <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-                AJ247 Studios is a premium photo and video production company based in Kraków, Poland. 
-                We specialize in sports, concerts, weddings, and corporate events — delivering 
-                cinematic quality with fast turnaround times.
+                AJ247 Studios is a Kraków-based media studio specializing in cinematic video and 
+                commercial photography for brands, events, and creators. We combine creative direction, 
+                professional gear, and fast turnarounds so small businesses and creators get polished, 
+                on-brand media that actually converts. Founded and run by a small, experienced team — 
+                we manage production from shot-list to final edit.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
@@ -130,7 +132,7 @@ export default function AboutPage() {
               </div>
               {/* Floating stat */}
               <div className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 rounded-xl p-4 shadow-xl border border-slate-200 dark:border-slate-700">
-                <div className="text-2xl font-bold text-slate-900 dark:text-white">500+</div>
+                <div className="text-2xl font-bold text-slate-900 dark:text-white">15+</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">Projects Delivered</div>
               </div>
             </div>
@@ -161,17 +163,19 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
               <p>
-                AJ247 Studios started in 2019 with a simple mission: bring professional, 
-                cinematic-quality production to events in Kraków without the corporate price tag.
+                AJ247 Studios was founded to bring professional, cinematic-quality media production 
+                to brands, events, and creators in Kraków — without the corporate price tag.
               </p>
               <p>
-                What began as weekend sports photography quickly grew into a full-service 
-                production company. Today, we work with sports teams, concert venues, couples, 
-                and corporations across Poland.
+                We&apos;re a small team of videographers and photographers who handle every project 
+                from creative direction to final delivery. Quick local shoots, pro editing, fast turnarounds.
               </p>
               <p>
-                Our name reflects our commitment: we&apos;re available 24/7 to capture your most 
-                important moments, delivering results that exceed expectations.
+                Our name reflects our commitment: we&apos;re dedicated to capturing your most 
+                important moments and delivering results that exceed expectations.
+              </p>
+              <p className="text-slate-500 dark:text-slate-500 italic">
+                Want the real numbers? Ask for our portfolio pack — we&apos;ll send case studies and raw+edited samples.
               </p>
             </div>
           </div>

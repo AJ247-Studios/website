@@ -214,7 +214,7 @@ export default function ContactPageClient() {
         ? `Hi! I'm interested in ${services.find(s => s.value === formData.projectType)?.label || "your services"}.`
         : "Hi! I'd like to discuss a photo/video project."
     );
-    window.open(`https://wa.me/48123456789?text=${message}`, "_blank");
+    window.open(`https://wa.me/48503685377?text=${message}`, "_blank");
   };
 
   // Success state
@@ -519,7 +519,7 @@ export default function ContactPageClient() {
                 </h3>
                 <div className="space-y-3">
                   <a
-                    href="tel:+48123456789"
+                    href="tel:+48503685377"
                     className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-colors"
                   >
                     <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
@@ -529,11 +529,11 @@ export default function ContactPageClient() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-slate-900 dark:text-white">Call us</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">+48 123 456 789</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">+48 503 685 377</p>
                     </div>
                   </a>
                   <a
-                    href="mailto:hello@aj247studios.com"
+                    href="mailto:aj247studios@gmail.com"
                     className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 transition-colors"
                   >
                     <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
@@ -543,7 +543,7 @@ export default function ContactPageClient() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-slate-900 dark:text-white">Email us</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">hello@aj247studios.com</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">aj247studios@gmail.com</p>
                     </div>
                   </a>
                 </div>
@@ -617,7 +617,7 @@ export default function ContactPageClient() {
             WhatsApp
           </button>
           <a
-            href="tel:+48123456789"
+            href="tel:+48503685377"
             className="flex items-center justify-center px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

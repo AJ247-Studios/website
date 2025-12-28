@@ -400,7 +400,7 @@ export default function ProfilePage() {
   };
 
   const handleQuickMessage = () => {
-    window.open("https://wa.me/48123456789", "_blank");
+    window.open("https://wa.me/48503685377", "_blank");
   };
 
   const handleQuickPay = () => {

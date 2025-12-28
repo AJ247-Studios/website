@@ -74,17 +74,18 @@ const SITE_CONFIG = {
   name: "AJ247 Studios",
   url: "https://aj247studios.com",
   logo: "https://aj247studios.com/logo.png",
-  description: "Professional photo and video production in Kraków. Sports events, concerts, weddings, portraits & corporate.",
+  description: "AJ247 Studios — Kraków-based photo & video production. Quick local shoots, pro editing, fast delivery.",
   address: {
     locality: "Kraków",
     region: "Lesser Poland",
     country: "PL",
   },
-  phone: "+48 123 456 789",
+  phone: "+48 503 685 377",
+  email: "aj247studios@gmail.com",
   social: {
-    instagram: "https://instagram.com/aj247studios",
-    youtube: "https://youtube.com/@aj247studios",
-    facebook: "https://facebook.com/aj247studios",
+    instagram: "https://www.instagram.com/aj247studios.pl/",
+    youtube: "https://www.youtube.com/@AJ247Studios-b8y",
+    facebook: "https://www.facebook.com/people/aj247studiospl/61582157606460/",
   },
 };
 

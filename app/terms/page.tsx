@@ -67,8 +67,8 @@ export default function TermsPage() {
             <h2 className="text-2xl font-semibold mb-4">7. Contact Us</h2>
             <p className="text-slate-300 mb-4">
               If you have any questions about these Terms, please contact us at{" "}
-              <a href="mailto:hello@aj247studios.com" className="text-amber-500 hover:text-amber-400">
-                hello@aj247studios.com
+              <a href="mailto:aj247studios@gmail.com" className="text-amber-500 hover:text-amber-400">
+                aj247studios@gmail.com
               </a>
             </p>
           </section>

@@ -22,14 +22,14 @@ const contactSchema = {
     contactPoint: [
       {
         "@type": "ContactPoint",
-        telephone: "+48-123-456-789",
+        telephone: "+48-503-685-377",
         contactType: "bookings",
         availableLanguage: ["English", "Polish"],
         areaServed: "PL",
       },
       {
         "@type": "ContactPoint",
-        telephone: "+48-123-456-789",
+        telephone: "+48-503-685-377",
         contactType: "customer service",
         contactOption: "TollFree",
         availableLanguage: ["English", "Polish"],
