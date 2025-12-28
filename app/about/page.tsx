@@ -70,7 +70,7 @@ const team = [
     name: "Szymon",
     role: "Videographer & Photographer",
     bio: "4–5 years experience. Senior shooter handling complex shoots for sports and photoshoots. Secondary DOP, lighting and color workflows, main editor.",
-    image: "/team/szymon.jpg",
+    image: "/portfolio/Szymon-full-res.png",
   },
 ];
 
@@ -231,9 +231,19 @@ export default function AboutPage() {
             {team.map((member) => (
               <div key={member.name} className="text-center">
                 <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
-                  <span className="text-4xl font-bold text-slate-400 dark:text-slate-500">
-                    {member.name.charAt(0)}
-                  </span>
+                  {member.image ? (
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      width={128}
+                      height={128}
+                      className="w-32 h-32 rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-4xl font-bold text-slate-400 dark:text-slate-500">
+                      {member.name.charAt(0)}
+                    </span>
+                  )}
                 </div>
                 <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
                   {member.name}
