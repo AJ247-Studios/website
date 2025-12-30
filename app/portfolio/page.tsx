@@ -92,7 +92,7 @@ export default function PortfolioPage() {
       <PortfolioHero
         headline="Our Work Speaks for Itself"
         subheadline="15+ projects delivered across sports, concerts, weddings, and corporate events. See what we can create for you."
-        imageUrl="/portfolio/Concert1.JPG"
+        imageUrl="/portfolio/Concert1.webp"
         ctaText="Get a Free Quote"
         ctaHref="/contact"
         secondaryCtaText="View Case Studies"
