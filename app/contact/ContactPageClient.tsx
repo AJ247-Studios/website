@@ -541,30 +541,7 @@ export default function ContactPageClient() {
                 </div>
               </div>
 
-              {/* Trust panel - Testimonial */}
-              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
-                <div className="flex items-start gap-3">
-                  <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
-                    {/* Placeholder avatar */}
-                    <div className="w-full h-full flex items-center justify-center text-slate-400">
-                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 italic mb-2">
-                      &ldquo;{testimonial.quote}&rdquo;
-                    </p>
-                    <p className="text-sm font-medium text-slate-900 dark:text-white">
-                      {testimonial.author}
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {testimonial.role}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              
 
               {/* Trust badges - Client logos */}
               <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
