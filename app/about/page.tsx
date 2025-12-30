@@ -97,13 +97,35 @@ export default function AboutPage() {
                   That Matter
                 </span>
               </h1>
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-                AJ247 Studios is a Kraków-based media studio specializing in cinematic video and 
-                commercial photography for brands, events, and creators. We combine creative direction, 
-                professional gear, and fast turnarounds so small businesses and creators get polished, 
-                on-brand media that actually converts. Founded and run by a small, experienced team — 
-                we manage production from shot-list to final edit.
-              </p>
+              <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                <p>
+                  AJ247 Studios started in 2023, with just two cameras, big dreams, and a love for capturing life as it happens. Back then, Josiah and I didn’t know much about running a business — we just wanted to take photos and videos, learn, experiment, and have fun creating.
+                </p>
+
+                <p>
+                  By the end of 2023, a few people started asking us to take photos and videos for them. At first, it was surprising — we never imagined anyone would pay us for something we were doing just for fun. But seeing their excitement made us realize this could be something more. Something real. Something that could capture memories people would treasure forever.
+                </p>
+
+                <p>
+                  At the start of 2024, we decided to officially launch AJ247 Studios. We built a website, shared our work more widely, and started taking on more clients. Every project was different — sports events, lifestyle shoots, weddings, commercial work — and every project taught us something new. I focused on photography, capturing the perfect moments, while Josiah worked his magic with video, making sure the story came alive in motion. Together, we learned how to tell better stories with every shoot.
+                </p>
+
+                <p>
+                  2025 has been a year of growth and reflection. More clients are trusting us, and our main goal has always been simple: make every client happy. The best part of our work isn’t recognition or awards — it’s seeing the joy on someone’s face when they see their photos or videos for the first time. That’s what keeps us going.
+                </p>
+
+                <p>
+                  Looking ahead to 2026, 2027, and beyond, we hope to work with even more clients across Poland, continue improving our craft, and create amazing memories for people to look back on. Our mission is clear: turn our passion into professionalism, and capture moments people will remember forever.
+                </p>
+
+                <p>
+                  From two friends with cameras to a growing creative studio, Josiah and I are proud of how far AJ247 Studios has come. We are thankful to everyone who has trusted us, and we’re excited to see what the future holds — more stories, more creativity, and more memories to capture.
+                </p>
+
+                <p className="mt-4 text-sm text-slate-700 dark:text-slate-300 italic text-right">
+                  — Anthony
+                </p>
+              </div>
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/portfolio"
