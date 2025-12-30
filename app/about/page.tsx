@@ -58,7 +58,7 @@ const team = [
     name: "Josiah Ennis",
     role: "Videographer / Co-founder",
     bio: "2–3 years experience. Lead videographer for commercial shoots and social-video campaigns. Shot planning, DOP, final edit.",
-    image: "/team/Josiah-full-res.png",
+    image: "/portfolio/Josiah-full-res.png",
   },
   {
     name: "Anthony Certeza",
