@@ -67,7 +67,7 @@ const team = [
     image: "/portfolio/Anthony-full-res.png",
   },
   {
-    name: "Szymon",
+    name: "Szymon Flak",
     role: "Videographer & Photographer",
     bio: "4–5 years experience. Senior shooter handling complex shoots for sports and photoshoots. Secondary DOP, lighting and color workflows, main editor.",
     image: "/portfolio/Szymon-full-res.png",
@@ -75,7 +75,7 @@ const team = [
 ];
 
 const equipment = [
-  "Sony FX2 — Cinematic 4K, main cinema body",
+  "Lumix GH5 — Cinematic 4K, main cinema body",
   "Nikon D500 — Sports & action",
   "Nikon D3 — Professional stills",
   "Nikon D7000 — Versatile backup",
