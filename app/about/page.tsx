@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 };
 
 const stats = [
-  { value: "15+", label: "Projects Delivered" },
-  { value: "10+", label: "Happy Clients" },
+  { value: "50+", label: "Projects Delivered" },
+  { value: "50+", label: "Happy Clients" },
   { value: "1000+", label: "Photos & Clips Delivered" },
   { value: "3", label: "Team Members" },
 ];
@@ -132,7 +132,7 @@ export default function AboutPage() {
               </div>
               {/* Floating stat */}
               <div className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 rounded-xl p-4 shadow-xl border border-slate-200 dark:border-slate-700">
-                <div className="text-2xl font-bold text-slate-900 dark:text-white">15+</div>
+                <div className="text-2xl font-bold text-slate-900 dark:text-white">50+</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">Projects Delivered</div>
               </div>
             </div>

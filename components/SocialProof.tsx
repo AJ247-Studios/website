@@ -110,13 +110,13 @@ export default function SocialProof() {
         </div>
 
         {/* Stats bar - updated to match site copy */}
-        <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 py-10 px-8 bg-linear-to-r from-blue-600 to-emerald-600 rounded-2xl text-white">
+          <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 py-10 px-8 bg-linear-to-r from-blue-600 to-emerald-600 rounded-2xl text-white">
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold mb-1">15+</div>
+            <div className="text-3xl sm:text-4xl font-bold mb-1">50+</div>
             <div className="text-blue-100 text-sm">Projects Delivered</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold mb-1">10+</div>
+            <div className="text-3xl sm:text-4xl font-bold mb-1">50+</div>
             <div className="text-blue-100 text-sm">Satisfied Clients</div>
           </div>
           <div className="text-center">

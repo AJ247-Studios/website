@@ -52,7 +52,7 @@ export default function HeroSection() {
           {/* Quick stats - social proof per research */}
           <div className="grid grid-cols-3 gap-8 max-w-lg mx-auto pt-8 border-t border-white/10">
             <div>
-              <div className="text-2xl sm:text-3xl font-bold text-white">15+</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white">50+</div>
               <div className="text-sm text-slate-400">Projects Delivered</div>
             </div>
             <div>

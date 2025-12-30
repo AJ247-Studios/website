@@ -33,8 +33,8 @@ AJ247 Studios is a Kraków-based media studio specializing in cinematic video an
 
 Key stats (placeholders — replace with actual numbers):
 
-* Projects delivered: **[15+]**
-* Happy clients: **[10+]**
+* Projects delivered: **[50+]**
+* Happy clients: **[50+]**
 * Photos & clips delivered: **[1000+]**
 
 Suggested line under stats:
@@ -121,8 +121,8 @@ CONTACT
 ABOUT
 - short_paragraph: "AJ247 Studios is a Kraków-based media studio specializing in cinematic video and commercial photography for brands, events, and creators. We combine creative direction, professional gear, and fast turnarounds so small businesses and creators get polished, on-brand media that converts."
 - stats:
-  - projects_delivered: [15+]
-  - happy_clients: [10+]
+  - projects_delivered: [50+]
+  - happy_clients: [50+]
   - items_delivered: [1000+]
 
 TEAM
