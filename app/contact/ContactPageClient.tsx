@@ -40,14 +40,6 @@ const clientLogos = [
   { name: "TechFlow", src: "/clients/techflow.png" },
 ];
 
-// Featured testimonial
-const testimonial = {
-  quote: "AJ247 became part of our family. Their work captured our spirit perfectly.",
-  author: "Marek Kowalski",
-  role: "Marketing Director, Wisła Kraków",
-  avatar: "/testimonials/marek.jpg",
-};
-
 interface FormData {
   name: string;
   email: string;
