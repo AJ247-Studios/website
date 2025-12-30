@@ -58,13 +58,13 @@ const team = [
     name: "Josiah Ennis",
     role: "Videographer / Co-founder",
     bio: "2–3 years experience. Lead videographer for commercial shoots and social-video campaigns. Shot planning, DOP, final edit.",
-    image: "/team/josiah.jpg",
+    image: "/team/Josiah-full-res.png",
   },
   {
     name: "Anthony Certeza",
     role: "Photographer / Co-founder",
     bio: "2–3 years experience. Stills photographer focused on product, lifestyle, and event photography. Client liaison, studio setups.",
-    image: "/team/anthony.jpg",
+    image: "/portfolio/Anthony-full-res.png",
   },
   {
     name: "Szymon",
