@@ -1,8 +1,8 @@
 const testimonials = [
   {
     id: 1,
-    quote: "AJ247 captured our wedding beautifully. The cinematic film made us relive every moment. Worth every złoty!",
-    author: "Marta & Tomek",
+    quote: "The video was really good! AJ247 Studios captured our special day perfectly and exceeded all our expectations.",
+    author: "Paul & Precious",
     role: "Wedding, Kraków",
     rating: 5,
   },
