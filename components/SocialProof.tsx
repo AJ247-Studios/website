@@ -8,27 +8,22 @@ const testimonials = [
   },
   {
     id: 2,
-    quote: "Incredible sports coverage for our basketball league. Fast delivery, amazing action shots. Our sponsors loved the content.",
-    author: "Piotr Nowak",
-    role: "KS Cracovia",
+    quote: "We had the opportunity to work with AJ247 Studios on several sports projects, and I’m fully satisfied with the results. With every video, I could see clear progress, and the final outcomes were excellent. These young talents are doing a great job.",
+    author: "Dima",
+    role: "FCA Krakow, Poland",
     rating: 5,
   },
   {
     id: 3,
-    quote: "Professional, creative, and so easy to work with. Our corporate event photos were delivered within 24 hours.",
-    author: "Anna Kowalska",
-    role: "Marketing Director, Tech Corp",
+    quote: "...",
+    author: "...",
+    role: "Marketing Director...",
     rating: 5,
   },
 ];
 
 const clientLogos = [
-  { name: "KS Cracovia", initials: "KC" },
-  { name: "ICE Kraków", initials: "ICE" },
-  { name: "Tauron Arena", initials: "TA" },
-  { name: "Wisła Kraków", initials: "WK" },
-  { name: "AGH University", initials: "AGH" },
-  { name: "Kraków Film", initials: "KF" },
+  { name: "FCA Krakow, Poland", initials: "FCA" },
 ];
 
 export default function SocialProof() {
