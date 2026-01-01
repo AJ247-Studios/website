@@ -5,11 +5,26 @@ import { useState } from "react";
 export default function AboutStory({
   paragraphs,
   signature,
+  showToggle = true,
 }: {
   paragraphs: string[];
   signature?: string;
+  showToggle?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+
+  if (!showToggle) {
+    return (
+      <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+        {paragraphs.map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
+        {signature && (
+          <div className="text-right text-sm text-slate-700 dark:text-slate-300 italic">{signature}</div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">

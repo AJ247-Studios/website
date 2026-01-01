@@ -110,6 +110,7 @@ export default function AboutPage() {
                 paragraphs={[
                   `AJ247 Studios is a Kraków-based media studio specializing in cinematic video and commercial photography for brands, events, and creators. We combine creative direction, professional gear, and fast turnarounds so small businesses and creators get polished, on-brand media that actually converts. Founded and run by a small, experienced team — we manage production from shot-list to final edit.`,
                 ]}
+                showToggle={false}
               />
               <div className="flex flex-wrap gap-4">
                 <Link
@@ -169,10 +170,7 @@ export default function AboutPage() {
               Our Story
             </h2>
             <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-              {anthonyStory.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-              <div className="text-right text-sm text-slate-700 dark:text-slate-300 italic">— Anthony</div>
+              <AboutStory paragraphs={anthonyStory} signature={"— Anthony"} />
             </div>
           </div>
         </div>
