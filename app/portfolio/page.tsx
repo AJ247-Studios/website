@@ -36,7 +36,7 @@ export default function PortfolioPage() {
 
   // Data
   const liveProjects = mockProjects.filter(p => 
-    ["color-powder-festival", "fca-krakow-basketball", "krakow-portrait-sessions"].includes(p.slug)
+    ["color-powder-festival", "fca-krakow-basketball", "krakow-portrait-sessions", "krakow-motocross-highlights"].includes(p.slug)
   );
   const featuredProjects = getFeaturedProjects();
   const categoryCounts = getCategoryCounts(liveProjects);
