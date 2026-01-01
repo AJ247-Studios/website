@@ -126,6 +126,7 @@ export default function PortfolioPage() {
         activeFilter={activeFilter}
         onFilterChange={handleFilterChange}
         totalCount={mockProjects.length}
+        sticky={false}
         onAnalytics={(filter) => {
           // Analytics: track filter selection
           console.log("Filter selected:", filter);

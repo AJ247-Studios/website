@@ -14,6 +14,8 @@ interface FilterBarProps {
   totalCount?: number;
   /** Analytics callback */
   onAnalytics?: (filter: string) => void;
+  /** Enable sticky behavior (fixed bar on scroll) */
+  sticky?: boolean;
 }
 
 /**
@@ -29,6 +31,7 @@ export default function FilterBar({
   onFilterChange,
   totalCount,
   onAnalytics,
+  sticky = true,
 }: FilterBarProps) {
   const [isSticky, setIsSticky] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -37,6 +40,8 @@ export default function FilterBar({
 
   // Sticky behavior with IntersectionObserver
   useEffect(() => {
+    if (!sticky) return;
+
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
 
@@ -44,12 +49,12 @@ export default function FilterBar({
       ([entry]) => {
         setIsSticky(!entry.isIntersecting);
       },
-      { threshold: 0, rootMargin: "-65px 0px 0px 0px" } // Account for header height
+      { threshold: 0, rootMargin: "-65px 0px 0px 0px" }
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []);
+  }, [sticky]);
 
   const handleFilterClick = (filter: ProjectCategory | "all") => {
     // Optimistic update for instant feel
@@ -59,18 +64,19 @@ export default function FilterBar({
   };
 
   const activeLabel = filters.find(f => f.value === activeFilter)?.label || "All Work";
+  const shouldStick = sticky && isSticky;
 
   return (
     <>
       {/* Sentinel element for sticky detection */}
-      <div ref={sentinelRef} className="h-0" />
+      {sticky && <div ref={sentinelRef} className="h-0" />}
 
       {/* Filter Bar */}
       <div
         ref={stickyRef}
         className={`
-          ${isSticky 
-            ? "fixed top-16 left-0 right-0 z-40 bg-white/95 dark:bg-slate-950/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 shadow-sm" 
+          ${shouldStick
+            ? "fixed top-16 left-0 right-0 z-40 bg-white/95 dark:bg-slate-950/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 shadow-sm"
             : "bg-white dark:bg-slate-950"
           }
           transition-all duration-200
@@ -189,7 +195,7 @@ export default function FilterBar({
       )}
 
       {/* Add spacer when sticky to prevent content jump */}
-      {isSticky && <div className="h-[72px]" />}
+      {shouldStick && <div className="h-[72px]" />}
     </>
   );
 }
