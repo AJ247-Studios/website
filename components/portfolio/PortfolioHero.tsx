@@ -38,7 +38,7 @@ interface PortfolioHeroProps {
 export default function PortfolioHero({
   headline = "Our Work Speaks for Itself",
   subheadline = "500+ projects delivered. From championship sports to dream weddings — see what we can create for you.",
-  imageUrl = "/portfolio/hero-default.jpg",
+  imageUrl = "/portfolio/hero-default.webp",
   videoUrl,
   videoPosterUrl,
   blurDataUrl,

@@ -462,7 +462,7 @@ export function getImageUrl(
     format?: 'auto' | 'webp' | 'avif' | 'jpeg';
   }
 ): string {
-  if (!image) return '/portfolio/placeholder.jpg';
+  if (!image) return '/portfolio/placeholder.webp';
   
   // If we have pre-generated variants and a matching size, use that
   if (image.variants && options?.width) {
