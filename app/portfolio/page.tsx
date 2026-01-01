@@ -36,7 +36,7 @@ export default function PortfolioPage() {
 
   // Data
   const liveProjects = mockProjects.filter(p => p.slug === "color-powder-festival");
-  const featuredProjects = liveProjects.filter(p => p.featured);
+  const featuredProjects = getFeaturedProjects();
   const categoryCounts = getCategoryCounts(liveProjects);
   
   // Enrich filter options with counts
@@ -108,13 +108,13 @@ export default function PortfolioPage() {
       <FeaturedCaseStudies
         projects={featuredProjects}
         onProjectClick={(projectId) => {
-          const project = liveProjects.find(p => p.id === projectId);
+          const project = mockProjects.find(p => p.id === projectId);
           if (project) {
             handleProjectClick(project, 0);
           }
         }}
         onCtaClick={(projectId) => {
-          const project = liveProjects.find(p => p.id === projectId);
+          const project = mockProjects.find(p => p.id === projectId);
           if (project) {
             handleBookClick(project);
           }
