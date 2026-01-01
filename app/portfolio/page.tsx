@@ -35,7 +35,9 @@ export default function PortfolioPage() {
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
 
   // Data
-  const liveProjects = mockProjects.filter(p => p.slug === "color-powder-festival");
+  const liveProjects = mockProjects.filter(p => 
+    ["color-powder-festival", "fca-krakow-basketball"].includes(p.slug)
+  );
   const featuredProjects = getFeaturedProjects();
   const categoryCounts = getCategoryCounts(liveProjects);
   
