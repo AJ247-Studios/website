@@ -333,8 +333,8 @@ export const mockProjects: Project[] = [
   },
   {
     id: "3",
-    slug: "kasia-tomasz-wedding",
-    title: "Kasia & Tomasz Wedding",
+    slug: "paul-precious-wedding",
+    title: "Paul & Precious Wedding",
     client: "Paul & Precious",
     description: "Wedding highlight film capturing Paul & Precious' Kraków celebration with an embedded YouTube film plus photo selects.",
     shortDescription: "Kraków wedding highlight film",
