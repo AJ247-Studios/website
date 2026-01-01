@@ -84,6 +84,14 @@ const equipment = [
   "Mixed new & well-maintained used gear",
 ];
 
+const anthonyStory = [
+  `AJ247 Studios started in 2023, with just two cameras, big dreams, and a love for capturing life as it happens. Back then, Josiah and I didn’t know much about running a business — we just wanted to take photos and videos, learn, experiment, and have fun creating.`,
+  `By the end of 2023, a few people started asking us to take photos and videos for them. At first, it was surprising — we never imagined anyone would pay us for something we were doing just for fun. But seeing their excitement made us realize this could be something more. Something real. Something that could capture memories people would treasure forever.`,
+  `At the start of 2024, we decided to officially launch AJ247 Studios. We built a website, shared our work more widely, and started taking on more clients. Every project was different — sports events, lifestyle shoots, weddings, commercial work — and every project taught us something new. I focused on photography, capturing the perfect moments, while Josiah worked his magic with video, making sure the story came alive in motion. Together, we learned how to tell better stories with every shoot.`,
+  `2025 has been a year of growth and reflection. More clients are trusting us, and our main goal has always been simple: make every client happy. The best part of our work isn’t recognition or awards — it’s seeing the joy on someone’s face when they see their photos or videos for the first time. That’s what keeps us going.`,
+  `Looking ahead to 2026, 2027, and beyond, we hope to work with even more clients across Poland, continue improving our craft, and create amazing memories for people to look back on. Our mission is clear: turn our passion into professionalism, and capture moments people will remember forever.`,
+  `From two friends with cameras to a growing creative studio, Josiah and I are proud of how far AJ247 Studios has come. We are thankful to everyone who has trusted us, and we’re excited to see what the future holds — more stories, more creativity, and more memories to capture.`,
+];
 export default function AboutPage() {
   return (
     <main>
@@ -100,14 +108,8 @@ export default function AboutPage() {
               </h1>
               <AboutStory
                 paragraphs={[
-                  `AJ247 Studios started in 2023, with just two cameras, big dreams, and a love for capturing life as it happens. Back then, Josiah and I didn’t know much about running a business — we just wanted to take photos and videos, learn, experiment, and have fun creating.`,
-                  `By the end of 2023, a few people started asking us to take photos and videos for them. At first, it was surprising — we never imagined anyone would pay us for something we were doing just for fun. But seeing their excitement made us realize this could be something more. Something real. Something that could capture memories people would treasure forever.`,
-                  `At the start of 2024, we decided to officially launch AJ247 Studios. We built a website, shared our work more widely, and started taking on more clients. Every project was different — sports events, lifestyle shoots, weddings, commercial work — and every project taught us something new. I focused on photography, capturing the perfect moments, while Josiah worked his magic with video, making sure the story came alive in motion. Together, we learned how to tell better stories with every shoot.`,
-                  `2025 has been a year of growth and reflection. More clients are trusting us, and our main goal has always been simple: make every client happy. The best part of our work isn’t recognition or awards — it’s seeing the joy on someone’s face when they see their photos or videos for the first time. That’s what keeps us going.`,
-                  `Looking ahead to 2026, 2027, and beyond, we hope to work with even more clients across Poland, continue improving our craft, and create amazing memories for people to look back on. Our mission is clear: turn our passion into professionalism, and capture moments people will remember forever.`,
-                  `From two friends with cameras to a growing creative studio, Josiah and I are proud of how far AJ247 Studios has come. We are thankful to everyone who has trusted us, and we’re excited to see what the future holds — more stories, more creativity, and more memories to capture.`,
+                  `AJ247 Studios is a Kraków-based media studio specializing in cinematic video and commercial photography for brands, events, and creators. We combine creative direction, professional gear, and fast turnarounds so small businesses and creators get polished, on-brand media that actually converts. Founded and run by a small, experienced team — we manage production from shot-list to final edit.`,
                 ]}
-                signature={"— Anthony"}
               />
               <div className="flex flex-wrap gap-4">
                 <Link
@@ -167,21 +169,10 @@ export default function AboutPage() {
               Our Story
             </h2>
             <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-              <p>
-                AJ247 Studios was founded to bring professional, cinematic-quality media production 
-                to brands, events, and creators in Kraków — without the corporate price tag.
-              </p>
-              <p>
-                We&apos;re a small team of videographers and photographers who handle every project 
-                from creative direction to final delivery. Quick local shoots, pro editing, fast turnarounds.
-              </p>
-              <p>
-                Our name reflects our commitment: we&apos;re dedicated to capturing your most 
-                important moments and delivering results that exceed expectations.
-              </p>
-              <p className="text-slate-500 dark:text-slate-500 italic">
-                Want the real numbers? Ask for our portfolio pack — we&apos;ll send case studies and raw+edited samples.
-              </p>
+              {anthonyStory.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+              <div className="text-right text-sm text-slate-700 dark:text-slate-300 italic">— Anthony</div>
             </div>
           </div>
         </div>
