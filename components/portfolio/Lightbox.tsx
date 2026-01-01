@@ -53,6 +53,7 @@ export default function Lightbox({
     : [];
   
   const currentMedia = allMedia[currentIndex];
+  const isYouTubeVideo = currentMedia?.type === "video" && (currentMedia.url.includes("youtube.com") || currentMedia.url.includes("youtu.be"));
   const hasNext = currentIndex < allMedia.length - 1;
   const hasPrev = currentIndex > 0;
 
@@ -195,18 +196,30 @@ export default function Lightbox({
           {/* Media */}
           <div className="relative max-w-full max-h-full w-full h-full flex items-center justify-center">
             {currentMedia.type === "video" ? (
-              <div className="relative w-full max-w-4xl aspect-video">
-                <video
-                  ref={videoRef}
-                  src={currentMedia.url}
-                  poster={currentMedia.posterUrl}
-                  className="w-full h-full object-contain rounded-lg"
-                  controls
-                  playsInline
-                  onPlay={() => setIsVideoPlaying(true)}
-                  onPause={() => setIsVideoPlaying(false)}
-                />
-              </div>
+              isYouTubeVideo ? (
+                <div className="relative w-full max-w-4xl aspect-video">
+                  <iframe
+                    src={currentMedia.url}
+                    className="w-full h-full rounded-lg"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={currentMedia.alt}
+                  />
+                </div>
+              ) : (
+                <div className="relative w-full max-w-4xl aspect-video">
+                  <video
+                    ref={videoRef}
+                    src={currentMedia.url}
+                    poster={currentMedia.posterUrl}
+                    className="w-full h-full object-contain rounded-lg"
+                    controls
+                    playsInline
+                    onPlay={() => setIsVideoPlaying(true)}
+                    onPause={() => setIsVideoPlaying(false)}
+                  />
+                </div>
+              )
             ) : (
               <div className="relative w-full h-full">
                 <Image
