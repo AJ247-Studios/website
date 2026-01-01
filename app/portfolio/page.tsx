@@ -35,8 +35,9 @@ export default function PortfolioPage() {
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
 
   // Data
-  const featuredProjects = getFeaturedProjects();
-  const categoryCounts = getCategoryCounts(mockProjects);
+  const liveProjects = mockProjects.filter(p => p.slug === "color-powder-festival");
+  const featuredProjects = liveProjects.filter(p => p.featured);
+  const categoryCounts = getCategoryCounts(liveProjects);
   
   // Enrich filter options with counts
   const filtersWithCounts = filterOptions.map(f => ({
@@ -107,13 +108,13 @@ export default function PortfolioPage() {
       <FeaturedCaseStudies
         projects={featuredProjects}
         onProjectClick={(projectId) => {
-          const project = mockProjects.find(p => p.id === projectId);
+          const project = liveProjects.find(p => p.id === projectId);
           if (project) {
             handleProjectClick(project, 0);
           }
         }}
         onCtaClick={(projectId) => {
-          const project = mockProjects.find(p => p.id === projectId);
+          const project = liveProjects.find(p => p.id === projectId);
           if (project) {
             handleBookClick(project);
           }
@@ -125,7 +126,7 @@ export default function PortfolioPage() {
         filters={filtersWithCounts}
         activeFilter={activeFilter}
         onFilterChange={handleFilterChange}
-        totalCount={mockProjects.length}
+        totalCount={liveProjects.length}
         sticky={false}
         onAnalytics={(filter) => {
           // Analytics: track filter selection
@@ -135,7 +136,7 @@ export default function PortfolioPage() {
 
       {/* Portfolio Grid - Clean, image-first grid with hover states */}
       <PortfolioGrid
-        projects={mockProjects}
+        projects={liveProjects}
         activeFilter={activeFilter}
         onProjectClick={handleProjectClick}
         onBookClick={handleBookClick}
