@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 import type { Session } from "@supabase/supabase-js";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 interface Message {
   role: "user" | "assistant";
@@ -323,9 +326,41 @@ export default function ChatWidget() {
                       : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded-bl-sm"
                   } shadow-sm break-words`}
                 >
-                  <p className="text-xs sm:text-sm whitespace-pre-wrap break-words overflow-wrap-anywhere">
-                    {msg.content}
-                  </p>
+                  <div className="text-xs sm:text-sm prose prose-sm dark:prose-invert max-w-none
+                    prose-p:m-0 prose-p:mb-2 prose-p:last:mb-0
+                    prose-ul:m-0 prose-ul:mb-2 prose-ul:last:mb-0
+                    prose-ol:m-0 prose-ol:mb-2 prose-ol:last:mb-0
+                    prose-li:m-0 prose-li:my-1
+                    prose-code:bg-gray-200 dark:prose-code:bg-gray-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+                    prose-pre:bg-gray-900 dark:prose-pre:bg-gray-950 prose-pre:p-3 prose-pre:rounded prose-pre:text-xs prose-pre:overflow-x-auto
+                    prose-blockquote:border-l-4 prose-blockquote:pl-3 prose-blockquote:italic
+                    prose-a:text-blue-500 dark:prose-a:text-blue-400 prose-a:underline
+                    prose-strong:font-bold
+                    prose-em:italic
+                  ">
+                    <ReactMarkdown 
+                      remarkPlugins={[remarkGfm]} 
+                      rehypePlugins={[rehypeRaw]}
+                      components={{
+                        h1: ({node, ...props}: any) => <h1 className="text-base font-bold mb-2" {...props} />,
+                        h2: ({node, ...props}: any) => <h2 className="text-sm font-bold mb-2" {...props} />,
+                        h3: ({node, ...props}: any) => <h3 className="text-xs font-bold mb-1" {...props} />,
+                        ul: ({node, ...props}: any) => <ul className="list-disc list-inside" {...props} />,
+                        ol: ({node, ...props}: any) => <ol className="list-decimal list-inside" {...props} />,
+                        code: ({node, inline, className, children, ...props}: any) => {
+                          if (inline) {
+                            return <code className="bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded text-xs" {...props}>{children}</code>;
+                          }
+                          return <code className="block bg-gray-900 dark:bg-gray-950 text-gray-100 p-3 rounded text-xs overflow-x-auto" {...props}>{children}</code>;
+                        },
+                        pre: ({node, children, ...props}: any) => <pre className="bg-gray-900 dark:bg-gray-950 p-3 rounded text-xs overflow-x-auto mb-2" {...props}>{children}</pre>,
+                        blockquote: ({node, ...props}: any) => <blockquote className="border-l-4 border-gray-400 dark:border-gray-600 pl-3 italic my-2" {...props} />,
+                        a: ({node, href, ...props}: any) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-500 dark:text-blue-400 underline" {...props} />,
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))}
