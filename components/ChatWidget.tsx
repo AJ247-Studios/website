@@ -11,6 +11,7 @@ interface Message {
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -167,12 +168,12 @@ export default function ChatWidget() {
       {/* Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 z-50"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 z-50"
         aria-label="Toggle chat"
       >
         {isOpen ? (
           <svg
-            className="w-6 h-6"
+            className="w-5 h-5 sm:w-6 sm:h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -186,7 +187,7 @@ export default function ChatWidget() {
           </svg>
         ) : (
           <svg
-            className="w-7 h-7"
+            className="w-6 h-6 sm:w-7 sm:h-7"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -203,14 +204,21 @@ export default function ChatWidget() {
 
       {/* Chat Panel */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl flex flex-col z-50" style={{ height: '32rem' }}>
+        <div 
+          className={`fixed bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl flex flex-col z-50 transition-all duration-300 ${
+            isFullscreen 
+              ? 'inset-0 rounded-none' 
+              : 'bottom-0 left-0 right-0 sm:bottom-20 sm:right-6 sm:left-auto sm:w-96 rounded-t-2xl sm:rounded-2xl'
+          }`}
+          style={!isFullscreen ? { height: 'calc(100vh - 4rem)', maxHeight: '600px' } : {}}
+        >
           {/* Header */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-blue-600 rounded-t-2xl">
+          <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-blue-600 rounded-t-2xl sm:rounded-t-2xl">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0">
                   <svg
-                    className="w-6 h-6 text-blue-600"
+                    className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -223,30 +231,65 @@ export default function ChatWidget() {
                     />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-white">AI Assistant</h3>
-                  <p className="text-xs text-blue-100">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-white text-sm sm:text-base truncate">AI Assistant</h3>
+                  <p className="text-xs text-blue-100 truncate">
                     {session ? `Welcome, ${session.user?.email}` : `Guest (${guestCount}/${GUEST_LIMIT} messages)`}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                 {session && (
                   <button
                     onClick={handleLogout}
-                    className="text-white hover:bg-white/20 px-3 py-1 rounded-lg transition-colors text-xs"
+                    className="text-white hover:bg-white/20 px-2 sm:px-3 py-1 rounded-lg transition-colors text-xs"
                     title="Logout"
                   >
                     Logout
                   </button>
                 )}
                 <button
+                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  className="hidden sm:block text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
+                  title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                >
+                  {isFullscreen ? (
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                      />
+                    </svg>
+                  )}
+                </button>
+                <button
                   onClick={clearChat}
                   className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
                   title="Clear chat"
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -264,7 +307,7 @@ export default function ChatWidget() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-950">
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 bg-gray-50 dark:bg-gray-950">
             {messages.map((msg, idx) => (
               <div
                 key={idx}
@@ -274,13 +317,13 @@ export default function ChatWidget() {
                 style={{ animation: 'fadeIn 0.3s ease-in' }}
               >
                 <div
-                  className={`max-w-[80%] px-4 py-3 rounded-2xl ${
+                  className={`max-w-[85%] sm:max-w-[80%] px-3 sm:px-4 py-2 sm:py-3 rounded-2xl ${
                     msg.role === "user"
                       ? "bg-blue-600 text-white rounded-br-sm"
                       : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded-bl-sm"
-                  } shadow-sm`}
+                  } shadow-sm break-words`}
                 >
-                  <p className="text-sm whitespace-pre-wrap" style={{ wordBreak: 'break-word' }}>
+                  <p className="text-xs sm:text-sm whitespace-pre-wrap break-words overflow-wrap-anywhere">
                     {msg.content}
                   </p>
                 </div>
@@ -288,7 +331,7 @@ export default function ChatWidget() {
             ))}
             {loading && (
               <div className="flex justify-start" style={{ animation: 'fadeIn 0.3s ease-in' }}>
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-3 sm:px-4 py-2 sm:py-3 rounded-2xl rounded-bl-sm shadow-sm">
                   <div className="flex gap-1">
                     <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite' }}></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full" style={{ animation: 'bounce 1s infinite 0.1s' }}></div>
@@ -301,10 +344,10 @@ export default function ChatWidget() {
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+          <div className="p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-b-2xl">
             {!session && guestCount >= GUEST_LIMIT ? (
               <div className="space-y-3">
-                <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                <p className="text-xs sm:text-sm text-center text-gray-600 dark:text-gray-400">
                   You've reached the guest limit. Log in to continue chatting!
                 </p>
                 <div className="space-y-2">
@@ -313,27 +356,27 @@ export default function ChatWidget() {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    className="w-full px-3 py-2 text-xs sm:text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   />
                   <input
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    className="w-full px-3 py-2 text-xs sm:text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                   />
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleAuth("signInWithPassword")}
                       disabled={loading}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg disabled:opacity-50 transition-colors"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-xs sm:text-sm font-medium disabled:opacity-50 transition-colors"
                     >
                       Login
                     </button>
                     <button
                       onClick={() => handleAuth("signUp")}
                       disabled={loading}
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg disabled:opacity-50 transition-colors"
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-xs sm:text-sm font-medium disabled:opacity-50 transition-colors"
                     >
                       Sign Up
                     </button>
@@ -350,18 +393,18 @@ export default function ChatWidget() {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Type your message..."
-                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-shadow"
+                    className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-shadow"
                     disabled={loading}
                   />
                   <button
                     onClick={sendMessage}
                     disabled={loading || !input.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg flex items-center justify-center"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg flex items-center justify-center text-xs sm:text-sm font-medium"
                     title="Send message"
                   >
                     {loading ? (
                       <svg
-                        className="animate-spin h-5 w-5"
+                        className="animate-spin h-4 w-4 sm:h-5 sm:w-5"
                         fill="none"
                         viewBox="0 0 24 24"
                       >
