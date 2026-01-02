@@ -218,7 +218,7 @@ export default function ChatWidget() {
           {/* Header */}
           <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-blue-600 rounded-t-2xl sm:rounded-t-2xl">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0">
                   <svg
                     className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
@@ -251,6 +251,25 @@ export default function ChatWidget() {
                     Logout
                   </button>
                 )}
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="sm:hidden text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
+                  title="Close chat"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
                 <button
                   onClick={() => setIsFullscreen(!isFullscreen)}
                   className="hidden sm:block text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
