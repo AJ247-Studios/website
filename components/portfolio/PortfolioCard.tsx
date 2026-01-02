@@ -147,16 +147,6 @@ export default function PortfolioCard({
           </div>
         )}
       </div>
-
-      {/* Mobile-only: Always visible title below image */}
-      <div className="sm:hidden mt-2">
-        <h3 className="text-sm font-medium text-slate-900 dark:text-white line-clamp-1">
-          {project.title}
-        </h3>
-        <p className="text-xs text-slate-500 dark:text-slate-400">
-          {project.client}
-        </p>
-      </div>
     </article>
   );
 }
