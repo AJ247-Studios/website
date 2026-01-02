@@ -326,18 +326,7 @@ export default function ChatWidget() {
                       : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded-bl-sm"
                   } shadow-sm break-words`}
                 >
-                  <div className="text-xs sm:text-sm prose prose-sm dark:prose-invert max-w-none
-                    prose-p:m-0 prose-p:mb-2 prose-p:last:mb-0
-                    prose-ul:m-0 prose-ul:mb-2 prose-ul:last:mb-0
-                    prose-ol:m-0 prose-ol:mb-2 prose-ol:last:mb-0
-                    prose-li:m-0 prose-li:my-1
-                    prose-code:bg-gray-200 dark:prose-code:bg-gray-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-                    prose-pre:bg-gray-900 dark:prose-pre:bg-gray-950 prose-pre:p-3 prose-pre:rounded prose-pre:text-xs prose-pre:overflow-x-auto
-                    prose-blockquote:border-l-4 prose-blockquote:pl-3 prose-blockquote:italic
-                    prose-a:text-blue-500 dark:prose-a:text-blue-400 prose-a:underline
-                    prose-strong:font-bold
-                    prose-em:italic
-                  ">
+                  <div className="text-xs sm:text-sm prose prose-sm dark:prose-invert max-w-none prose-p:m-0 prose-p:mb-2 prose-p:last:mb-0 prose-ul:m-0 prose-ul:mb-2 prose-ul:last:mb-0 prose-ol:m-0 prose-ol:mb-2 prose-ol:last:mb-0 prose-li:m-0 prose-li:my-1 prose-code:bg-gray-200 dark:prose-code:bg-gray-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 dark:prose-pre:bg-gray-950 prose-pre:p-3 prose-pre:rounded prose-pre:text-xs prose-pre:overflow-x-auto prose-blockquote:border-l-4 prose-blockquote:pl-3 prose-blockquote:italic prose-a:text-blue-500 dark:prose-a:text-blue-400 prose-a:underline prose-strong:font-bold prose-em:italic">
                     <ReactMarkdown 
                       remarkPlugins={[remarkGfm]} 
                       rehypePlugins={[rehypeRaw]}
