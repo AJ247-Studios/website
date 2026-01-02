@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "types:generate": "npx supabase gen types typescript --project-id YOUR_PROJECT_ID > types/supabase.ts"
   },
   "repository": {
     "type": "git",
