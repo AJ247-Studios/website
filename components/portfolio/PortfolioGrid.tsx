@@ -76,23 +76,17 @@ export default function PortfolioGrid({
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {displayedProjects.map((project, index) => {
-            // Determine card size for masonry effect
-            // First featured project gets large size
-            const size = index === 0 && project.featured ? "large" : "default";
-            
             return (
               <article
                 key={project.id}
-                className={`
-                  ${size === "large" ? "sm:col-span-2 sm:row-span-2" : ""}
-                `}
+                className="w-full"
               >
                 <PortfolioCard
                   project={project}
                   onClick={() => onProjectClick(project, index)}
                   onBookClick={() => onBookClick?.(project)}
                   priority={index < 6} // Priority load first 6 for LCP
-                  size={size}
+                  size="default"
                 />
               </article>
             );
