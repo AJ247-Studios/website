@@ -25,19 +25,35 @@ export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] 
   const lastTsRef = useRef<number | null>(null);
   const widthRef = useRef<number>(0);
   const rafRef = useRef<number | null>(null);
+  const roRef = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
-    function measure() {
-      const el = trackARef.current;
-      if (!el) return;
-      widthRef.current = el.offsetWidth;
-    }
-    measure();
+    let measureRaf: number | null = null;
+    const requestMeasure = () => {
+      if (measureRaf != null) return;
+      measureRaf = requestAnimationFrame(() => {
+        const el = trackARef.current;
+        if (el) {
+          // Use scrollWidth to include offscreen width
+          widthRef.current = el.scrollWidth || el.offsetWidth;
+        }
+        measureRaf && cancelAnimationFrame(measureRaf);
+        measureRaf = null;
+      });
+    };
+
+    requestMeasure();
 
     function onResize() {
-      measure();
+      requestMeasure();
     }
     window.addEventListener("resize", onResize);
+
+    // Observe size changes (e.g., images loading)
+    if (typeof ResizeObserver !== "undefined") {
+      roRef.current = new ResizeObserver(() => requestMeasure());
+      if (trackARef.current) roRef.current.observe(trackARef.current);
+    }
 
     function step(ts: number) {
       if (lastTsRef.current == null) {
@@ -69,11 +85,22 @@ export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] 
     return () => {
       window.removeEventListener("resize", onResize);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (measureRaf) cancelAnimationFrame(measureRaf);
+      if (roRef.current) roRef.current.disconnect();
     };
   }, []);
 
+  const onImgLoad = () => {
+    // trigger re-measure when any image finishes loading
+    // the ResizeObserver should catch this, but this is an extra nudge
+    const el = trackARef.current;
+    if (el) {
+      widthRef.current = el.scrollWidth || el.offsetWidth;
+    }
+  };
+
   const renderLogos = (dupIndexOffset = 0) => (
-    <div className="inline-flex items-center gap-8 sm:gap-12" aria-hidden="false">
+    <div className="inline-flex items-center gap-6" aria-hidden="false">
       {logos.map((logo, idx) => {
         const style = imageStyles[logo.fileName] || {
           width: 120,
@@ -89,6 +116,7 @@ export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] 
             height={style.height}
             className={`shrink-0 ${style.className}`}
             title={logo.alt}
+            onLoadingComplete={onImgLoad}
           />
         );
       })}
@@ -97,11 +125,11 @@ export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] 
 
   return (
     <div className="relative overflow-hidden">
-      <div className="absolute inset-0 flex">
-        <div ref={trackARef} className="w-max will-change-transform">
+      <div className="relative w-full h-full">
+        <div ref={trackARef} className="absolute left-0 top-0 w-max will-change-transform">
           {renderLogos()}
         </div>
-        <div ref={trackBRef} className="w-max will-change-transform">
+        <div ref={trackBRef} className="absolute left-0 top-0 w-max will-change-transform">
           {renderLogos(logos.length)}
         </div>
       </div>
