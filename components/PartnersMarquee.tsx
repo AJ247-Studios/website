@@ -48,15 +48,15 @@ export default function PartnersMarquee() {
         {loopLogos.map((logo, idx) => (
           <div
             key={`${logo.src}-${idx}`}
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0"
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 p-2"
             title={logo.alt}
           >
             <Image
               src={logo.src}
               alt={logo.alt}
-              width={80}
-              height={80}
-              className="w-full h-full object-cover"
+              width={96}
+              height={96}
+              className="w-full h-full object-contain"
             />
           </div>
         ))}
