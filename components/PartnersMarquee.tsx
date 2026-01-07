@@ -5,6 +5,18 @@ import Image from "next/image";
 type PartnerLogo = {
   src: string;
   alt: string;
+  fileName: string;
+};
+
+// Custom styles per image file
+const imageStyles: Record<string, { width: number; height: number; className: string }> = {
+  "B.webp": { width: 80, height: 80, className: "w-20 h-20 rounded-full object-cover" },
+  "No-press-studio.webp": { width: 184, height: 80, className: "h-20 rounded-lg object-contain" },
+  "People's-Press.webp": { width: 142, height: 80, className: "h-20 rounded-lg object-contain" },
+  "Poland-Sports-Gazette.webp": { width: 142, height: 80, className: "h-20 rounded-lg object-contain" },
+  "Realtime.webp": { width: 80, height: 80, className: "w-20 h-20 rounded-full object-cover" },
+  "Resilience.webp": { width: 160, height: 80, className: "h-20 rounded-lg object-contain" },
+  "The-red-light.webp": { width: 80, height: 80, className: "w-20 h-20 rounded-full object-cover" },
 };
 
 function getPartnerLogos(): PartnerLogo[] {
@@ -21,7 +33,7 @@ function getPartnerLogos(): PartnerLogo[] {
   return files.map((file) => {
     const name = path.parse(file).name.replace(/[-_]+/g, " ");
     const alt = name.trim().length ? name.trim() : "Partner logo";
-    return { src: `/partners/${file}`, alt };
+    return { src: `/partners/${file}`, alt, fileName: file };
   });
 }
 
@@ -45,21 +57,25 @@ export default function PartnersMarquee() {
         className="flex items-center gap-8 sm:gap-12 animate-marquee will-change-transform"
         aria-hidden="false"
       >
-        {loopLogos.map((logo, idx) => (
-          <div
-            key={`${logo.src}-${idx}`}
-            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 p-2"
-            title={logo.alt}
-          >
+        {loopLogos.map((logo, idx) => {
+          const style = imageStyles[logo.fileName] || { 
+            width: 120, 
+            height: 80, 
+            className: "h-20 rounded-lg object-contain" 
+          };
+          
+          return (
             <Image
+              key={`${logo.src}-${idx}`}
               src={logo.src}
               alt={logo.alt}
-              width={96}
-              height={96}
-              className="w-full h-full object-contain"
+              width={style.width}
+              height={style.height}
+              className={`shrink-0 ${style.className}`}
+              title={logo.alt}
             />
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
