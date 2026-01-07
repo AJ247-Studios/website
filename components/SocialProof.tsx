@@ -1,3 +1,4 @@
+import PartnersMarquee from "./PartnersMarquee";
 const testimonials = [
   {
     id: 1,
@@ -22,9 +23,7 @@ const testimonials = [
   },
 ];
 
-const clientLogos = [
-  { name: "FCA Krakow, Poland", initials: "FCA" },
-];
+// Deprecated placeholder; replaced by dynamic marquee from /public/partners
 
 export default function SocialProof() {
   return (
@@ -40,22 +39,12 @@ export default function SocialProof() {
           </p>
         </div>
 
-        {/* Client logos - trust signals per research */}
+        {/* Client logos marquee from /public/partners */}
         <div className="mb-16">
           <p className="text-center text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-8">
             Trusted by leading organizations
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
-            {clientLogos.map((client) => (
-              <div
-                key={client.name}
-                className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-bold text-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                title={client.name}
-              >
-                {client.initials}
-              </div>
-            ))}
-          </div>
+          <PartnersMarquee />
         </div>
 
         {/* Testimonials grid */}
