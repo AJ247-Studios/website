@@ -14,13 +14,6 @@ const testimonials = [
     role: "FCA Krakow, Poland",
     rating: 5,
   },
-  {
-    id: 3,
-    quote: "...",
-    author: "...",
-    role: "Marketing Director...",
-    rating: 5,
-  },
 ];
 
 // Deprecated placeholder; replaced by dynamic marquee from /public/partners
