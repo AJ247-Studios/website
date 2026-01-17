@@ -11,16 +11,17 @@ const addOns = [
       </svg>
     ),
   },
-  {
-    name: "Drone Coverage",
-    description: "Aerial shots and cinematic flyovers",
-    price: "500–1,500",
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-      </svg>
-    ),
-  },
+  // Drone Coverage temporarily removed
+  // {
+  //   name: "Drone Coverage",
+  //   description: "Aerial shots and cinematic flyovers",
+  //   price: "500–1,500",
+  //   icon: (
+  //     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  //       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+  //     </svg>
+  //   ),
+  // },
   {
     name: "Second Photographer",
     description: "Additional coverage angles",

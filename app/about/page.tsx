@@ -264,7 +264,7 @@ export default function AboutPage() {
               </h2>
               <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
                 We invest in the best gear to deliver the best results. Our equipment lineup 
-                includes industry-standard cameras, lenses, lighting, and drones.
+                includes industry-standard cameras, lenses, and lighting.
               </p>
               <ul className="grid grid-cols-2 gap-3">
                 {equipment.map((item) => (

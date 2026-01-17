@@ -61,7 +61,7 @@ interface BatchUpdate {
 }
 
 const PRESET_TAGS = [
-  'final', 'draft', 'raw', 'b-roll', 'interview', 'drone', 
+  'final', 'draft', 'raw', 'b-roll', 'interview', // 'drone', 
   'highlight', 'full-length', 'social', 'web', 'print',
   'needs-review', 'approved', 'archive',
 ];

@@ -17,7 +17,7 @@ const faqCategories = [
       },
       {
         q: "Are there any hidden fees?",
-        a: "No hidden fees, ever. The price we quote is the price you pay. Additional services (like drone coverage or rush delivery) are clearly listed as optional add-ons with upfront pricing.",
+        a: "No hidden fees, ever. The price we quote is the price you pay. Additional services (like rush delivery) are clearly listed as optional add-ons with upfront pricing.",
       },
       {
         q: "Do you require a deposit?",
@@ -101,10 +101,11 @@ const faqCategories = [
         q: "What's included in 'edited photos'?",
         a: "All photos receive professional color correction, exposure adjustment, cropping, and light retouching. Premium packages include more advanced skin retouching and creative edits.",
       },
-      {
-        q: "Do you provide drone coverage?",
-        a: "Yes, drone photography and videography is available as an add-on (500-1,500 PLN) or included in Premium packages. We're fully licensed and insured for commercial drone operation.",
-      },
+      // Drone coverage FAQ temporarily removed
+      // {
+      //   q: "Do you provide drone coverage?",
+      //   a: "Yes, drone photography and videography is available as an add-on (500-1,500 PLN) or included in Premium packages. We're fully licensed and insured for commercial drone operation.",
+      // },
       {
         q: "Can I request specific shots or styles?",
         a: "Absolutely! We encourage you to share Pinterest boards, reference photos, or specific shot lists. We'll work together to achieve your vision.",
@@ -117,7 +118,7 @@ const faqCategories = [
     faqs: [
       {
         q: "What equipment do you use?",
-        a: "We use professional-grade Sony and Canon mirrorless cameras, cinema lenses, Profoto lighting, DJI drones, and stabilized gimbals. All equipment is maintained and backed up.",
+        a: "We use professional-grade Sony and Canon mirrorless cameras, cinema lenses, Profoto lighting, and stabilized gimbals. All equipment is maintained and backed up.",
       },
       {
         q: "Do you bring backup equipment?",

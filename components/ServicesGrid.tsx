@@ -66,7 +66,7 @@ const services = [
   {
     id: "custom",
     title: "Custom Packages",
-    description: "Tailored solutions combining photo, video, drone, and more for your unique needs.",
+    description: "Tailored solutions combining photo, video, and more for your unique needs.", // drone temporarily removed
     price: "Get a Quote",
     features: ["Mix & match services", "Add-ons available", "Flexible pricing"],
     icon: (
