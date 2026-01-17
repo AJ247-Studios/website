@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { sendNotificationEmail, sendConfirmationEmail } from "@/lib/email";
 
 /**
  * POST /api/leads
@@ -212,8 +213,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Send notification email to team
-    // await sendNotificationEmail(leadRecord);
+    // Send notification email to team
+    await sendNotificationEmail(leadRecord);
 
     // TODO: Send confirmation email to customer
     // await sendConfirmationEmail(leadRecord);
