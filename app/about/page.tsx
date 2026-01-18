@@ -133,10 +133,14 @@ export default function AboutPage() {
               <div className="aspect-4/3 rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-lg">
                 <video
                   className="w-full h-full object-cover"
-                  controls
+                  autoPlay
+                  muted
+                  loop
                   playsInline
-                  preload="metadata"
+                  preload="auto"
                   poster="/portfolio/background_photo.webp"
+                  controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+                  disablePictureInPicture
                 >
                   <source src="/portfolio/F_Weddings_ShowCase_720p@24fps.mkv" type="video/x-matroska" />
                   Your browser does not support the video tag.
