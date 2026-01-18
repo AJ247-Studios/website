@@ -130,7 +130,7 @@ export default function AboutPage() {
             
             {/* Video hero */}
             <div className="relative">
-              <div className="aspect-4/3 rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-lg">
+              <div className="aspect-[9/16] rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-lg">
                 <video
                   className="w-full h-full object-cover"
                   autoPlay
