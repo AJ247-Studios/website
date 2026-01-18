@@ -142,7 +142,7 @@ export default function AboutPage() {
                   controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
                   disablePictureInPicture
                 >
-                  <source src="/portfolio/F_Weddings_ShowCase_720p@24fps.mkv" type="video/x-matroska" />
+                  <source src="/portfolio/F_Weddings_ShowCase_720p@24fps.mkv" />
                   Your browser does not support the video tag.
                 </video>
               </div>
