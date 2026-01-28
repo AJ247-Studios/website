@@ -190,9 +190,10 @@ export default function ContactPageClient() {
       
       setIsSubmitted(true);
     } catch (error) {
-      // For demo, still show success
-      localStorage.removeItem("contactFormDraft");
-      setIsSubmitted(true);
+      // Show error to user - don't fake success!
+      setErrors({
+        name: "Something went wrong. Please try WhatsApp or email us directly at aj247studios@gmail.com",
+      });
     } finally {
       setIsSubmitting(false);
     }

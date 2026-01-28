@@ -13,8 +13,13 @@ const testimonials = [
     author: "Dima",
     role: "FCA Krakow, Poland",
     rating: 5,
-  },
-];
+  },  {
+    id: 3,
+    quote: "Professional, creative, and incredibly easy to work with. They understood our brand vision immediately and delivered content that exceeded what we imagined. Highly recommend for any business looking for quality media.",
+    author: "Marta K.",
+    role: "Brand Photography, Kraków",
+    rating: 5,
+  },];
 
 // Deprecated placeholder; replaced by dynamic marquee from /public/partners
 

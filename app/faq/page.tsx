@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description: "Frequently asked questions about AJ247 Studios photo and video services. Learn about pricing, delivery, booking, and what to expect.",
 };
 
+// FAQ data for both display and JSON-LD schema
 const faqCategories = [
   {
     id: "pricing",
@@ -136,9 +137,35 @@ const faqCategories = [
   },
 ];
 
+// Generate JSON-LD structured data for FAQ rich snippets in Google
+function generateFaqSchema() {
+  const allFaqs = faqCategories.flatMap(category => category.faqs);
+  
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": allFaqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a,
+      },
+    })),
+  };
+}
+
 export default function FAQPage() {
+  const faqSchema = generateFaqSchema();
+  
   return (
     <main>
+      {/* JSON-LD Schema for Google Rich Snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      
       {/* Hero */}
       <section className="py-16 sm:py-20 bg-linear-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

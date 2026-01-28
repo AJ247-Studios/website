@@ -11,6 +11,7 @@ import { createServerClient } from "@supabase/ssr";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://aj247studios.com"),
   title: {
     default: "AJ247 Studios | Premium Photo & Video Production in Kraków",
     template: "%s | AJ247 Studios",
