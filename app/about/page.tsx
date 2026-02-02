@@ -223,7 +223,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-wrap justify-center gap-8">
             {team.map((member) => (
               <div key={member.name} className="text-center">
                 <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
