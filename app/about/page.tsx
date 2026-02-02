@@ -12,7 +12,7 @@ const stats = [
   { value: "50+", label: "Projects Delivered" },
   { value: "50+", label: "Happy Clients" },
   { value: "1000+", label: "Photos & Clips Delivered" },
-  { value: "3", label: "Team Members" },
+    { value: "2", label: "Team Members" },
 ];
 
 const values = [
@@ -66,12 +66,6 @@ const team = [
     role: "Photographer / Co-founder",
     bio: "2–3 years experience. Stills photographer focused on product, lifestyle, and event photography. Client liaison, studio setups.",
     image: "/portfolio/Anthony-full-res.webp",
-  },
-  {
-    name: "Szymon Flak",
-    role: "Videographer & Photographer",
-    bio: "4–5 years experience. Senior shooter handling complex shoots for sports and photoshoots. Secondary DOP, lighting and color workflows, main editor.",
-    image: "/portfolio/Szymon-full-res.webp",
   },
 ];
 
