@@ -100,7 +100,7 @@ export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] 
   };
 
   const renderLogos = (dupIndexOffset = 0) => (
-    <div className="inline-flex items-center gap-6" aria-hidden="false">
+    <div className="inline-flex items-center" style={{ gap: '3rem' }} aria-hidden="false">
       {logos.map((logo, idx) => {
         const style = imageStyles[logo.fileName] || {
           width: 120,
@@ -108,18 +108,21 @@ export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] 
           className: "h-20 rounded-lg object-contain",
         };
         return (
-          <Image
-            key={`${logo.src}-${idx + dupIndexOffset}`}
-            src={logo.src}
-            alt={logo.alt}
-            width={style.width}
-            height={style.height}
-            className={`shrink-0 ${style.className}`}
-            title={logo.alt}
-            onLoadingComplete={onImgLoad}
-          />
+          <div key={`${logo.src}-${idx + dupIndexOffset}`} className="shrink-0 flex items-center justify-center" style={{ minWidth: style.width }}>
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={style.width}
+              height={style.height}
+              className={`shrink-0 ${style.className}`}
+              title={logo.alt}
+              onLoadingComplete={onImgLoad}
+            />
+          </div>
         );
       })}
+      {/* Trailing spacer to maintain gap before loop restart */}
+      <div className="shrink-0" style={{ width: '3rem' }} aria-hidden="true" />
     </div>
   );
 

@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 };
 
 const stats = [
-  { value: "50+", label: "Projects Delivered" },
-  { value: "50+", label: "Happy Clients" },
-  { value: "1000+", label: "Photos & Clips Delivered" },
-    { value: "2", label: "Team Members" },
+  { value: "150+", label: "Projects Delivered" },
+  { value: "150+", label: "Happy Clients" },
+  { value: "4000+", label: "Photos & Clips Delivered" },
+  { value: "2", label: "Team Members" },
 ];
 
 const values = [
@@ -70,12 +70,12 @@ const team = [
 ];
 
 const equipment = [
-  "Lumix GH5 — Cinematic 4K, main cinema body",
-  "Nikon D500 — Sports & action",
-  "Nikon D3 — Professional stills",
-  "Nikon D7000 — Versatile backup",
-  "Sony A6000 — Compact & travel",
-  "Mixed new & well-maintained used gear",
+  "Lumix GH5",
+  "Nikon D500",
+  "Nikon D3",
+  "Nikon D7000",
+  "Lights & Audio",
+  "Mixed new & well-maintained gear",
 ];
 
 const anthonyStory = [
@@ -142,7 +142,7 @@ export default function AboutPage() {
               </div>
               {/* Floating stat */}
               <div className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 rounded-xl p-4 shadow-xl border border-slate-200 dark:border-slate-700">
-                <div className="text-2xl font-bold text-slate-900 dark:text-white">50+</div>
+                <div className="text-2xl font-bold text-slate-900 dark:text-white">150+</div>
                 <div className="text-sm text-slate-600 dark:text-slate-400">Projects Delivered</div>
               </div>
             </div>
@@ -223,31 +223,31 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             {team.map((member) => (
-              <div key={member.name} className="text-center">
-                <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
+              <div key={member.name} className="flex flex-col items-center text-center">
+                <div className="w-40 h-40 mb-6 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
                   {member.image ? (
                     <Image
                       src={member.image}
                       alt={member.name}
-                      width={128}
-                      height={128}
-                      className="w-32 h-32 rounded-full object-cover"
+                      width={160}
+                      height={160}
+                      className="w-40 h-40 rounded-full object-cover"
                     />
                   ) : (
-                    <span className="text-4xl font-bold text-slate-400 dark:text-slate-500">
+                    <span className="text-5xl font-bold text-slate-400 dark:text-slate-500">
                       {member.name.charAt(0)}
                     </span>
                   )}
                 </div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-1">
                   {member.name}
                 </h3>
                 <div className="text-sm text-blue-600 dark:text-blue-400 mb-3">
                   {member.role}
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs">
                   {member.bio}
                 </p>
               </div>

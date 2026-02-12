@@ -83,8 +83,8 @@ const SITE_CONFIG = {
   phone: "+48 503 685 377",
   email: "aj247studios@gmail.com",
   social: {
-    instagram: "https://www.instagram.com/aj247studios.pl/",
-    youtube: "https://www.youtube.com/@AJ247Studios-b8y",
+    instagram: "https://www.instagram.com/aj247studios._com/",
+    youtube: "https://www.youtube.com/@AJ247Studioscom",
     facebook: "https://www.facebook.com/people/aj247studiospl/61582157606460/",
   },
 };

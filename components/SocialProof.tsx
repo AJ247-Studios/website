@@ -13,12 +13,7 @@ const testimonials = [
     author: "Dima",
     role: "FCA Krakow, Poland",
     rating: 5,
-  },  {
-    id: 3,
-    quote: "Professional, creative, and incredibly easy to work with. They understood our brand vision immediately and delivered content that exceeded what we imagined. Highly recommend for any business looking for quality media.",
-    author: "Marta K.",
-    role: "Brand Photography, Kraków",
-    rating: 5,
+
   },];
 
 // Deprecated placeholder; replaced by dynamic marquee from /public/partners
@@ -46,7 +41,7 @@ export default function SocialProof() {
         </div>
 
         {/* Testimonials grid */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
@@ -94,19 +89,19 @@ export default function SocialProof() {
         {/* Stats bar - updated to match site copy */}
           <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 py-10 px-8 bg-linear-to-r from-blue-600 to-emerald-600 rounded-2xl text-white">
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold mb-1">50+</div>
+            <div className="text-3xl sm:text-4xl font-bold mb-1">150+</div>
             <div className="text-blue-100 text-sm">Projects Delivered</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold mb-1">50+</div>
+            <div className="text-3xl sm:text-4xl font-bold mb-1">150+</div>
             <div className="text-blue-100 text-sm">Satisfied Clients</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold mb-1">1000+</div>
+            <div className="text-3xl sm:text-4xl font-bold mb-1">4000+</div>
             <div className="text-blue-100 text-sm">Photos Delivered</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold mb-1">10+</div>
+            <div className="text-3xl sm:text-4xl font-bold mb-1">50+</div>
             <div className="text-blue-100 text-sm">Hours of Video</div>
           </div>
         </div>

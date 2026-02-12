@@ -94,7 +94,7 @@ export default function PortfolioPage() {
       {/* Hero Section - Big, contextual hero with striking visual */}
       <PortfolioHero
         headline="Our Work Speaks for Itself"
-        subheadline="50+ projects delivered across sports, concerts, weddings, and corporate events. See what we can create for you."
+        subheadline="150+ projects delivered across sports, concerts, weddings, and corporate events. See what we can create for you."
         imageUrl="/portfolio/Concert1.webp"
         ctaText="Get a Free Quote"
         ctaHref="/contact"
