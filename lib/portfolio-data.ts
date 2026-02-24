@@ -16,6 +16,7 @@ export const filterOptions: FilterOption[] = [
   { value: "concerts", label: "Concerts" },
   { value: "weddings", label: "Weddings" },
   { value: "portraits", label: "Portraits" },
+  { value: "prom", label: "Prom" },
   { value: "corporate", label: "Corporate" },
   { value: "events", label: "Events" },
 ];
@@ -275,7 +276,7 @@ export const mockProjects: Project[] = [
     client: "Prom Event",
     description: "Capturing the elegance and excitement of Prom night with stunning portraits and candid moments throughout the evening.",
     shortDescription: "Prom night photography",
-    categories: ["events", "portraits"],
+    categories: ["prom", "events", "portraits"],
     year: 2026,
     featured: false,
     heroMedia: {

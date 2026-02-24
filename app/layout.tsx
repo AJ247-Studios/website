@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | AJ247 Studios",
   },
   description:
-    "Professional photo and video production in Kraków. Sports events, concerts, weddings, portraits & corporate. 500+ projects delivered. Get a free quote today.",
+    "Professional photo and video production in Kraków. Sports events, concerts, weddings, portraits & corporate. 150+ projects delivered. Get a free quote today.",
   keywords: [
     "photo production Kraków",
     "video production Kraków",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     siteName: "AJ247 Studios",
     title: "AJ247 Studios | Premium Photo & Video Production in Kraków",
     description:
-      "Professional photo and video production in Kraków. Sports events, concerts, weddings, portraits & corporate. Get a free quote today.",
+      "Professional photo and video production in Kraków. Sports events, concerts, weddings, portraits & corporate. 150+ projects delivered. Get a free quote today.",
     images: [
       {
         url: "/og-image.jpg",
