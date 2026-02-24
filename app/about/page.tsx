@@ -136,7 +136,7 @@ export default function AboutPage() {
                   controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
                   disablePictureInPicture
                 >
-                  <source src="/portfolio/F_Weddings_ShowCase_720p@24fps.mkv" />
+                  <source src="/portfolio/F_Weddings_ShowCase_720p@24fps.mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
