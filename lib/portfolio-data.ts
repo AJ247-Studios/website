@@ -281,8 +281,8 @@ export const mockProjects: Project[] = [
     heroMedia: {
       id: "hero-14",
       type: "image",
-      url: "/portfolio/Prom/20260116-DSC_5950.jpg",
-      thumbnailUrl: "/portfolio/Prom/20260116-DSC_5950.jpg",
+      url: "/portfolio/Prom/20260116-DSC_6507.jpg",
+      thumbnailUrl: "/portfolio/Prom/20260116-DSC_6507.jpg",
       alt: "Prom 2026 highlight image",
       width: 2000,
       height: 1333,
