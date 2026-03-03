@@ -55,7 +55,7 @@ interface FeatureComparisonProps {
 
 export function FeatureComparison({ 
   features, 
-  standardLabel = "Standard", 
+  standardLabel = "Customized", 
   premiumLabel = "Premium" 
 }: FeatureComparisonProps) {
   return (

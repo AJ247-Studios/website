@@ -14,9 +14,9 @@ export const metadata: Metadata = {
 
 const sportsPackages = [
   {
-    name: "Standard",
+    name: "Customized",
     description: "Essential coverage for local sports events and games",
-    price: "1,500",
+    price: "1,499",
     priceNote: "Starting price • 3-4 hours",
     features: [
       { text: "3-4 hours of coverage", included: true },
@@ -32,7 +32,7 @@ const sportsPackages = [
   {
     name: "Premium",
     description: "Comprehensive coverage with cinematic highlights",
-    price: "3,500",
+    price: "3,499",
     priceNote: "Starting price • 5+ hours",
     popular: true,
     features: [
@@ -61,9 +61,9 @@ const sportsComparison = [
 
 const concertPackages = [
   {
-    name: "Standard",
+    name: "Customized",
     description: "Professional coverage for concerts and live events",
-    price: "2,000",
+    price: "1,999",
     priceNote: "Starting price • 4 hours",
     features: [
       { text: "4 hours of coverage", included: true },
@@ -79,7 +79,7 @@ const concertPackages = [
   {
     name: "Premium",
     description: "Full cinematic production for major events",
-    price: "5,000",
+    price: "4,999",
     priceNote: "Starting price • 6+ hours",
     popular: true,
     features: [
@@ -108,9 +108,9 @@ const concertComparison = [
 
 const weddingPackages = [
   {
-    name: "Standard",
+    name: "Customized",
     description: "Beautiful coverage for intimate celebrations",
-    price: "3,500",
+    price: "3,499",
     priceNote: "Starting price • 6 hours",
     features: [
       { text: "6 hours of coverage", included: true },
@@ -126,7 +126,7 @@ const weddingPackages = [
   {
     name: "Premium",
     description: "Complete cinematic wedding experience",
-    price: "5,600",
+    price: "5,599",
     priceNote: "Full day coverage",
     popular: true,
     features: [
@@ -171,9 +171,9 @@ const portraitPackages = [
     ],
   },
   {
-    name: "Standard",
+    name: "Customized",
     description: "Comprehensive portrait session",
-    price: "650",
+    price: "649",
     priceNote: "1.5 hour session",
     features: [
       { text: "1.5 hour session", included: true },
@@ -189,7 +189,7 @@ const portraitPackages = [
   {
     name: "Premium",
     description: "VIP treatment with full styling consultation",
-    price: "950",
+    price: "949",
     priceNote: "3 hour session",
     popular: true,
     features: [
@@ -209,7 +209,7 @@ const corporatePackages = [
   {
     name: "Half Day",
     description: "Conference or event coverage",
-    price: "1,200",
+    price: "1,199",
     priceNote: "4 hours",
     features: [
       { text: "4 hours of coverage", included: true },
@@ -225,7 +225,7 @@ const corporatePackages = [
   {
     name: "Full Day",
     description: "Comprehensive corporate coverage",
-    price: "2,200",
+    price: "2,199",
     priceNote: "8 hours",
     features: [
       { text: "8 hours of coverage", included: true },
@@ -241,7 +241,7 @@ const corporatePackages = [
   {
     name: "Premium",
     description: "Full photo + video production",
-    price: "4,500",
+    price: "4,499",
     priceNote: "Full day + video",
     popular: true,
     features: [
