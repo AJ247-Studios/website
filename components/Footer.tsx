@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,9 +11,13 @@ export default function Footer() {
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-linear-to-br from-blue-600 to-emerald-500 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">AJ</span>
-              </div>
+              <Image
+                src="/logo.png"
+                alt="AJ247 Studios Logo"
+                width={40}
+                height={40}
+                className="w-10 h-10 object-contain"
+              />
               <span className="text-lg font-bold">AJ247 Studios</span>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed mb-6">

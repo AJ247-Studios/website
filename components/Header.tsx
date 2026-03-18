@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSupabase } from "@/components/SupabaseProvider";
 import { useState } from "react";
 
@@ -23,10 +24,14 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-linear-to-br from-blue-600 to-emerald-500 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">AJ</span>
-            </div>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">AJ247 Studios</span>
+            <Image
+              src="/logo.png"
+              alt="AJ247 Studios Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation - limited to 4-6 items per research */}

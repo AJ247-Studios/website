@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+
 /**
  * Optimized Login Page
  * 
@@ -207,9 +211,13 @@ export default function LoginPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-emerald-500 flex items-center justify-center">
-                <span className="text-white font-bold">AJ</span>
-              </div>
+              <Image
+                src="/logo.png"
+                alt="AJ247 Studios Logo"
+                width={40}
+                height={40}
+                className="w-10 h-10 object-contain"
+              />
             </Link>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
               Welcome back
