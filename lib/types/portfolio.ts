@@ -10,6 +10,7 @@ export type ProjectCategory =
   | "concerts"
   | "weddings"
   | "portraits"
+  | "prom"
   | "corporate"
   | "events";
 
