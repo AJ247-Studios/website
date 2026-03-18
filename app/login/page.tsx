@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSupabase } from "@/components/SupabaseProvider";
 
 /**
  * Optimized Login Page
@@ -13,11 +15,6 @@ import { useState } from "react";
  * - Accessibility: big labels, high contrast, keyboard-first
  * - aria-live for error announcements
  */
-
-import { useState, useEffect, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useSupabase } from "@/components/SupabaseProvider";
-import Link from "next/link";
 
 type AuthMethod = "magic-link" | "password";
 
