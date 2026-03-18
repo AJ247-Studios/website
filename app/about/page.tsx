@@ -167,12 +167,30 @@ export default function AboutPage() {
       {/* Our Story */}
       <section className="py-20 sm:py-28 bg-white dark:bg-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
-              Our Story
-            </h2>
-            <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-              <AboutStory paragraphs={anthonyStory} signature={"— Anthony"} />
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Image on the left */}
+            <div className="relative">
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800">
+                <Image
+                  src="/US.webp"
+                  alt="AJ247 Studios team photo"
+                  width={800}
+                  height={1000}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {/* Decorative element */}
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-blue-600/20 to-emerald-500/20 rounded-2xl -z-10"></div>
+            </div>
+            
+            {/* Story on the right */}
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-6">
+                Our Story
+              </h2>
+              <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                <AboutStory paragraphs={anthonyStory} signature={"— Anthony"} />
+              </div>
             </div>
           </div>
         </div>
