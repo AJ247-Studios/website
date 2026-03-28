@@ -12,7 +12,7 @@ export default function TermsPage() {
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">Terms of Service</h1>
         
         <div>
-          <p className="text-slate-500 dark:text-slate-400 mb-8">Last updated: March 2026</p>
+          <p className="text-slate-500 dark:text-slate-400 mb-8">Last updated: March 28, 2026</p>
           
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">1. Acceptance of Terms</h2>
@@ -42,9 +42,51 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">4. Payment Terms</h2>
             <p className="text-slate-600 dark:text-slate-300 mb-4">
-              Payment terms, including deposits and final payments, will be specified in individual
-              project quotes and agreements. Late payments may incur additional fees.
+              By engaging the services of AJ247 Studios, you agree to the following terms and conditions:
             </p>
+            
+            <ol className="list-decimal list-inside space-y-4 text-slate-600 dark:text-slate-300 mb-6">
+              <li>
+                <strong className="text-slate-900 dark:text-white">Booking Deposit</strong><br />
+                A non-refundable deposit of 30% of the total service fee is required to secure any booking.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Confirmation of Booking</strong><br />
+                Bookings are only considered confirmed once the required deposit has been received and acknowledged by AJ247 Studios.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Payment of Remaining Balance</strong><br />
+                The remaining 70% of the total fee must be paid in full prior to or on the day of the scheduled service, unless otherwise agreed in writing.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Accepted Payment Methods</strong><br />
+                Payments shall be made using the methods specified on the AJ247 Studios website or as otherwise agreed in writing.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Invoices and Receipts</strong><br />
+                Upon request, AJ247 Studios may issue an invoice or receipt. All such documents are provided as non-tax invoices and do not include VAT or any other applicable taxes.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Non-Refundable Deposit Policy</strong><br />
+                The initial 30% deposit is strictly non-refundable, including in the event of cancellation by the client.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Rescheduling</strong><br />
+                Requests to reschedule a booking may be considered at the sole discretion of AJ247 Studios and are subject to availability and adequate notice.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Late or Outstanding Payments</strong><br />
+                Failure to make payments in accordance with these terms may result in the suspension or cancellation of services, and/or withholding of deliverables until full payment is received.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Delivery of Services</strong><br />
+                All final deliverables, including but not limited to photographs and video content, will be released only after full payment has been received.
+              </li>
+              <li>
+                <strong className="text-slate-900 dark:text-white">Acceptance of Terms</strong><br />
+                By making a booking or any form of payment, the client acknowledges that they have read, understood, and agreed to these Terms of Service.
+              </li>
+            </ol>
           </section>
 
           <section className="mb-8">
