@@ -67,7 +67,7 @@ export const mockProjects: Project[] = [
     ],
     metrics: {
       deliverables: "19 concert photos",
-      timeline: "Same-day delivery",
+      timeline: "2 week delivery",
     },
     testimonial: {
       quote: "AJ247Studios worked with us on our recent concert coverage and absolutely nailed it. Every key moment was captured perfectly, from the energy on stage to the crowd reactions. Fast, professional, and the photos are exactly what we needed for our press materials.",
@@ -121,7 +121,7 @@ export const mockProjects: Project[] = [
     ],
     metrics: {
       deliverables: "13 photos + highlight film",
-      timeline: "Same-day delivery",
+      timeline: "2 week delivery",
     },
   },
   {
@@ -158,7 +158,7 @@ export const mockProjects: Project[] = [
     ],
     metrics: {
       deliverables: "11 press photos",
-      timeline: "Same-day delivery",
+      timeline: "2 week delivery",
     },
     testimonial: {
       quote: "Worked with them on a few events already and they've been consistent every time. Quick delivery, good communication, and they always manage to catch the key moments. Solid work overall.",
@@ -220,11 +220,11 @@ export const mockProjects: Project[] = [
     heroMedia: {
       id: "hero-18",
       type: "image",
-      url: "/portfolio/Wedding/20251009_DSC_1189.webp",
-      thumbnailUrl: "/portfolio/Wedding/20251009_DSC_1189.webp",
+      url: "/portfolio/Wedding/20070110_DSC_1186.webp",
+      thumbnailUrl: "/portfolio/Wedding/20070110_DSC_1186.webp",
       alt: "Wedding photo",
-      width: 5568,
-      height: 3712,
+      width: 3798,
+      height: 2558,
     },
     gallery: [
       { id: "wed-01", type: "image", url: "/portfolio/Wedding/20070110_DSC_0172.webp", thumbnailUrl: "/portfolio/Wedding/20070110_DSC_0172.webp", alt: "Wedding shot 1", width: 3041, height: 2120 },
@@ -237,7 +237,12 @@ export const mockProjects: Project[] = [
     ],
     metrics: {
       deliverables: "7 photos",
-      timeline: "Same-day delivery",
+      timeline: "2 week delivery",
+    },
+    testimonial: {
+      quote: "We're really glad we went with AJ247Studios for our wedding. Nothing felt forced, they just captured everything as it happened. Looking through the photos brought the whole day back — exactly what we wanted.",
+      author: "Mark & Roxi",
+      role: "Wedding",
     },
   },
   {
@@ -700,8 +705,8 @@ export const sportsAlbum2025: Project = {
     { id: "sports-16", type: "image", url: "/portfolio/Sports/untitled_1_83.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_83.webp", alt: "Sports shot 16", width: 2118, height: 1569 },
     { id: "sports-17", type: "image", url: "/portfolio/Sports/untitled_1_84.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_84.webp", alt: "Sports shot 17", width: 1934, height: 1299 },
   ],
-  metrics: {
-    deliverables: "3 highlight films + 17 photos",
-    timeline: "Same-day delivery",
-  },
+    metrics: {
+      deliverables: "3 highlight films + 17 photos",
+      timeline: "2 week delivery",
+    },
 };
