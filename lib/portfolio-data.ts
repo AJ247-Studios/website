@@ -24,6 +24,7 @@ export const filterOptions: FilterOption[] = [
 ];
 
 export const mockProjects: Project[] = [
+  sportsAlbum2025,
   {
     id: "12",
     slug: "concert-coverage-2025",
@@ -628,4 +629,79 @@ export const getCategoryCounts = (projects: Project[]): Record<string, number> =
     });
   });
   return counts;
+};
+
+// New Sports Album
+export const sportsAlbum2025: Project = {
+  id: "19",
+  slug: "sports-coverage-2025",
+  title: "Sports Coverage 2025",
+  client: "Multiple Athletes",
+  description: "Dynamic sports photography capturing action, emotion, and athletic excellence.",
+  shortDescription: "Sports action photography",
+  categories: ["sports"],
+  year: 2025,
+  featured: true,
+  heroMedia: {
+    id: "hero-19",
+    type: "image",
+    url: "/portfolio/Sports/DSC_6003.webp",
+    thumbnailUrl: "/portfolio/Sports/DSC_6003.webp",
+    alt: "Sports action shot",
+    width: 4928,
+    height: 3264,
+  },
+  gallery: [
+    {
+      id: "sports-video-1",
+      type: "video",
+      url: "https://www.youtube.com/embed/C2d02zOxqWQ",
+      thumbnailUrl: "/portfolio/Sports/DSC_6003.webp",
+      posterUrl: "/portfolio/Sports/DSC_6003.webp",
+      alt: "Sports highlight film 1",
+      width: 1920,
+      height: 1080,
+    },
+    {
+      id: "sports-video-2",
+      type: "video",
+      url: "https://www.youtube.com/embed/6ZWSj4cvnbs",
+      thumbnailUrl: "/portfolio/Sports/DSC_5130.webp",
+      posterUrl: "/portfolio/Sports/DSC_5130.webp",
+      alt: "Sports highlight film 2",
+      width: 1920,
+      height: 1080,
+    },
+    {
+      id: "sports-video-3",
+      type: "video",
+      url: "https://www.youtube.com/embed/DRw4c6X6MAU",
+      thumbnailUrl: "/portfolio/Sports/DSC_6058.webp",
+      posterUrl: "/portfolio/Sports/DSC_6058.webp",
+      alt: "Sports highlight film 3",
+      width: 1920,
+      height: 1080,
+    },
+    { id: "sports-01", type: "image", url: "/portfolio/Sports/DSC_5096.webp", thumbnailUrl: "/portfolio/Sports/DSC_5096.webp", alt: "Sports shot 1", width: 3264, height: 4928 },
+    { id: "sports-02", type: "image", url: "/portfolio/Sports/DSC_5130.webp", thumbnailUrl: "/portfolio/Sports/DSC_5130.webp", alt: "Sports shot 2", width: 3264, height: 4928 },
+    { id: "sports-03", type: "image", url: "/portfolio/Sports/DSC_6003.webp", thumbnailUrl: "/portfolio/Sports/DSC_6003.webp", alt: "Sports shot 3", width: 4928, height: 3264 },
+    { id: "sports-04", type: "image", url: "/portfolio/Sports/DSC_6058.webp", thumbnailUrl: "/portfolio/Sports/DSC_6058.webp", alt: "Sports shot 4", width: 3264, height: 4928 },
+    { id: "sports-05", type: "image", url: "/portfolio/Sports/20251023_DSC_3358.webp", thumbnailUrl: "/portfolio/Sports/20251023_DSC_3358.webp", alt: "Sports shot 5", width: 3102, height: 2104 },
+    { id: "sports-06", type: "image", url: "/portfolio/Sports/20251023_DSC_5563_2.webp", thumbnailUrl: "/portfolio/Sports/20251023_DSC_5563_2.webp", alt: "Sports shot 6", width: 3465, height: 2709 },
+    { id: "sports-07", type: "image", url: "/portfolio/Sports/20251122_DSC_0817.webp", thumbnailUrl: "/portfolio/Sports/20251122_DSC_0817.webp", alt: "Sports shot 7", width: 3691, height: 2768 },
+    { id: "sports-08", type: "image", url: "/portfolio/Sports/20251122_DSC_0818.webp", thumbnailUrl: "/portfolio/Sports/20251122_DSC_0818.webp", alt: "Sports shot 8", width: 4183, height: 2746 },
+    { id: "sports-09", type: "image", url: "/portfolio/Sports/20251122_DSC_1486.webp", thumbnailUrl: "/portfolio/Sports/20251122_DSC_1486.webp", alt: "Sports shot 9", width: 2750, height: 1825 },
+    { id: "sports-10", type: "image", url: "/portfolio/Sports/untitled_1_2.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_2.webp", alt: "Sports shot 10", width: 3577, height: 1809 },
+    { id: "sports-11", type: "image", url: "/portfolio/Sports/untitled_1_6.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_6.webp", alt: "Sports shot 11", width: 3027, height: 1522 },
+    { id: "sports-12", type: "image", url: "/portfolio/Sports/untitled_1_8.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_8.webp", alt: "Sports shot 12", width: 3217, height: 2202 },
+    { id: "sports-13", type: "image", url: "/portfolio/Sports/untitled_1_10_1.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_10_1.webp", alt: "Sports shot 13", width: 3005, height: 2057 },
+    { id: "sports-14", type: "image", url: "/portfolio/Sports/untitled_1_11.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_11.webp", alt: "Sports shot 14", width: 2031, height: 2963 },
+    { id: "sports-15", type: "image", url: "/portfolio/Sports/untitled_1_82.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_82.webp", alt: "Sports shot 15", width: 2258, height: 1740 },
+    { id: "sports-16", type: "image", url: "/portfolio/Sports/untitled_1_83.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_83.webp", alt: "Sports shot 16", width: 2118, height: 1569 },
+    { id: "sports-17", type: "image", url: "/portfolio/Sports/untitled_1_84.webp", thumbnailUrl: "/portfolio/Sports/untitled_1_84.webp", alt: "Sports shot 17", width: 1934, height: 1299 },
+  ],
+  metrics: {
+    deliverables: "3 highlight films + 17 photos",
+    timeline: "Same-day delivery",
+  },
 };
