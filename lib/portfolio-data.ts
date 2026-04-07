@@ -77,8 +77,8 @@ export const mockProjects: Project[] = [
   {
     id: "13",
     slug: "couple-portrait-session",
-    title: "Couple Portrait Session",
-    client: "Pre-Wedding Couple",
+    title: "Steve & Joni Pre-Wedding",
+    client: "Steve & Joni",
     description: "Romantic pre-wedding portrait session captured in beautiful Kraków locations.",
     shortDescription: "Pre-wedding couple photography",
     categories: ["couples", "weddings"],
@@ -94,6 +94,16 @@ export const mockProjects: Project[] = [
       height: 2832,
     },
     gallery: [
+      {
+        id: "couple-video",
+        type: "video",
+        url: "https://www.youtube.com/embed/4TEUUR1VXEQ",
+        thumbnailUrl: "/portfolio/Couples/DSC_8552.webp",
+        posterUrl: "/portfolio/Couples/DSC_8552.webp",
+        alt: "Steve & Joni pre-wedding highlight film",
+        width: 1920,
+        height: 1080,
+      },
       { id: "couple-01", type: "image", url: "/portfolio/Couples/DSC_7619.webp", thumbnailUrl: "/portfolio/Couples/DSC_7619.webp", alt: "Couple shot 1", width: 2962, height: 1971 },
       { id: "couple-02", type: "image", url: "/portfolio/Couples/DSC_7792.webp", thumbnailUrl: "/portfolio/Couples/DSC_7792.webp", alt: "Couple shot 2", width: 4256, height: 2832 },
       { id: "couple-03", type: "image", url: "/portfolio/Couples/DSC_7843.webp", thumbnailUrl: "/portfolio/Couples/DSC_7843.webp", alt: "Couple shot 3", width: 2431, height: 3653 },
@@ -109,7 +119,7 @@ export const mockProjects: Project[] = [
       { id: "couple-13", type: "image", url: "/portfolio/Couples/DSC_8971.webp", thumbnailUrl: "/portfolio/Couples/DSC_8971.webp", alt: "Couple shot 13", width: 2348, height: 1559 },
     ],
     metrics: {
-      deliverables: "13 couple photos",
+      deliverables: "13 photos + highlight film",
       timeline: "Same-day delivery",
     },
   },
