@@ -33,7 +33,7 @@ export const mockProjects: Project[] = [
     shortDescription: "Sports action photography",
     categories: ["sports"],
     year: 2025,
-    featured: true,
+    featured: false,
     heroMedia: {
       id: "hero-19",
       type: "image",
@@ -156,7 +156,7 @@ export const mockProjects: Project[] = [
     shortDescription: "Pre-wedding couple photography",
     categories: ["couples", "weddings"],
     year: 2025,
-    featured: true,
+    featured: false,
     heroMedia: {
       id: "hero-13",
       type: "image",
@@ -441,7 +441,7 @@ export const mockProjects: Project[] = [
     shortDescription: "Three portrait stories around Kraków",
     categories: ["portraits"],
     year: 2025,
-    featured: false,
+    featured: true,
     heroMedia: {
       id: "hero-11",
       type: "image",
