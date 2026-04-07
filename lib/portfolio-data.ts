@@ -345,6 +345,9 @@ export const mockProjects: Project[] = [
       { id: "por-16", type: "image", url: "/portfolio/Portraits/Portrait_16.webp", thumbnailUrl: "/portfolio/Portraits/Portrait_16.webp", alt: "Portrait session 3 — natural light", width: 2000, height: 1333 },
       { id: "por-18", type: "image", url: "/portfolio/Portraits/Portrait_18.webp", thumbnailUrl: "/portfolio/Portraits/Portrait_18.webp", alt: "Portrait session 3 — soft smile", width: 2000, height: 1333 },
       { id: "por-19", type: "image", url: "/portfolio/Portraits/Portrait_19.webp", thumbnailUrl: "/portfolio/Portraits/Portrait_19.webp", alt: "Portrait session 3 — downtown vibe", width: 2000, height: 1333 },
+      { id: "por-20", type: "image", url: "/portfolio/Portraits/20260328_DSC_0001.webp", thumbnailUrl: "/portfolio/Portraits/20260328_DSC_0001.webp", alt: "Portrait session 4 — studio look", width: 1920, height: 1080 },
+      { id: "por-21", type: "image", url: "/portfolio/Portraits/20260328_DSC_0122.webp", thumbnailUrl: "/portfolio/Portraits/20260328_DSC_0122.webp", alt: "Portrait session 4 — natural pose", width: 1920, height: 1080 },
+      { id: "por-22", type: "image", url: "/portfolio/Portraits/20260328_DSC_0381.webp", thumbnailUrl: "/portfolio/Portraits/20260328_DSC_0381.webp", alt: "Portrait session 4 — close-up", width: 1920, height: 1080 },
     ],
     metrics: {
       deliverables: "3 portrait sessions, 50+ selects",
