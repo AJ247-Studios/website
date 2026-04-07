@@ -360,7 +360,7 @@ export const mockProjects: Project[] = [
     },
   },
   {
-    id: "12",
+    id: "15",
     slug: "krakow-motocross-highlights",
     title: "Kraków Motocross Highlights",
     client: "Motocross Collective",
@@ -401,7 +401,7 @@ export const mockProjects: Project[] = [
     },
   },
   {
-    id: "14",
+    id: "16",
     slug: "prom-2026",
     title: "Prom 2026",
     client: "Prom Event",
@@ -520,7 +520,7 @@ export const mockProjects: Project[] = [
     },
   },
   {
-    id: "13",
+    id: "17",
     slug: "football-game-coverage",
     title: "Football Game Coverage",
     client: "Football Team",
