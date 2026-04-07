@@ -98,6 +98,9 @@ export const mockProjects: Project[] = [
     },
   },
   {
+    id: "12",
+    slug: "concert-coverage-2025",
+    title: "Concert Coverage 2025",
     client: "Multiple Artists",
     description: "Live concert photography capturing the energy and atmosphere of performances in Kraków venues.",
     shortDescription: "Live concert photography",
