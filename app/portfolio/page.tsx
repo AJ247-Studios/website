@@ -34,10 +34,8 @@ export default function PortfolioPage() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
 
-  // Data
-  const liveProjects = mockProjects.filter(p => 
-    ["paul-precious-wedding", "fca-krakow-basketball", "krakow-portrait-sessions", "krakow-motocross-highlights", "football-game-coverage", "prom-2026"].includes(p.slug)
-  );
+  // Data - show all projects
+  const liveProjects = mockProjects;
   const featuredProjects = getFeaturedProjects();
   const categoryCounts = getCategoryCounts(liveProjects);
   
