@@ -20,6 +20,7 @@ export const filterOptions: FilterOption[] = [
   { value: "prom", label: "Prom" },
   { value: "corporate", label: "Corporate" },
   { value: "events", label: "Events" },
+  { value: "press", label: "Press" },
 ];
 
 export const mockProjects: Project[] = [
@@ -110,6 +111,48 @@ export const mockProjects: Project[] = [
     metrics: {
       deliverables: "13 couple photos",
       timeline: "Same-day delivery",
+    },
+  },
+  {
+    id: "14",
+    slug: "press-event-coverage",
+    title: "Press Event Coverage",
+    client: "Poland Sports Gazette",
+    description: "Professional press event photography for sports announcements and media conferences in Kraków.",
+    shortDescription: "Press event photography",
+    categories: ["events", "press"],
+    year: 2025,
+    featured: false,
+    heroMedia: {
+      id: "hero-14",
+      type: "image",
+      url: "/portfolio/Events/20251111_DSC_4675.webp",
+      thumbnailUrl: "/portfolio/Events/20251111_DSC_4675.webp",
+      alt: "Press event coverage",
+      width: 1920,
+      height: 1080,
+    },
+    gallery: [
+      { id: "event-01", type: "image", url: "/portfolio/Events/20251111_DSC_3926.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_3926.webp", alt: "Event shot 1", width: 1920, height: 1080 },
+      { id: "event-02", type: "image", url: "/portfolio/Events/20251111_DSC_4182.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_4182.webp", alt: "Event shot 2", width: 1920, height: 1080 },
+      { id: "event-03", type: "image", url: "/portfolio/Events/20251111_DSC_4570.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_4570.webp", alt: "Event shot 3", width: 1920, height: 1080 },
+      { id: "event-04", type: "image", url: "/portfolio/Events/20251111_DSC_4641.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_4641.webp", alt: "Event shot 4", width: 1920, height: 1080 },
+      { id: "event-05", type: "image", url: "/portfolio/Events/20251111_DSC_4675.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_4675.webp", alt: "Event shot 5", width: 1920, height: 1080 },
+      { id: "event-06", type: "image", url: "/portfolio/Events/20251111_DSC_4712.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_4712.webp", alt: "Event shot 6", width: 1920, height: 1080 },
+      { id: "event-07", type: "image", url: "/portfolio/Events/20251111_DSC_5128_2.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_5128_2.webp", alt: "Event shot 7", width: 1920, height: 1080 },
+      { id: "event-08", type: "image", url: "/portfolio/Events/20251111_DSC_7474.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_7474.webp", alt: "Event shot 8", width: 1920, height: 1080 },
+      { id: "event-09", type: "image", url: "/portfolio/Events/20251111_DSC_7475.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_7475.webp", alt: "Event shot 9", width: 1920, height: 1080 },
+      { id: "event-10", type: "image", url: "/portfolio/Events/20251111_DSC_7692.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_7692.webp", alt: "Event shot 10", width: 1920, height: 1080 },
+      { id: "event-11", type: "image", url: "/portfolio/Events/20251111_DSC_8708.webp", thumbnailUrl: "/portfolio/Events/20251111_DSC_8708.webp", alt: "Event shot 11", width: 1920, height: 1080 },
+    ],
+    metrics: {
+      deliverables: "11 press photos",
+      timeline: "Same-day delivery",
+    },
+    testimonial: {
+      quote: "Worked with them on a few events already and they've been consistent every time. Quick delivery, good communication, and they always manage to catch the key moments. Solid work overall.",
+      author: "mjakmalopolska",
+      role: "Sports & Press",
     },
   },
   {

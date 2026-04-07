@@ -13,7 +13,8 @@ export type ProjectCategory =
   | "couples"
   | "prom"
   | "corporate"
-  | "events";
+  | "events"
+  | "press";
 
 export type MediaType = "image" | "video";
 
