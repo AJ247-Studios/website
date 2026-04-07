@@ -3,11 +3,11 @@ import Script from "next/script";
 import ContactPageClient from "./ContactPageClient";
 
 export const metadata: Metadata = {
-  title: "Book a Shoot | AJ247 Studios",
-  description: "Get a free quote in 2 hours. Professional photo and video production in Kraków. WhatsApp available for instant response.",
+  title: "Contact Us | AJ247 Studios",
+  description: "Get in touch for professional photo and video production in Kraków. WhatsApp available for instant response.",
   openGraph: {
-    title: "Book a Shoot | AJ247 Studios",
-    description: "Get a personalized quote within 2 hours. Premium photo & video production.",
+    title: "Contact Us | AJ247 Studios",
+    description: "Professional photo & video production in Kraków. Contact us via WhatsApp or email.",
     url: "https://aj247studios.com/contact",
   },
 };

@@ -2,19 +2,47 @@ import PartnersMarquee from "./PartnersMarquee";
 const testimonials = [
   {
     id: 1,
-    quote: "The video was really good! AJ247 Studios captured our special day perfectly and exceeded all our expectations.",
-    author: "Paul & Precious",
-    role: "Wedding, Kraków",
+    quote: "I usually don't feel comfortable in front of the camera, but somehow they made it really easy. The atmosphere was relaxed and not rushed at all. The photos turned out better than I expected, very natural and not overdone.",
+    author: "Lidia",
+    role: "Portrait",
     rating: 5,
   },
   {
     id: 2,
-    quote: "We had the opportunity to work with AJ247 Studios on several sports projects, and I’m fully satisfied with the results. With every video, I could see clear progress, and the final outcomes were excellent. These young talents are doing a great job.",
-    author: "Dima",
-    role: "FCA Krakow, Poland",
+    quote: "We're really glad we went with AJ247Studios for our wedding. Nothing felt forced, they just captured everything as it happened. Looking through the photos brought the whole day back — exactly what we wanted.",
+    author: "Mark & Roxi",
+    role: "Wedding",
     rating: 5,
-
-  },];
+  },
+  {
+    id: 3,
+    quote: "Worked with them on a few events already and they've been consistent every time. Quick delivery, good communication, and they always manage to catch the key moments. Solid work overall.",
+    author: "mjakmalopolska",
+    role: "Sports & Press",
+    rating: 5,
+  },
+  {
+    id: 4,
+    quote: "Super happy with how everything turned out. The session was really chill and I didn't feel awkward at all. You can tell they know what they're doing, and the final photos just speak for themselves.",
+    author: "Maja",
+    role: "Portrait",
+    rating: 5,
+  },
+  {
+    id: 5,
+    quote: "Didn't really expect much going in, but I was honestly surprised. The photos came out really clean and natural, nothing looked staged or awkward. They managed to capture the vibe of the night really well. Definitely glad we had them there.",
+    author: "Piotr",
+    role: "Prom",
+    rating: 5,
+  },
+  {
+    id: 6,
+    quote: "AJ247Studios worked with us on our recent concert coverage and absolutely nailed it. Every key moment was captured perfectly, from the energy on stage to the crowd reactions. Fast, professional, and the photos are exactly what we needed for our press materials.",
+    author: "People Press Agency",
+    role: "Concert",
+    rating: 5,
+  },
+];
 
 // Deprecated placeholder; replaced by dynamic marquee from /public/partners
 
