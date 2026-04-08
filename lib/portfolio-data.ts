@@ -188,10 +188,10 @@ export const mockProjects: Project[] = [
   {
     id: "13",
     slug: "couple-portrait-session",
-    title: "Steve & Joni Pre-Wedding",
+    title: "Couples Shoot",
     client: "Steve & Joni",
     description: "Romantic pre-wedding portrait session captured in beautiful Kraków locations.",
-    shortDescription: "Pre-wedding couple photography",
+    shortDescription: "Couples portrait photography",
     categories: ["couples", "weddings"],
     year: 2025,
     featured: false,
