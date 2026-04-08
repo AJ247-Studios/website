@@ -76,8 +76,12 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 3rem;
   flex-shrink: 0;
+  padding: 0 2rem;
+}
+
+.marquee-item:last-child {
+  padding-right: 0;
 }
 
 /* Focus visible for accessibility */

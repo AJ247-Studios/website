@@ -7,47 +7,46 @@ type PartnerLogo = {
   fileName: string;
 };
 
-const imageStyles: Record<string, { width: number; height: number; className: string }> = {
-  "B.webp": { width: 80, height: 80, className: "w-20 h-20 rounded-full object-cover" },
-  "No-press-studio.webp": { width: 184, height: 80, className: "h-20 rounded-lg object-contain" },
-  "People's-Press.webp": { width: 142, height: 80, className: "h-20 rounded-lg object-contain" },
-  "Poland-Sports-Gazette.webp": { width: 142, height: 80, className: "h-20 rounded-lg object-contain" },
-  "Realtime.webp": { width: 80, height: 80, className: "w-20 h-20 rounded-full object-cover" },
-  "Resilience.webp": { width: 1680, height: 80, className: "h-20 rounded-lg object-contain" },
-  "The-red-light.webp": { width: 80, height: 80, className: "w-20 h-20 rounded-full object-cover" },
+// Wrapper dimensions based on actual logo aspect ratios at 80px height
+const logoSizes: Record<string, { wrapperWidth: number; aspectRatio: number }> = {
+  "B.webp":                { wrapperWidth: 80,  aspectRatio: 1080 / 1042 },  // ~1:1
+  "People's-Press.webp":   { wrapperWidth: 120, aspectRatio: 1536 / 1024 },  // 3:2
+  "Poland-Sports-Gazette.webp": { wrapperWidth: 120, aspectRatio: 1536 / 1024 }, // 3:2
+  "Realtime.webp":         { wrapperWidth: 80,  aspectRatio: 200 / 200 },    // 1:1
+  "Resilience.webp":       { wrapperWidth: 140, aspectRatio: 1414 / 800 },   // ~1.77:1
+  "The-red-light.webp":    { wrapperWidth: 80,  aspectRatio: 828 / 827 },    // ~1:1
 };
 
 export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] }) {
   return (
     <div className="marquee-container">
       <div className="marquee-track">
-        {/* First set of logos */}
         {logos.map((logo, idx) => {
-          const style = imageStyles[logo.fileName] || { width: 120, height: 80, className: "h-20 rounded-lg object-contain" };
+          const size = logoSizes[logo.fileName] || { wrapperWidth: 120, aspectRatio: 1.5 };
           return (
-            <div key={`logo-1-${logo.fileName}-${idx}`} className="marquee-item">
+            <div key={`logo-1-${idx}`} className="marquee-item" style={{ width: size.wrapperWidth }}>
               <Image
                 src={logo.src}
                 alt={logo.alt}
-                width={style.width}
-                height={style.height}
-                className={style.className}
+                width={size.wrapperWidth}
+                height={Math.round(size.wrapperWidth / size.aspectRatio)}
+                className="h-20 w-full rounded-lg object-contain"
                 title={logo.alt}
               />
             </div>
           );
         })}
-        {/* Second set of logos (exact copy for seamless loop) */}
+        {/* Exact duplicate for seamless loop */}
         {logos.map((logo, idx) => {
-          const style = imageStyles[logo.fileName] || { width: 120, height: 80, className: "h-20 rounded-lg object-contain" };
+          const size = logoSizes[logo.fileName] || { wrapperWidth: 120, aspectRatio: 1.5 };
           return (
-            <div key={`logo-2-${logo.fileName}-${idx}`} className="marquee-item">
+            <div key={`logo-2-${idx}`} className="marquee-item" style={{ width: size.wrapperWidth }}>
               <Image
                 src={logo.src}
                 alt={logo.alt}
-                width={style.width}
-                height={style.height}
-                className={style.className}
+                width={size.wrapperWidth}
+                height={Math.round(size.wrapperWidth / size.aspectRatio)}
+                className="h-20 w-full rounded-lg object-contain"
                 title={logo.alt}
               />
             </div>
