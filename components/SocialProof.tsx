@@ -57,7 +57,7 @@ export default function SocialProof() {
         {/* Section header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-            Trusted by Kraków&apos;s Best
+            Trusted by:
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400">
             From sports teams to Fortune 500 companies, we deliver results that speak for themselves.
