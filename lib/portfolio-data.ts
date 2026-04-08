@@ -25,6 +25,44 @@ export const filterOptions: FilterOption[] = [
 
 export const mockProjects: Project[] = [
   {
+    id: "20",
+    slug: "mark-roxi-wedding",
+    title: "Mark & Roxi Wedding",
+    client: "Mark & Roxi",
+    description: "Beautiful wedding day coverage capturing every special moment of Mark and Roxi's celebration in Kraków.",
+    shortDescription: "Wedding photography in Kraków",
+    categories: ["weddings"],
+    year: 2025,
+    featured: true,
+    heroMedia: {
+      id: "hero-20",
+      type: "image",
+      url: "/portfolio/Wedding/20070110_DSC_1186.webp",
+      thumbnailUrl: "/portfolio/Wedding/20070110_DSC_1186.webp",
+      alt: "Mark & Roxi wedding photo",
+      width: 4928,
+      height: 3264,
+    },
+    gallery: [
+      { id: "wedding-01", type: "image", url: "/portfolio/Wedding/20070110_DSC_0172.webp", thumbnailUrl: "/portfolio/Wedding/20070110_DSC_0172.webp", alt: "Wedding shot 1", width: 3264, height: 4928 },
+      { id: "wedding-02", type: "image", url: "/portfolio/Wedding/20070110_DSC_1145.webp", thumbnailUrl: "/portfolio/Wedding/20070110_DSC_1145.webp", alt: "Wedding shot 2", width: 3264, height: 4928 },
+      { id: "wedding-03", type: "image", url: "/portfolio/Wedding/20070110_DSC_1186.webp", thumbnailUrl: "/portfolio/Wedding/20070110_DSC_1186.webp", alt: "Wedding shot 3", width: 4928, height: 3264 },
+      { id: "wedding-04", type: "image", url: "/portfolio/Wedding/20070110_DSC_9895.webp", thumbnailUrl: "/portfolio/Wedding/20070110_DSC_9895.webp", alt: "Wedding shot 4", width: 3264, height: 4928 },
+      { id: "wedding-05", type: "image", url: "/portfolio/Wedding/20070110_DSC_9946.webp", thumbnailUrl: "/portfolio/Wedding/20070110_DSC_9946.webp", alt: "Wedding shot 5", width: 3264, height: 4928 },
+      { id: "wedding-06", type: "image", url: "/portfolio/Wedding/20251009_DSC_1189.webp", thumbnailUrl: "/portfolio/Wedding/20251009_DSC_1189.webp", alt: "Wedding shot 6", width: 4928, height: 3264 },
+      { id: "wedding-07", type: "image", url: "/portfolio/Wedding/20251009_DSC_1209_2.webp", thumbnailUrl: "/portfolio/Wedding/20251009_DSC_1209_2.webp", alt: "Wedding shot 7", width: 4928, height: 3264 },
+    ],
+    metrics: {
+      deliverables: "7 wedding photos",
+      timeline: "2 week delivery",
+    },
+    testimonial: {
+      quote: "We're really glad we went with AJ247Studios for our wedding. Nothing felt forced, they just captured everything as it happened. Looking through the photos brought the whole day back — exactly what we wanted.",
+      author: "Mark & Roxi",
+      role: "Wedding",
+    },
+  },
+  {
     id: "19",
     slug: "sports-coverage-2025",
     title: "Sports Coverage 2025",

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Project } from "@/lib/types/portfolio";
 
 interface FeaturedCaseStudiesProps {
-  /** Featured projects to display (1-3 recommended) */
+  /** Featured projects to display (1-4 recommended) */
   projects: Project[];
   /** Analytics callback */
   onProjectClick?: (projectId: string) => void;
@@ -50,8 +50,8 @@ export default function FeaturedCaseStudies({
         </div>
 
         {/* Case Study Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {projects.slice(0, 3).map((project) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {projects.slice(0, 4).map((project) => (
             <article
               key={project.id}
               className="group relative bg-slate-50 dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10"
@@ -63,7 +63,7 @@ export default function FeaturedCaseStudies({
                   alt={project.heroMedia.alt}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   placeholder={project.heroMedia.blurDataUrl ? "blur" : undefined}
                   blurDataURL={project.heroMedia.blurDataUrl}
                 />

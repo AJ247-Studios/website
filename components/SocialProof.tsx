@@ -37,9 +37,9 @@ const testimonials = [
   },
   {
     id: 6,
-    quote: "AJ247Studios worked with us on our recent concert coverage and absolutely nailed it. Every key moment was captured perfectly, from the energy on stage to the crowd reactions. Fast, professional, and the photos are exactly what we needed for our press materials.",
-    author: "People Press Agency",
-    role: "Concert",
+    quote: "We had the opportunity to work with AJ247 Studios on several sports projects, and I'm fully satisfied with the results. With every video, I could see clear progress, and the final outcomes were excellent. These young talents are doing a great job.",
+    author: "Dima",
+    role: "FCA Kraków",
     rating: 5,
   },
 ];
