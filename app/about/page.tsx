@@ -12,7 +12,7 @@ const stats = [
   { value: "150+", label: "Projects Delivered" },
   { value: "150+", label: "Happy Clients" },
   { value: "4000+", label: "Photos & Clips Delivered" },
-  { value: "3", label: "Team Members" },
+  { value: "4", label: "Team Members" },
 ];
 
 const values = [
@@ -73,6 +73,13 @@ const team = [
     bio: "Professional video editor. If you need media coverage in the Philippines, contact Ivan for rates and availability.",
     image: "/portfolio/Ivan-full-res.jpeg",
     website: "https://navifilms.my.canva.site/",
+  },
+  {
+    name: "Tomek Dudzik",
+    role: "Graphic Designer / Editor",
+    bio: "Graphic designer and video editor. Creates stunning visual designs and edits for all your media needs.",
+    image: "/portfolio/Tomek Dudzik.jpeg",
+    website: "https://www.instagram.com/tstudios.d",
   },
 ];
 
