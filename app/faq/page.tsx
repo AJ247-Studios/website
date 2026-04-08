@@ -18,19 +18,19 @@ const faqCategories = [
       },
       {
         q: "Are there any hidden fees?",
-        a: "No hidden fees, ever. The price we quote is the price you pay. Additional services (like rush delivery) are clearly listed as optional add-ons with upfront pricing.",
+        a: "No hidden fees. Rush delivery and major revision requests are the only situations where additional costs may apply — and we'll always communicate these upfront before proceeding.",
       },
       {
         q: "Do you require a deposit?",
-        a: "Yes, we require a 30% deposit to secure your booking date. The remaining balance is due on the day of the event or upon delivery, depending on the service.",
+        a: "Yes, we require a 30% non-refundable deposit to secure your booking date. The remaining balance is due on the day of the event. Once the deposit is paid, your date is locked in.",
       },
       {
         q: "What payment methods do you accept?",
-        a: "We accept bank transfers (preferred), credit/debit cards, and PayPal. For corporate clients, we can also arrange invoicing with NET 14 or NET 30 terms.",
+        a: "We accept bank transfers (preferred). For corporate clients, alternative arrangements can be discussed — contact us to talk through options.",
       },
       {
         q: "Can I customize a package?",
-        a: "Absolutely! We specialize in custom packages. Tell us what you need — hours of coverage, number of photos, video length, add-ons — and we'll create a tailored quote.",
+        a: "Absolutely. We specialize in custom packages. Tell us what you need — hours of coverage, number of photos, video length, add-ons — and we'll create a tailored quote.",
       },
     ],
   },
@@ -40,23 +40,23 @@ const faqCategories = [
     faqs: [
       {
         q: "How quickly will I receive my photos/videos?",
-        a: "Standard delivery times vary by package: Photo sessions (3-5 days), Events (5-7 days), Weddings (7-14 days). Premium packages include faster delivery, and we offer 48-hour priority delivery as an add-on.",
+        a: "Delivery times vary by service. Photo sessions: 3–5 business days. Events and corporate shoots: 14–16 business days. Weddings: 14–16 business days. Rush delivery is available on request — contact us before booking to discuss availability and pricing.",
       },
       {
         q: "How are photos delivered?",
-        a: "All photos are delivered via a private online gallery where you can view, download, and share them. Premium packages also include a USB drive with high-resolution files.",
+        a: "All photos are delivered via a private online gallery where you can view, download, and share them. Premium packages also include a USB drive with all high-resolution files.",
       },
       {
         q: "What format are the photos in?",
-        a: "You'll receive high-resolution JPEG files optimized for both print and digital use. RAW files are available upon request for an additional fee.",
+        a: "You'll receive high-resolution JPEG files optimized for both print and digital use.",
       },
       {
         q: "Can I request additional edits?",
-        a: "Yes! Each package includes a set number of edited photos. Additional retouching or edits can be purchased at 15-25 PLN per photo, depending on complexity.",
+        a: "Yes. Each package includes a set number of edited photos. Additional retouching can be purchased at 10–25 PLN per photo depending on complexity.",
       },
       {
         q: "Do you offer same-day delivery?",
-        a: "For events and weddings, we can deliver a small selection of edited photos same-day (great for social media). Full delivery follows standard timelines.",
+        a: "Same-day delivery is not standard. For urgent turnaround requests, contact us before booking and we'll do our best to accommodate depending on availability and a rush fee agreed in advance.",
       },
     ],
   },
@@ -66,23 +66,23 @@ const faqCategories = [
     faqs: [
       {
         q: "How far in advance should I book?",
-        a: "We recommend booking 2-4 weeks in advance for most events. For weddings and large events, 2-3 months is ideal. However, we do accommodate last-minute bookings when available.",
+        a: "We recommend booking 2–4 weeks in advance for most events. For weddings and large events, 2–3 months is ideal — especially during peak wedding season (May–September), which fills up fast. We do accommodate last-minute bookings when available.",
       },
       {
         q: "What happens after I submit a quote request?",
-        a: "We'll respond within 2 hours during business hours with a personalized quote. After you approve, we'll send a contract and invoice for the deposit. Once paid, your date is secured.",
+        a: "We'll respond within 24 hours with a personalized quote. After you approve, we'll send a contract and deposit invoice. Once the deposit is paid, your date is secured.",
       },
       {
         q: "Can I reschedule my booking?",
-        a: "Yes, you can reschedule up to 14 days before the event at no charge. Rescheduling within 14 days may incur a small fee depending on availability.",
+        a: "Yes. You can reschedule up to 14 days before the event at no charge. Rescheduling within 14 days may incur a fee depending on availability.",
       },
       {
         q: "What's your cancellation policy?",
-        a: "Cancellations 30+ days out receive a full refund. 14-30 days: 50% refund. Under 14 days: deposit is non-refundable but can be applied to a future booking within 6 months.",
+        a: "Cancellations 30+ days before the event: full refund of deposit. 14–30 days: 50% refund. Under 14 days: deposit is non-refundable. At our discretion, the deposit value may be applied toward a future booking within 6 months.",
       },
       {
         q: "Do you travel outside Kraków?",
-        a: "Yes! We cover all of Poland and travel internationally. Travel fees apply for locations outside Kraków city limits — typically 1.50 PLN/km or negotiated flat rate for distant locations.",
+        a: "Yes — we cover all of Poland and travel internationally. Travel fees apply for locations outside Kraków city limits, typically 1.50 PLN/km or a negotiated flat rate for distant locations.",
       },
     ],
   },
@@ -92,24 +92,23 @@ const faqCategories = [
     faqs: [
       {
         q: "What types of events do you cover?",
-        a: "We specialize in sports events, concerts/festivals, weddings, corporate events, and portrait sessions. We've also covered product launches, conferences, private parties, and more.",
+        a: "We specialize in sports events, concerts and festivals, weddings, corporate events, and portrait sessions. We've also covered product launches, private parties, and more. If you're unsure, just ask.",
       },
       {
         q: "Do you offer both photo and video?",
-        a: "Yes! We offer photo-only, video-only, and combined packages. Our Premium packages typically include both for the best value.",
+        a: "Yes. We offer photo-only, video-only, and combined packages. Our Premium packages typically include both for the best value.",
       },
       {
         q: "What's included in 'edited photos'?",
         a: "All photos receive professional color correction, exposure adjustment, cropping, and light retouching. Premium packages include more advanced skin retouching and creative edits.",
       },
-      // Drone coverage FAQ temporarily removed
-      // {
-      //   q: "Do you provide drone coverage?",
-      //   a: "Yes, drone photography and videography is available as an add-on (500-1,500 PLN) or included in Premium packages. We're fully licensed and insured for commercial drone operation.",
-      // },
       {
         q: "Can I request specific shots or styles?",
-        a: "Absolutely! We encourage you to share Pinterest boards, reference photos, or specific shot lists. We'll work together to achieve your vision.",
+        a: "Absolutely. We encourage you to share Pinterest boards, reference photos, or specific shot lists before the event. We'll work together to achieve your vision.",
+      },
+      {
+        q: "What is your revision policy for videos?",
+        a: "Each video project includes one free round of minor revisions. Minor revisions include: text changes, pacing adjustments, clip swaps, and color grade tweaks. Major revisions — such as a full re-edit or music change — are billed separately and agreed upon before work begins.",
       },
     ],
   },
@@ -119,19 +118,15 @@ const faqCategories = [
     faqs: [
       {
         q: "What equipment do you use?",
-        a: "We use professional-grade Sony and Canon mirrorless cameras, cinema lenses, Profoto lighting, and stabilized gimbals. All equipment is maintained and backed up.",
+        a: "We shoot on professional mirrorless cameras including the Panasonic Lumix GH5, paired with cinema lenses, professional lighting, and stabilized gimbals. All equipment is regularly maintained and backed up on-site.",
       },
       {
         q: "Do you bring backup equipment?",
-        a: "Always. For every event, we bring duplicate camera bodies, memory cards, batteries, and lighting. Equipment failure will never ruin your photos.",
+        a: "Always. For every event we bring duplicate memory cards, batteries, and lighting. Equipment failure will never compromise your coverage.",
       },
       {
         q: "How do you handle low-light situations?",
-        a: "Our cameras excel in low light, and we bring professional lighting when needed. Concert and club photography is one of our specialties — we're experienced in challenging conditions.",
-      },
-      {
-        q: "Do you have insurance?",
-        a: "Yes, we carry full professional liability insurance and equipment insurance. We can provide certificates of insurance for venue requirements upon request.",
+        a: "Our cameras perform well in low light, and we bring professional lighting when needed. Concert and event photography in challenging conditions is something we're experienced in.",
       },
     ],
   },
