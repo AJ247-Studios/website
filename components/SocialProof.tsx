@@ -6,6 +6,7 @@ const testimonials = [
     author: "Lidia",
     role: "Portrait",
     rating: 5,
+    image: "/portfolio/Lidia.jpeg",
   },
   {
     id: 2,
@@ -27,6 +28,7 @@ const testimonials = [
     author: "Maja",
     role: "Portrait",
     rating: 5,
+    image: "/portfolio/Maja.jpeg",
   },
   {
     id: 5,
@@ -98,9 +100,17 @@ export default function SocialProof() {
 
               {/* Author */}
               <div className="flex items-center gap-3 mt-auto">
-                <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-white font-semibold text-xs">
-                  {testimonial.author.charAt(0)}
-                </div>
+                {testimonial.image ? (
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.author}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-white font-semibold text-xs">
+                    {testimonial.author.charAt(0)}
+                  </div>
+                )}
                 <div>
                   <div className="font-semibold text-slate-900 dark:text-white text-sm">
                     {testimonial.author}
