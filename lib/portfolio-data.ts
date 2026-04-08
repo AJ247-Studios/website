@@ -233,11 +233,6 @@ export const mockProjects: Project[] = [
       deliverables: "7 photos",
       timeline: "2 week delivery",
     },
-    testimonial: {
-      quote: "We're really glad we went with AJ247Studios for our wedding. Nothing felt forced, they just captured everything as it happened. Looking through the photos brought the whole day back — exactly what we wanted.",
-      author: "Mark & Roxi",
-      role: "Wedding",
-    },
   },
   {
     id: "10",
