@@ -60,12 +60,14 @@ const team = [
     role: "Videographer / Co-founder",
     bio: "2–3 years experience. Lead videographer for commercial shoots and social-video campaigns. Shot planning, DOP, final edit.",
     image: "/portfolio/Josiah-full-res.webp",
+    website: "https://aj247studios.com/portfolio",
   },
   {
     name: "Anthony Certeza",
     role: "Photographer / Co-founder",
     bio: "2–3 years experience. Stills photographer focused on product, lifestyle, and event photography. Client liaison, studio setups.",
     image: "/portfolio/Anthony-full-res.webp",
+    website: "https://aj247studios.com/portfolio",
   },
   {
     name: "Ivan Anthony Cabañero",
