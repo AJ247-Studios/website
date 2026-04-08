@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useRef } from "react";
 import Image from "next/image";
 
 type PartnerLogo = {
@@ -19,14 +18,12 @@ const imageStyles: Record<string, { width: number; height: number; className: st
 };
 
 export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Duplicate logos enough times to fill the screen + extra for seamless looping
-  const duplicatedLogos = [...logos, ...logos, ...logos, ...logos, ...logos, ...logos];
+  // Duplicate exactly 2x for seamless -50% loop
+  const duplicatedLogos = [...logos, ...logos];
 
   return (
-    <div ref={containerRef} className="relative overflow-hidden py-4">
-      <div className="flex animate-marquee">
+    <div className="overflow-hidden py-4">
+      <div className="flex gap-12 animate-marquee">
         {duplicatedLogos.map((logo, idx) => {
           const style = imageStyles[logo.fileName] || {
             width: 120,
@@ -36,8 +33,7 @@ export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] 
           return (
             <div 
               key={`${logo.fileName}-${idx}`} 
-              className="shrink-0 flex items-center justify-center px-8"
-              style={{ minWidth: style.width }}
+              className="shrink-0 flex items-center justify-center"
             >
               <Image
                 src={logo.src}
