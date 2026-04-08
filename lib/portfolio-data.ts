@@ -391,11 +391,18 @@ export const mockProjects: Project[] = [
       deliverables: "3 portrait sessions, 50+ selects",
       timeline: "1 week turnaround",
     },
-    testimonial: {
-      quote: "Three unique looks across Kraków — exactly what each client needed.",
-      author: "AJ247 Studios",
-      role: "Portraits, Kraków",
-    },
+    testimonials: [
+      {
+        quote: "I usually don't feel comfortable in front of the camera, but somehow they made it really easy. The atmosphere was relaxed and not rushed at all. The photos turned out better than I expected, very natural and not overdone.",
+        author: "Lidia",
+        role: "Portrait",
+      },
+      {
+        quote: "Super happy with how everything turned out. The session was really chill and I didn't feel awkward at all. You can tell they know what they're doing, and the final photos just speak for themselves.",
+        author: "Maja",
+        role: "Portrait",
+      },
+    ],
   },
   {
     id: "15",

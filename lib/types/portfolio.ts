@@ -64,6 +64,11 @@ export interface Project {
     author: string;
     role?: string;
   };
+  testimonials?: {
+    quote: string;
+    author: string;
+    role?: string;
+  }[];
   // SEO
   seoTitle?: string;
   seoDescription?: string;

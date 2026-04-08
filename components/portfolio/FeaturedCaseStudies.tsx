@@ -142,8 +142,21 @@ export default function FeaturedCaseStudies({
                   </div>
                 )}
 
-                {/* Testimonial Quote (condensed) */}
-                {project.testimonial && (
+                {/* Testimonial Quotes (condensed) */}
+                {project.testimonials ? (
+                  <div className="mb-4 space-y-2">
+                    {project.testimonials.slice(0, 2).map((t, idx) => (
+                      <blockquote key={idx} className={idx > 0 ? "border-t border-slate-200 dark:border-slate-700 pt-2" : ""}>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 italic line-clamp-2">
+                          &ldquo;{t.quote}&rdquo;
+                        </p>
+                        <cite className="text-xs text-slate-500 dark:text-slate-500 not-italic mt-1 block">
+                          — {t.author}
+                        </cite>
+                      </blockquote>
+                    ))}
+                  </div>
+                ) : project.testimonial && (
                   <blockquote className="mb-4">
                     <p className="text-sm text-slate-600 dark:text-slate-400 italic line-clamp-2">
                       &ldquo;{project.testimonial.quote}&rdquo;
