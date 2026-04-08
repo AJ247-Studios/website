@@ -62,15 +62,6 @@ export default function SocialProof() {
           <p className="text-lg text-slate-600 dark:text-slate-400">
             If you&apos;re organizing an interesting event or working on a social, cultural, or educational project and are looking for a media partner, we would be happy to hear from you.
           </p>
-          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
-            We are always open to supporting meaningful initiatives that create real value.
-          </p>
-          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
-            If your idea aligns with our vision, we will get in touch to explore potential collaboration opportunities.
-          </p>
-          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
-            We also want to highlight our experience: we deliver over 150 hours of video content and more than 5,000 photos.
-          </p>
         </div>
 
         {/* Client logos marquee from /public/partners */}
@@ -79,6 +70,19 @@ export default function SocialProof() {
             Trusted by leading organizations
           </p>
           <PartnersMarquee />
+        </div>
+
+        {/* Partnership message */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <p className="text-md text-slate-600 dark:text-slate-400">
+            We are always open to supporting meaningful initiatives that create real value.
+          </p>
+          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
+            If your idea aligns with our vision, we will get in touch to explore potential collaboration opportunities.
+          </p>
+          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
+            We also want to highlight our experience: we deliver over 150 hours of video content and more than 5,000 photos.
+          </p>
         </div>
 
         {/* Testimonials grid - 3 columns, 2 rows */}
