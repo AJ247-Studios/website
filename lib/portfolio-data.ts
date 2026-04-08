@@ -27,7 +27,7 @@ export const mockProjects: Project[] = [
   {
     id: "20",
     slug: "mark-roxi-wedding",
-    title: "Mark & Roxi Wedding",
+    title: "Wedding",
     client: "Mark & Roxi",
     description: "Beautiful wedding day coverage capturing every special moment of Mark and Roxi's celebration in Kraków.",
     shortDescription: "Wedding photography in Kraków",
