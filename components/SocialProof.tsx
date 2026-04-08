@@ -60,7 +60,16 @@ export default function SocialProof() {
             Trusted by:
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400">
-            From sports teams to Fortune 500 companies, we deliver results that speak for themselves.
+            If you&apos;re organizing an interesting event or working on a social, cultural, or educational project and are looking for a media partner, we would be happy to hear from you.
+          </p>
+          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
+            We are always open to supporting meaningful initiatives that create real value.
+          </p>
+          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
+            If your idea aligns with our vision, we will get in touch to explore potential collaboration opportunities.
+          </p>
+          <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
+            We also want to highlight our experience: we deliver over 150 hours of video content and more than 5,000 photos.
           </p>
         </div>
 
