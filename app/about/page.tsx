@@ -257,7 +257,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-12 max-w-4xl mx-auto">
             {team.map((member) => (
               <div key={member.name} className="flex flex-col items-center text-center">
                 <div className="w-40 h-40 mb-6 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
