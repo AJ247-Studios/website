@@ -20,10 +20,10 @@ const sportsPackages = [
     priceNote: "Starting price • 3-4 hours",
     features: [
       { text: "3-4 hours of coverage", included: true },
-      { text: "150+ edited photos", included: true },
+      { text: "80–100+ edited photos", included: true },
       { text: "Online gallery delivery", included: true },
       { text: "1-2 min highlight reel", included: true },
-      { text: "5 business day delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Second photographer", included: false },
       // { text: "Drone coverage", included: false },
       { text: "Social media cuts", included: false },
@@ -37,10 +37,10 @@ const sportsPackages = [
     popular: true,
     features: [
       { text: "5+ hours of coverage", included: true, highlight: true },
-      { text: "400+ edited photos", included: true, highlight: true },
+      { text: "150–200+ edited photos", included: true, highlight: true },
       { text: "Online gallery + USB drive", included: true },
       { text: "5-min highlight film", included: true, highlight: true },
-      { text: "48-hour priority delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Second photographer", included: true },
       // { text: "Drone coverage included", included: true },
       { text: "3 social media cuts", included: true },
@@ -50,9 +50,9 @@ const sportsPackages = [
 
 const sportsComparison = [
   { name: "Coverage duration", standard: "3-4 hours", premium: "5+ hours" },
-  { name: "Edited photos", standard: "150+", premium: "400+" },
+  { name: "Edited photos", standard: "80–100+", premium: "150–200+" },
   { name: "Highlight video", standard: "1-2 min", premium: "5 min cinematic" },
-  { name: "Delivery time", standard: "5 business days", premium: "48 hours" },
+  { name: "Delivery time", standard: "16 business days", premium: "16 business days" },
   { name: "Second photographer", standard: false, premium: true },
   // { name: "Drone coverage", standard: false, premium: true },
   { name: "Social media cuts", standard: false, premium: "3 included" },
@@ -67,10 +67,10 @@ const concertPackages = [
     priceNote: "Starting price • 4 hours",
     features: [
       { text: "4 hours of coverage", included: true },
-      { text: "250+ edited photos", included: true },
+      { text: "100–150+ edited photos", included: true },
       { text: "Online gallery delivery", included: true },
       { text: "2-min highlight reel", included: true },
-      { text: "7 business day delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Second photographer", included: false },
       { text: "Multi-camera video", included: false },
       { text: "Backstage access coverage", included: false },
@@ -84,10 +84,10 @@ const concertPackages = [
     popular: true,
     features: [
       { text: "6+ hours of coverage", included: true, highlight: true },
-      { text: "500+ edited photos", included: true, highlight: true },
+      { text: "200–250+ edited photos", included: true, highlight: true },
       { text: "Online gallery + USB + prints", included: true },
       { text: "5-min cinematic film", included: true, highlight: true },
-      { text: "48-hour priority delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Two photographers", included: true },
       { text: "Multi-camera video setup", included: true },
       { text: "Backstage & VIP coverage", included: true },
@@ -97,9 +97,9 @@ const concertPackages = [
 
 const concertComparison = [
   { name: "Coverage duration", standard: "4 hours", premium: "6+ hours" },
-  { name: "Edited photos", standard: "250+", premium: "500+" },
+  { name: "Edited photos", standard: "100–150+", premium: "200–250+" },
   { name: "Highlight video", standard: "2 min", premium: "5 min cinematic" },
-  { name: "Delivery time", standard: "7 business days", premium: "48 hours" },
+  { name: "Delivery time", standard: "16 business days", premium: "16 business days" },
   { name: "Photographers", standard: "1", premium: "2" },
   { name: "Multi-camera video", standard: false, premium: true },
   { name: "Backstage coverage", standard: false, premium: true },
@@ -114,13 +114,12 @@ const weddingPackages = [
     priceNote: "Starting price • 6 hours",
     features: [
       { text: "6 hours of coverage", included: true },
-      { text: "350+ edited photos", included: true },
+      { text: "150–200+ edited photos", included: true },
       { text: "Online gallery delivery", included: true },
       { text: "4–5 min highlight film", included: true },
-      { text: "14 business day delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Second photographer", included: false },
       // { text: "Drone coverage", included: false },
-      { text: "Same-day edit teaser", included: false },
     ],
   },
   {
@@ -131,25 +130,23 @@ const weddingPackages = [
     popular: true,
     features: [
       { text: "Full day coverage (10+ hrs)", included: true, highlight: true },
-      { text: "750+ edited photos", included: true, highlight: true },
+      { text: "250–300+ edited photos", included: true, highlight: true },
       { text: "Online gallery + USB + album", included: true },
       { text: "6–8 min cinematic film", included: true, highlight: true },
-      { text: "14 business day delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Second photographer included", included: true },
       // { text: "Drone coverage included", included: true },
-      { text: "Same-day edit for reception", included: true },
     ],
   },
 ];
 
 const weddingComparison = [
   { name: "Coverage duration", standard: "6 hours", premium: "Full day (10+ hrs)" },
-  { name: "Edited photos", standard: "350+", premium: "750+" },
+  { name: "Edited photos", standard: "150–200+", premium: "250–300+" },
   { name: "Wedding film", standard: "4–5 min highlight", premium: "6–8 min cinematic" },
-  { name: "Delivery time", standard: "14 business days", premium: "14 business days" },
+  { name: "Delivery time", standard: "16 business days", premium: "16 business days" },
   { name: "Second photographer", standard: false, premium: true },
   // { name: "Drone coverage", standard: false, premium: true },
-  { name: "Same-day edit", standard: false, premium: true },
   { name: "Premium album", standard: false, premium: true },
 ];
 
@@ -213,10 +210,10 @@ const corporatePackages = [
     priceNote: "4 hours",
     features: [
       { text: "4 hours of coverage", included: true },
-      { text: "100+ edited photos", included: true },
+      { text: "80–100+ edited photos", included: true },
       { text: "Online gallery delivery", included: true },
       { text: "Corporate-ready edits", included: true },
-      { text: "3 business day delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Video coverage", included: false },
       { text: "Headshot station", included: false },
       { text: "Social media cuts", included: false },
@@ -229,10 +226,10 @@ const corporatePackages = [
     priceNote: "8 hours",
     features: [
       { text: "8 hours of coverage", included: true },
-      { text: "250+ edited photos", included: true },
+      { text: "150–200+ edited photos", included: true },
       { text: "Online gallery + USB", included: true },
       { text: "Corporate-ready edits", included: true },
-      { text: "Next business day delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "2-min highlight video", included: true },
       { text: "Headshot station", included: false },
       { text: "Social media cuts", included: false },
@@ -246,10 +243,10 @@ const corporatePackages = [
     popular: true,
     features: [
       { text: "Full day coverage", included: true, highlight: true },
-      { text: "400+ edited photos", included: true, highlight: true },
+      { text: "200–250+ edited photos", included: true, highlight: true },
       { text: "Online gallery + USB + prints", included: true },
       { text: "5-min highlight film", included: true, highlight: true },
-      { text: "Same-day photo delivery", included: true },
+      { text: "16 business day delivery", included: true },
       { text: "Multi-camera video", included: true },
       { text: "Headshot station included", included: true },
       { text: "5 social media cuts", included: true },
@@ -429,7 +426,7 @@ export default function ServicesPage() {
               },
               {
                 q: "What is your revision policy?",
-                a: "1 free round of minor revisions included (minor = text, pacing, clip swaps, color grade adjustments). Major revisions billed separately (major = music change, full re-edit).",
+                a: "1 free round of minor revisions included per project. Minor revisions: text, pacing, clip swaps, color adjustments. Major revisions (music change, full re-edit) billed separately.",
               },
             ].map((faq, idx) => (
               <div
