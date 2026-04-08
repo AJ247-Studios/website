@@ -58,12 +58,29 @@ html {
   }
 }
 
-.animate-marquee {
-  animation: marquee 60s linear infinite;
+.marquee-track {
+  display: flex;
   width: fit-content;
+  animation: marquee 60s linear infinite;
 }
 
-.animate-marquee:hover {
+.marquee-content {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  flex-shrink: 0;
+}
+
+.marquee-item {
+  margin-right: 4rem;
+  flex-shrink: 0;
+}
+
+.marquee-item:last-child {
+  margin-right: 0;
+}
+
+.marquee-track:hover {
   animation-play-state: paused;
 }
 

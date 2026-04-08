@@ -18,34 +18,43 @@ const imageStyles: Record<string, { width: number; height: number; className: st
 };
 
 export default function PartnersMarqueeClient({ logos }: { logos: PartnerLogo[] }) {
-  // Duplicate exactly 2x for seamless -50% loop
-  const duplicatedLogos = [...logos, ...logos];
+  // Create two identical sets - the animation will move the first set off-screen
+  // and the second set will seamlessly take its place
+  const firstSet = logos.map((logo, idx) => (
+    <div key={`first-${logo.fileName}-${idx}`} className="marquee-item">
+      <Image
+        src={logo.src}
+        alt={logo.alt}
+        width={imageStyles[logo.fileName]?.width || 120}
+        height={imageStyles[logo.fileName]?.height || 80}
+        className={imageStyles[logo.fileName]?.className || "h-20 rounded-lg object-contain"}
+        title={logo.alt}
+      />
+    </div>
+  ));
+
+  const secondSet = logos.map((logo, idx) => (
+    <div key={`second-${logo.fileName}-${idx}`} className="marquee-item">
+      <Image
+        src={logo.src}
+        alt={logo.alt}
+        width={imageStyles[logo.fileName]?.width || 120}
+        height={imageStyles[logo.fileName]?.height || 80}
+        className={imageStyles[logo.fileName]?.className || "h-20 rounded-lg object-contain"}
+        title={logo.alt}
+      />
+    </div>
+  ));
 
   return (
-    <div className="overflow-hidden py-4">
-      <div className="flex gap-12 animate-marquee">
-        {duplicatedLogos.map((logo, idx) => {
-          const style = imageStyles[logo.fileName] || {
-            width: 120,
-            height: 80,
-            className: "h-20 rounded-lg object-contain",
-          };
-          return (
-            <div 
-              key={`${logo.fileName}-${idx}`} 
-              className="shrink-0 flex items-center justify-center"
-            >
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                width={style.width}
-                height={style.height}
-                className={`shrink-0 ${style.className}`}
-                title={logo.alt}
-              />
-            </div>
-          );
-        })}
+    <div className="overflow-hidden">
+      <div className="marquee-track">
+        <div className="marquee-content">
+          {firstSet}
+        </div>
+        <div className="marquee-content">
+          {secondSet}
+        </div>
       </div>
     </div>
   );
