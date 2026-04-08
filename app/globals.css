@@ -66,6 +66,7 @@ html {
   display: flex;
   width: max-content;
   animation: marquee 60s linear infinite;
+  align-items: center;
 }
 
 .marquee-track:hover {
@@ -77,7 +78,7 @@ html {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 
 .marquee-item:last-child {
