@@ -116,7 +116,7 @@ const weddingPackages = [
       { text: "6 hours of coverage", included: true },
       { text: "350+ edited photos", included: true },
       { text: "Online gallery delivery", included: true },
-      { text: "3-min highlight film", included: true },
+      { text: "4–5 min highlight film", included: true },
       { text: "14 business day delivery", included: true },
       { text: "Second photographer", included: false },
       // { text: "Drone coverage", included: false },
@@ -133,8 +133,8 @@ const weddingPackages = [
       { text: "Full day coverage (10+ hrs)", included: true, highlight: true },
       { text: "750+ edited photos", included: true, highlight: true },
       { text: "Online gallery + USB + album", included: true },
-      { text: "10-min cinematic film", included: true, highlight: true },
-      { text: "7 business day delivery", included: true },
+      { text: "6–8 min cinematic film", included: true, highlight: true },
+      { text: "14 business day delivery", included: true },
       { text: "Second photographer included", included: true },
       // { text: "Drone coverage included", included: true },
       { text: "Same-day edit for reception", included: true },
@@ -145,8 +145,8 @@ const weddingPackages = [
 const weddingComparison = [
   { name: "Coverage duration", standard: "6 hours", premium: "Full day (10+ hrs)" },
   { name: "Edited photos", standard: "350+", premium: "750+" },
-  { name: "Wedding film", standard: "3 min highlight", premium: "10 min cinematic" },
-  { name: "Delivery time", standard: "14 business days", premium: "7 business days" },
+  { name: "Wedding film", standard: "4–5 min highlight", premium: "6–8 min cinematic" },
+  { name: "Delivery time", standard: "14 business days", premium: "14 business days" },
   { name: "Second photographer", standard: false, premium: true },
   // { name: "Drone coverage", standard: false, premium: true },
   { name: "Same-day edit", standard: false, premium: true },
@@ -426,6 +426,10 @@ export default function ServicesPage() {
               {
                 q: "Do you travel outside Kraków?",
                 a: "Yes! We cover all of Poland and travel internationally. Travel fees apply for locations outside Kraków city limits.",
+              },
+              {
+                q: "What is your revision policy?",
+                a: "1 free round of minor revisions included (minor = text, pacing, clip swaps, color grade adjustments). Major revisions billed separately (major = music change, full re-edit).",
               },
             ].map((faq, idx) => (
               <div
