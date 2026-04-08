@@ -14,6 +14,7 @@ const testimonials = [
     author: "Mark & Roxi",
     role: "Wedding",
     rating: 5,
+    image: "/portfolio/Mark & Roxi.jpeg",
   },
   {
     id: 3,
@@ -43,6 +44,7 @@ const testimonials = [
     author: "Dima",
     role: "FCA Kraków",
     rating: 5,
+    image: "/portfolio/Dima.jpeg",
   },
 ];
 
