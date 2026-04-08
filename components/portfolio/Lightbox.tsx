@@ -43,9 +43,20 @@ export default function Lightbox({
 }: LightboxProps) {
   const [showInfo, setShowInfo] = useState(true);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const openTimeRef = useRef<number>(0);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // All media (hero + gallery)
   const allMedia: ProjectMedia[] = project 
@@ -53,7 +64,7 @@ export default function Lightbox({
     : [];
   
   const currentMedia = allMedia[currentIndex];
-  const isYouTubeVideo = currentMedia?.type === "video" && (currentMedia.url.includes("youtube.com") || currentMedia.url.includes("youtu.be"));
+  const isYouTubeVideo = currentMedia?.type === "video" && currentMedia.url && (currentMedia.url.includes("youtube.com") || currentMedia.url.includes("youtu.be"));
   const hasNext = currentIndex < allMedia.length - 1;
   const hasPrev = currentIndex > 0;
 
@@ -197,15 +208,47 @@ export default function Lightbox({
           <div className="relative max-w-full max-h-full w-full h-full flex items-center justify-center">
             {currentMedia.type === "video" ? (
               isYouTubeVideo ? (
-                <div className="relative w-full max-w-4xl aspect-video">
-                  <iframe
-                    src={currentMedia.url}
-                    className="w-full h-full rounded-lg"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title={currentMedia.alt}
-                  />
-                </div>
+                isMobile ? (
+                  // Mobile: link to open YouTube app
+                  <div className="relative w-full max-w-4xl aspect-video">
+                    {(() => {
+                      // Convert embed URL to watch URL
+                      let watchUrl = currentMedia.url;
+                      if (watchUrl.includes("embed/")) {
+                        const videoId = watchUrl.split("embed/")[1]?.split("?")[0];
+                        watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                      } else if (watchUrl.includes("youtu.be/")) {
+                        const videoId = watchUrl.split("youtu.be/")[1]?.split("?")[0];
+                        watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                      }
+                      return (
+                        <a
+                          href={watchUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full h-full flex flex-col items-center justify-center bg-slate-800 rounded-lg text-white hover:bg-slate-700 transition-colors"
+                        >
+                          <svg className="w-16 h-16 mb-4 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          </svg>
+                          <span className="text-lg font-medium">Watch on YouTube</span>
+                          <span className="text-sm text-slate-400 mt-1">Opens YouTube app</span>
+                        </a>
+                      );
+                    })()}
+                  </div>
+                ) : (
+                  // Desktop: embed iframe
+                  <div className="relative w-full max-w-4xl aspect-video">
+                    <iframe
+                      src={currentMedia.url}
+                      className="w-full h-full rounded-lg"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      title={currentMedia.alt}
+                    />
+                  </div>
+                )
               ) : (
                 <div className="relative w-full max-w-4xl aspect-video">
                   <video
