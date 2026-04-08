@@ -12,7 +12,7 @@ const stats = [
   { value: "150+", label: "Projects Delivered" },
   { value: "150+", label: "Happy Clients" },
   { value: "4000+", label: "Photos & Clips Delivered" },
-  { value: "2", label: "Team Members" },
+  { value: "3", label: "Team Members" },
 ];
 
 const values = [
@@ -66,6 +66,13 @@ const team = [
     role: "Photographer / Co-founder",
     bio: "2–3 years experience. Stills photographer focused on product, lifestyle, and event photography. Client liaison, studio setups.",
     image: "/portfolio/Anthony-full-res.webp",
+  },
+  {
+    name: "Ivan Anthony Cabañero",
+    role: "Editor",
+    bio: "Professional video editor. If you need media coverage in the Philippines, contact Ivan for rates and availability.",
+    image: "/portfolio/Ivan-full-res.jpeg",
+    website: "https://navifilms.my.canva.site/",
   },
 ];
 
@@ -241,7 +248,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-5xl mx-auto">
             {team.map((member) => (
               <div key={member.name} className="flex flex-col items-center text-center">
                 <div className="w-40 h-40 mb-6 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
@@ -265,9 +272,19 @@ export default function AboutPage() {
                 <div className="text-sm text-blue-600 dark:text-blue-400 mb-3">
                   {member.role}
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs">
+                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs mb-3">
                   {member.bio}
                 </p>
+                {member.website && (
+                  <a
+                    href={member.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    View Portfolio →
+                  </a>
+                )}
               </div>
             ))}
           </div>
