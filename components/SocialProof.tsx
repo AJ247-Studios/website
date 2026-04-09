@@ -25,7 +25,7 @@ const testimonials = [
   },
   {
     id: 4,
-    quote: "Super happy with how everything turned out. The session was really chill and I didn't feel awkward at all. You can tell they know what they're doing, and the final photos just speak for themselves.",
+    quote: "Sesja przebiegła w bardzo miłej atmosferze, fotograf pomagał dobrać pozę i proponował różne ujęcia, przy okazji było bardzo miło i wszystkie moje zastrzeżenia zostały wysłuchane i potraktowane poważnie. Bardzo polecam!!",
     author: "Maja",
     role: "Portrait",
     rating: 5,
