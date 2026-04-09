@@ -90,7 +90,7 @@ export default function SocialProof() {
           {testimonials.slice(0, 6).map((testimonial) => (
               <div
               key={testimonial.id}
-              className="relative bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700 flex flex-col"
+              className="relative bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700 flex flex-col h-auto"
             >
               {/* Quote mark */}
               <div className="absolute top-4 right-4 text-slate-200 dark:text-slate-700">
@@ -109,7 +109,7 @@ export default function SocialProof() {
               </div>
 
               {/* Quote */}
-              <blockquote className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed line-clamp-4">
+              <blockquote className="text-slate-700 dark:text-slate-300 mb-4 leading-relaxed">
                 &ldquo;{testimonial.quote}&rdquo;
               </blockquote>
 
