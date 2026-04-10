@@ -321,7 +321,7 @@ export default function Lightbox({
                   {project.categories[0]}
                 </span>
                 <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-                <p className="text-sm text-slate-400">{project.client} · {project.year}</p>
+                <p className="text-sm text-slate-400">{project.client}</p>
               </div>
 
               {/* Description */}

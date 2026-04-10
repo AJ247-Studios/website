@@ -88,7 +88,7 @@ export default function PortfolioCard({
             {project.title}
           </h3>
           <p className="text-sm text-white/70 mb-2">
-            {project.client} · {project.year}
+            {project.client}
           </p>
 
           {/* Short description - desktop hover only */}

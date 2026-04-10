@@ -108,7 +108,7 @@ export default function FeaturedCaseStudies({
                     {project.title}
                   </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {project.client} · {project.year}
+                    {project.client}
                   </p>
                 </div>
 
