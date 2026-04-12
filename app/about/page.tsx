@@ -140,7 +140,7 @@ export default function AboutPage() {
             
             {/* Video hero */}
             <div className="relative">
-              <div className="aspect-video rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-lg">
+              <div className="aspect-square rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-lg">
                 <video
                   className="w-full h-full object-cover"
                   autoPlay
@@ -152,7 +152,7 @@ export default function AboutPage() {
                   controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
                   disablePictureInPicture
                 >
-                  <source src="/portfolio/F_Weddings_ShowCase_720p@24fps.mp4" />
+                  <source src="/portfolio/AJ_001.mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
