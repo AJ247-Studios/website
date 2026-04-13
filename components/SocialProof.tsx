@@ -81,7 +81,7 @@ export default function SocialProof() {
             If your idea aligns with our vision, we will get in touch to explore potential collaboration opportunities.
           </p>
           <p className="text-md text-slate-600 dark:text-slate-400 mt-3">
-            We also want to highlight our experience: we deliver over 150 hours of video content and more than 5,000 photos.
+            We also want to highlight our experience: we have delivered over 150 projects, more than 4,000 photos, and over 50 hours of video content.
           </p>
         </div>
 
