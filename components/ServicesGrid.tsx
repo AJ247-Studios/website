@@ -5,8 +5,8 @@ const services = [
     id: "sports",
     title: "Sports Coverage",
     description: "Dynamic action shots and highlight reels that capture every winning moment.",
-    price: "From 1,500 PLN",
-    features: ["4+ hours coverage", "200+ edited photos", "Highlight video"],
+    price: "From 1,499 PLN",
+    features: ["3-4 hours coverage", "80–100+ edited photos", "1-2 min highlight reel", "16 business day delivery"],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -18,8 +18,8 @@ const services = [
     id: "concerts",
     title: "Concert & Events",
     description: "Immersive concert photography and cinematic video that brings the energy to life.",
-    price: "From 2,000 PLN",
-    features: ["6+ hours coverage", "300+ edited photos", "5-min highlight film"],
+    price: "From 1,999 PLN",
+    features: ["4 hours coverage", "100–150+ edited photos", "2-min highlight reel", "16 business day delivery"],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
@@ -30,8 +30,8 @@ const services = [
     id: "weddings",
     title: "Wedding Coverage",
     description: "Timeless wedding photography and films that tell your love story beautifully.",
-    price: "From 3,500 PLN",
-    features: ["Full-day coverage", "500+ edited photos", "10-min cinematic film"],
+    price: "From 3,499 PLN",
+    features: ["6 hours coverage", "150–200+ edited photos", "4-5 min highlight film", "16 business day delivery"],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -43,7 +43,7 @@ const services = [
     title: "Photo Sessions",
     description: "Professional portraits for personal branding, headshots, and creative projects.",
     price: "From 450 PLN",
-    features: ["1-2 hour session", "20+ edited photos", "Multiple looks"],
+    features: ["1 hour session", "10 edited photos", "Online gallery", "5 business day delivery"],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -55,8 +55,8 @@ const services = [
     id: "corporate",
     title: "Corporate Events",
     description: "Professional coverage for conferences, launches, and corporate gatherings.",
-    price: "From 1,200 PLN",
-    features: ["Flexible hours", "Quick turnaround", "Brand-aligned edits"],
+    price: "From 1,199 PLN",
+    features: ["4 hours coverage", "80–100+ edited photos", "Corporate-ready edits", "16 business day delivery", "Online gallery delivery"],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -66,7 +66,7 @@ const services = [
   {
     id: "custom",
     title: "Custom Packages",
-    description: "Tailored solutions combining photo, video, and more for your unique needs.", // drone temporarily removed
+    description: "Tailored solutions combining photo, video, and more for your unique needs.",
     price: "Get a Quote",
     features: ["Mix & match services", "Add-ons available", "Flexible pricing"],
     icon: (
