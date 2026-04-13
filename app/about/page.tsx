@@ -140,7 +140,7 @@ export default function AboutPage() {
             
             {/* Video hero */}
             <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-lg">
+              <div className="aspect-square rounded-2xl overflow-hidden bg-white dark:bg-white shadow-lg">
                 <video
                   className="w-full h-full object-cover"
                   autoPlay
@@ -148,7 +148,6 @@ export default function AboutPage() {
                   loop
                   playsInline
                   preload="auto"
-                  poster="/portfolio/background_photo.webp"
                   controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
                   disablePictureInPicture
                 >
