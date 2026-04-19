@@ -1,2 +1,3 @@
 commit	load_time_ms	memory_mb	status	description
 3404419	7.200	0	keep	baseline
+39b6ea1	7.000	0	keep	enable compression
