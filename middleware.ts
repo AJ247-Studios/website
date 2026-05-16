@@ -56,8 +56,8 @@ export async function middleware(req: NextRequest) {
 
   const pathname = req.nextUrl.pathname;
 
-  // Protect /client and /admin routes - require valid session
-  if (pathname.startsWith("/client") || pathname.startsWith("/admin")) {
+  // Protect /client, /admin, and /dashboard routes - require valid session
+  if (pathname.startsWith("/client") || pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
     if (!user) {
       const redirectUrl = new URL("/login", req.url);
       redirectUrl.searchParams.set("redirect", pathname);

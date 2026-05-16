@@ -130,10 +130,10 @@ export default function AboutPage() {
                   View Our Work
                 </Link>
                 <Link
-                  href="/contact"
+                  href="/book"
                   className="inline-flex items-center px-6 py-3 text-base font-semibold text-slate-700 dark:text-slate-300 border-2 border-slate-200 dark:border-slate-700 rounded-xl hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
                 >
-                  Get in Touch
+                  Book Us Now
                 </Link>
               </div>
             </div>
@@ -283,16 +283,20 @@ export default function AboutPage() {
                 <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs mb-3">
                   {member.bio}
                 </p>
-                {member.website && (
-                  <a
-                    href={member.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                <div className="flex gap-2 mt-2">
+                  <Link
+                    href={`/team/${member.name.split(' ')[0].toLowerCase()}`}
+                    className="text-sm px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                   >
-                    View Portfolio →
-                  </a>
-                )}
+                    View Portfolio
+                  </Link>
+                  <Link
+                    href={`/book?employee=${member.name.split(' ')[0].toLowerCase()}`}
+                    className="text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Book Now
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
@@ -352,10 +356,10 @@ export default function AboutPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/contact"
+                  href="/book"
                   className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-slate-900 bg-white rounded-xl hover:bg-slate-100 transition-colors"
                 >
-                  Get a Free Quote
+                  Book Us Now
                 </Link>
                 <Link
                   href="/portfolio"
