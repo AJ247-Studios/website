@@ -37,7 +37,7 @@
     "next": "^16.0.8",
     "nodemailer": "^7.0.12",
     "openai": "^6.10.0",
-    "puppeteer": "^24.41.0",
+    "pg": "^8.20.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-markdown": "^10.1.0",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^24.10.2",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.22",
