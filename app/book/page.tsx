@@ -216,6 +216,23 @@ export default function BookPage() {
     }
   }, [session]);
 
+  // Auto-fill event type based on selected service
+  useEffect(() => {
+    if (formData.serviceType && !formData.eventType) {
+      const defaults: Record<string, string> = {
+        sports: "Sports Event",
+        concert: "Concert / Live Event",
+        wedding: "Wedding",
+        portrait: "Portrait Session",
+        corporate: "Corporate Event",
+      };
+      setFormData((prev) => ({
+        ...prev,
+        eventType: defaults[prev.serviceType] || "",
+      }));
+    }
+  }, [formData.serviceType]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fetch employees and packages from API
   useEffect(() => {
     async function fetchData() {
