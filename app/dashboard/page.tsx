@@ -148,8 +148,14 @@ export default function EmployeeDashboard() {
           setMessages(MOCK_MESSAGES);
         } else {
           setMessages((messagesData || []).map((m: any) => ({
-            id: m.id, sender_id: m.sender_id, sender_name: m.sender_name || "Client",
-            content: m.content, is_read: m.is_read, created_at: m.created_at, booking_id: m.booking_id,
+            id: m.id,
+            sender_id: m.sender_id,
+            sender_name: m.sender_name || "Client",
+            receiver_id: m.receiver_id,
+            content: m.content,
+            is_read: m.is_read,
+            created_at: m.created_at,
+            booking_id: m.booking_id,
           })) as Message[]);
         }
       } catch (err: any) {
@@ -657,10 +663,18 @@ export default function EmployeeDashboard() {
                       <div className="flex-1 overflow-y-auto p-4 space-y-3">
                         {(() => {
                           const userId = session?.user?.id;
-                          const convMessages = messages.filter((m) =>
-                            (m.sender_id === userId && m.receiver_id === selectedMessageClient) ||
-                            (m.sender_id === selectedMessageClient && m.receiver_id === userId)
-                          );
+                          // For team/admin: show all messages to/from this client
+                          // For client: show messages where they are sender or receiver
+                          const convMessages = messages.filter((m) => {
+                            const isTeamOrAdmin = role === "team" || role === "admin";
+                            if (isTeamOrAdmin) {
+                              // Team sees all messages with this client
+                              return m.sender_id === selectedMessageClient || m.receiver_id === selectedMessageClient;
+                            }
+                            // Client sees only their direct messages
+                            return (m.sender_id === userId && m.receiver_id === selectedMessageClient) ||
+                                   (m.sender_id === selectedMessageClient && m.receiver_id === userId);
+                          });
                           return convMessages.map((msg) => {
                             const isMe = msg.sender_id === userId;
                             return (

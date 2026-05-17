@@ -36,6 +36,7 @@ interface Message {
   id: string;
   sender_name: string;
   sender_id: string;
+  receiver_id?: string;
   sender_avatar?: string;
   content: string;
   is_read: boolean;
@@ -171,6 +172,7 @@ export default function ClientPortalDashboard() {
             id: m.id,
             sender_name: m.sender_name || "Team Member",
             sender_id: m.sender_id,
+            receiver_id: m.receiver_id,
             content: m.content,
             is_read: m.is_read,
             created_at: m.created_at,
