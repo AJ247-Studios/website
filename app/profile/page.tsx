@@ -6,7 +6,7 @@ import { useSupabase } from "@/components/SupabaseProvider";
 import Image from "next/image";
 
 export default function ProfilePage() {
-  const { supabase, session, isLoading: authLoading } = useSupabase();
+  const { supabase, session, role, isLoading: authLoading } = useSupabase();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -78,6 +78,8 @@ export default function ProfilePage() {
         .from("user_profiles")
         .upsert({
           id: session.user.id,
+          email: session.user.email,
+          role: role || "user",
           display_name: form.display_name,
           phone: form.phone || null,
           company: form.company || null,
