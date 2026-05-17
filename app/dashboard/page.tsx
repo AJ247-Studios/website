@@ -169,9 +169,43 @@ export default function EmployeeDashboard() {
     setReplyText("");
   }, [replyText, selectedMessageClient]);
 
-  const handleUpdateBookingStatus = useCallback((bookingId: string, newStatus: Booking["status"]) => {
-    setBookings((prev) => prev.map((b) => (b.id === bookingId ? { ...b, status: newStatus } : b)));
-  }, []);
+  const handleUpdateBookingStatus = useCallback(async (bookingId: string, newStatus: Booking["status"]) => {
+    if (!supabase) return;
+    try {
+      const { data, error } = await supabase
+        .from("bookings")
+        .update({ status: newStatus })
+        .eq("id", bookingId)
+        .select()
+        .single();
+      if (error) {
+        console.error("Failed to update status:", error);
+        return;
+      }
+      setBookings((prev) => prev.map((b) => (b.id === bookingId ? { ...b, status: data.status } : b)));
+    } catch (err) {
+      console.error("Update status error:", err);
+    }
+  }, [supabase]);
+
+  const handleToggleDeposit = useCallback(async (bookingId: string, currentValue: boolean) => {
+    if (!supabase) return;
+    try {
+      const { data, error } = await supabase
+        .from("bookings")
+        .update({ deposit_paid: !currentValue })
+        .eq("id", bookingId)
+        .select()
+        .single();
+      if (error) {
+        console.error("Failed to update deposit:", error);
+        return;
+      }
+      setBookings((prev) => prev.map((b) => (b.id === bookingId ? { ...b, deposit_paid: data.deposit_paid } : b)));
+    } catch (err) {
+      console.error("Update deposit error:", err);
+    }
+  }, [supabase]);
 
   const handleOpenClientView = useCallback((clientId: string) => {
     console.log("Open client view:", clientId);
@@ -400,9 +434,10 @@ export default function EmployeeDashboard() {
                               {booking.status === "in_progress" && (
                                 <button onClick={() => handleUpdateBookingStatus(booking.id, "completed")} className="px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">Complete</button>
                               )}
-                              <button onClick={() => setSelectedBooking(selectedBooking?.id === booking.id ? null : booking)} className="px-2 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">Details</button>
-                            </div>
-                          </td>
+                               <button onClick={() => handleToggleDeposit(booking.id, booking.deposit_paid)} className={`px-2 py-1 text-xs font-medium rounded-lg transition-colors ${booking.deposit_paid ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50" : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900/50"}`}>{booking.deposit_paid ? "Unmark Deposit" : "Mark Deposit"}</button>
+                               <button onClick={() => setSelectedBooking(selectedBooking?.id === booking.id ? null : booking)} className="px-2 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">Details</button>
+                             </div>
+                           </td>
                         </tr>
                       ))}
                     </tbody>
@@ -428,7 +463,13 @@ export default function EmployeeDashboard() {
                     <div className="flex justify-between"><span className="text-slate-500 dark:text-slate-400">Date</span><span className="text-slate-900 dark:text-white">{selectedBooking.event_date}</span></div>
                     <div className="flex justify-between"><span className="text-slate-500 dark:text-slate-400">Location</span><span className="text-slate-900 dark:text-white">{selectedBooking.event_location}</span></div>
                     <div className="flex justify-between"><span className="text-slate-500 dark:text-slate-400">Total Price</span><span className="text-slate-900 dark:text-white font-medium">{selectedBooking.total_price_pln.toLocaleString()} PLN</span></div>
-                    <div className="flex justify-between"><span className="text-slate-500 dark:text-slate-400">Deposit</span><span className={selectedBooking.deposit_paid ? "text-emerald-600 font-medium" : "text-amber-600 font-medium"}>{selectedBooking.deposit_paid ? "Paid" : "Pending"}</span></div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-500 dark:text-slate-400">Deposit</span>
+                      <div className="flex items-center gap-3">
+                        <span className={selectedBooking.deposit_paid ? "text-emerald-600 font-medium" : "text-amber-600 font-medium"}>{selectedBooking.deposit_paid ? "Paid" : "Pending"}</span>
+                        <button onClick={() => handleToggleDeposit(selectedBooking.id, selectedBooking.deposit_paid)} className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors ${selectedBooking.deposit_paid ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50" : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900/50"}`}>{selectedBooking.deposit_paid ? "Mark Unpaid" : "Mark Paid"}</button>
+                      </div>
+                    </div>
                     {selectedBooking.notes && (
                       <div className="pt-3 border-t border-slate-200 dark:border-slate-700">
                         <div className="text-slate-500 dark:text-slate-400 text-sm mb-1">Notes</div>
