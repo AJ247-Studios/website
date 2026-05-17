@@ -176,10 +176,10 @@ export default function AdminPage() {
         </div>
         
         {/* Tab navigation */}
-        <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+        <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-lg p-1 overflow-x-auto">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === "overview"
                 ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
@@ -189,25 +189,25 @@ export default function AdminPage() {
           </button>
           <button
             onClick={() => router.push("/admin/projects")}
-            className="px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            className="flex-shrink-0 px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           >
             Projects
           </button>
           <button
             onClick={() => setActiveTab("users")}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === "users"
                 ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            User Management
+            Users
           </button>
           <button
             onClick={() => router.push("/admin/media")}
-            className="px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+            className="flex-shrink-0 px-4 py-2 text-sm font-medium rounded-md transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           >
-            Media Manager
+            Media
           </button>
         </div>
       </div>

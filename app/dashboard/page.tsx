@@ -351,7 +351,7 @@ export default function EmployeeDashboard() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-8 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700">
+        <div className="flex gap-1 mb-8 bg-white dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700 overflow-x-auto">
           {([
             { key: "overview" as DashboardTab, label: "Overview" },
             { key: "bookings" as DashboardTab, label: "Bookings" },
@@ -362,7 +362,7 @@ export default function EmployeeDashboard() {
             <button
               key={tab.key}
               onClick={() => { setActiveTab(tab.key); setSelectedBooking(null); setSelectedMessageClient(null); }}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+              className={`flex-shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                 activeTab === tab.key
                   ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
