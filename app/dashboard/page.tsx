@@ -589,13 +589,21 @@ export default function EmployeeDashboard() {
                   <div className="overflow-y-auto max-h-[500px]">
                     {(() => {
                       const userId = session?.user?.id;
+                      // Helper to get name from messageablePeople or msg data
+                      const getName = (id: string) => {
+                        const fromPeople = messageablePeople.find((p) => p.id === id);
+                        if (fromPeople) return fromPeople.name;
+                        const fromMsg = messages.find((m) => m.sender_id === id);
+                        if (fromMsg?.sender_name) return fromMsg.sender_name;
+                        return id.slice(0, 8) + "...";
+                      };
                       // Group by conversation partner (the OTHER person)
                       const conversations = new Map<string, { name: string; messages: Message[] }>();
                       messages.forEach((msg) => {
                         const partnerId = msg.sender_id === userId ? msg.receiver_id : msg.sender_id;
                         if (!partnerId) return;
                         if (!conversations.has(partnerId)) {
-                          conversations.set(partnerId, { name: msg.sender_id === userId ? (msg.receiver_id || "Them") : (msg.sender_name || "Them"), messages: [] });
+                          conversations.set(partnerId, { name: getName(partnerId), messages: [] });
                         }
                         conversations.get(partnerId)!.messages.push(msg);
                       });
@@ -636,7 +644,13 @@ export default function EmployeeDashboard() {
                     <>
                       <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
                         <h3 className="font-semibold text-slate-900 dark:text-white">
-                          {messageablePeople.find((p) => p.id === selectedMessageClient)?.name || "Conversation"}
+                          {(() => {
+                            const fromPeople = messageablePeople.find((p) => p.id === selectedMessageClient);
+                            if (fromPeople) return fromPeople.name;
+                            const fromMsg = messages.find((m) => m.sender_id === selectedMessageClient);
+                            if (fromMsg?.sender_name) return fromMsg.sender_name;
+                            return "Conversation";
+                          })()}
                         </h3>
                       </div>
                       <div className="flex-1 overflow-y-auto p-4 space-y-3">
