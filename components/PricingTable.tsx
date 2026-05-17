@@ -59,28 +59,76 @@ export function FeatureComparison({
   premiumLabel = "Premium" 
 }: FeatureComparisonProps) {
   return (
-    <div className="mt-12 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
-      <table className="w-full">
-        <thead>
-          <tr className="bg-slate-50 dark:bg-slate-800/50">
-            <th className="py-4 px-6 text-left text-sm font-semibold text-slate-900 dark:text-white">
-              Feature
-            </th>
-            <th className="py-4 px-6 text-center text-sm font-semibold text-slate-900 dark:text-white">
-              {standardLabel}
-            </th>
-            <th className="py-4 px-6 text-center text-sm font-semibold text-slate-900 dark:text-white bg-blue-50 dark:bg-blue-900/20">
-              {premiumLabel}
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-          {features.map((feature, idx) => (
-            <tr key={idx} className="bg-white dark:bg-slate-800/30">
-              <td className="py-4 px-6 text-sm text-slate-700 dark:text-slate-300">
-                {feature.name}
-              </td>
-              <td className="py-4 px-6 text-center">
+    <div className="mt-12">
+      {/* Desktop: Table */}
+      <div className="hidden sm:block overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-slate-50 dark:bg-slate-800/50">
+              <th className="py-4 px-6 text-left text-sm font-semibold text-slate-900 dark:text-white">
+                Feature
+              </th>
+              <th className="py-4 px-6 text-center text-sm font-semibold text-slate-900 dark:text-white">
+                {standardLabel}
+              </th>
+              <th className="py-4 px-6 text-center text-sm font-semibold text-slate-900 dark:text-white bg-blue-50 dark:bg-blue-900/20">
+                {premiumLabel}
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+            {features.map((feature, idx) => (
+              <tr key={idx} className="bg-white dark:bg-slate-800/30">
+                <td className="py-4 px-6 text-sm text-slate-700 dark:text-slate-300">
+                  {feature.name}
+                </td>
+                <td className="py-4 px-6 text-center">
+                  {typeof feature.standard === "boolean" ? (
+                    feature.standard ? (
+                      <svg className="w-5 h-5 mx-auto text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5 mx-auto text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )
+                  ) : (
+                    <span className="text-sm text-slate-600 dark:text-slate-400">{feature.standard}</span>
+                  )}
+                </td>
+                <td className="py-4 px-6 text-center bg-blue-50/50 dark:bg-blue-900/10">
+                  {typeof feature.premium === "boolean" ? (
+                    feature.premium ? (
+                      <svg className="w-5 h-5 mx-auto text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5 mx-auto text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )
+                  ) : (
+                    <span className="text-sm font-medium text-slate-900 dark:text-white">{feature.premium}</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile: Card List */}
+      <div className="sm:hidden space-y-3">
+        {features.map((feature, idx) => (
+          <div key={idx} className="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+            <div className="font-medium text-sm text-slate-900 dark:text-white mb-3">
+              {feature.name}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {/* Standard */}
+              <div className="text-center p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">{standardLabel}</div>
                 {typeof feature.standard === "boolean" ? (
                   feature.standard ? (
                     <svg className="w-5 h-5 mx-auto text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,10 +140,12 @@ export function FeatureComparison({
                     </svg>
                   )
                 ) : (
-                  <span className="text-sm text-slate-600 dark:text-slate-400">{feature.standard}</span>
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{feature.standard}</span>
                 )}
-              </td>
-              <td className="py-4 px-6 text-center bg-blue-50/50 dark:bg-blue-900/10">
+              </div>
+              {/* Premium */}
+              <div className="text-center p-3 rounded-lg bg-blue-50/50 dark:bg-blue-900/10">
+                <div className="text-xs text-blue-600 dark:text-blue-400 mb-1">{premiumLabel}</div>
                 {typeof feature.premium === "boolean" ? (
                   feature.premium ? (
                     <svg className="w-5 h-5 mx-auto text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,13 +157,13 @@ export function FeatureComparison({
                     </svg>
                   )
                 ) : (
-                  <span className="text-sm font-medium text-slate-900 dark:text-white">{feature.premium}</span>
+                  <span className="text-sm font-semibold text-slate-900 dark:text-white">{feature.premium}</span>
                 )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
