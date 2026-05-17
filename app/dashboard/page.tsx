@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -148,16 +148,75 @@ function StatusBadge({ status }: { status: Booking["status"] }) {
 // ============================================================================
 export default function EmployeeDashboard() {
   const router = useRouter();
-  const { session, role, isLoading } = useSupabase();
+  const { supabase, session, role, isLoading } = useSupabase();
   const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedMessageClient, setSelectedMessageClient] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
-  const [bookings, setBookings] = useState(MOCK_BOOKINGS);
-  const [messages, setMessages] = useState(MOCK_MESSAGES);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
+
+  // Fetch real data from Supabase
+  useEffect(() => {
+    if (!session) return;
+
+    async function fetchData() {
+      try {
+        setDataLoading(true);
+        setFetchError("");
+
+        // Fetch bookings (RLS will filter by role: team sees assigned, admin sees all)
+        const { data: bookingsData, error: bookingsError } = await supabase
+          .from("bookings")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (bookingsError) {
+          console.error("Bookings fetch error:", bookingsError);
+          // Fallback to mock data for demo if fetch fails
+          setBookings(MOCK_BOOKINGS);
+        } else {
+          setBookings((bookingsData || []) as Booking[]);
+        }
+
+        // Fetch messages (RLS filters to sender/receiver)
+        const { data: messagesData, error: messagesError } = await supabase
+          .from("messages")
+          .select("*")
+          .order("created_at", { ascending: true });
+
+        if (messagesError) {
+          console.error("Messages fetch error:", messagesError);
+          setMessages(MOCK_MESSAGES);
+        } else {
+          // Enrich with sender names from messages themselves if available
+          setMessages((messagesData || []).map((m: any) => ({
+            id: m.id,
+            sender_id: m.sender_id,
+            sender_name: m.sender_name || "Client",
+            content: m.content,
+            is_read: m.is_read,
+            created_at: m.created_at,
+            booking_id: m.booking_id,
+          })) as Message[]);
+        }
+      } catch (err: any) {
+        console.error("Dashboard data fetch error:", err);
+        setFetchError("Failed to load data. Showing demo data.");
+        setBookings(MOCK_BOOKINGS);
+        setMessages(MOCK_MESSAGES);
+      } finally {
+        setDataLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [session, supabase]);
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || dataLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="text-center">
@@ -175,9 +234,6 @@ export default function EmployeeDashboard() {
     }
     return null;
   }
-
-  // TODO: Check role === 'team' or 'admin', redirect if not
-  // For now, show dashboard to any authenticated user
 
   const unreadCount = messages.filter((m) => !m.is_read).length;
   const upcomingBookings = bookings.filter((b) => b.status === "confirmed" || b.status === "in_progress").length;

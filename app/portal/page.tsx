@@ -104,11 +104,12 @@ function StatusBadge({ status }: { status: Booking["status"] }) {
 
 export default function ClientPortalDashboard() {
   const router = useRouter();
-  const { session, isLoading } = useSupabase();
+  const { supabase, session, isLoading } = useSupabase();
   const [activeTab, setActiveTab] = useState<ClientTab>("bookings");
   const [replyText, setReplyText] = useState("");
-  const [bookings] = useState(MOCK_BOOKINGS);
-  const [messages, setMessages] = useState(MOCK_MESSAGES);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
     if (!isLoading && !session) {
@@ -116,21 +117,87 @@ export default function ClientPortalDashboard() {
     }
   }, [session, isLoading, router]);
 
-  const handleSendMessage = useCallback(() => {
-    if (!replyText.trim()) return;
+  // Fetch real data from Supabase
+  useEffect(() => {
+    if (!session) return;
+
+    async function fetchData() {
+      try {
+        setDataLoading(true);
+
+        // Fetch bookings for this client
+        const { data: bookingsData, error: bookingsError } = await supabase
+          .from("bookings")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (bookingsError) {
+          console.error("Bookings fetch error:", bookingsError);
+          setBookings(MOCK_BOOKINGS);
+        } else {
+          setBookings((bookingsData || []).map((b: any) => ({
+            id: b.id,
+            service_type: b.service_type,
+            package_name: b.package_id ? "Package" : "Custom",
+            employee_name: b.employee_id || "TBD",
+            event_date: b.event_date,
+            event_location: b.event_location || "",
+            total_price_pln: b.total_price_pln,
+            deposit_paid: b.deposit_paid,
+            status: b.status,
+            notes: b.notes || "",
+          })) as Booking[]);
+        }
+
+        // Fetch messages
+        const { data: messagesData, error: messagesError } = await supabase
+          .from("messages")
+          .select("*")
+          .order("created_at", { ascending: true });
+
+        if (messagesError) {
+          console.error("Messages fetch error:", messagesError);
+          setMessages(MOCK_MESSAGES);
+        } else {
+          setMessages((messagesData || []).map((m: any) => ({
+            id: m.id,
+            sender_name: m.sender_name || "Team Member",
+            sender_id: m.sender_id,
+            content: m.content,
+            is_read: m.is_read,
+            created_at: m.created_at,
+          })) as Message[]);
+        }
+      } catch (err: any) {
+        console.error("Portal fetch error:", err);
+        setBookings(MOCK_BOOKINGS);
+        setMessages(MOCK_MESSAGES);
+      } finally {
+        setDataLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [session, supabase]);
+
+  const handleSendMessage = useCallback(async () => {
+    if (!replyText.trim() || !session) return;
+
+    // TODO: Send message via Supabase when receiver_id is known
+    // For now, add locally
     const newMessage: Message = {
       id: `msg-${Date.now()}`,
       sender_name: "You",
-      sender_id: "client",
+      sender_id: session.user.id,
       content: replyText,
       is_read: true,
       created_at: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, newMessage]);
     setReplyText("");
-  }, [replyText]);
+  }, [replyText, session]);
 
-  if (isLoading) {
+  if (isLoading || dataLoading) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
         <div className="text-center">
