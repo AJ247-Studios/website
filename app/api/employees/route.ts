@@ -1,23 +1,27 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-/**
- * GET /api/employees
- * Get all available employees with their pricing for a specific service
- * Query param: ?service_type=sports (optional)
- */
+  if (!url || !key) {
+    throw new Error(
+      "Missing Supabase environment variables. Ensure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set."
+    );
+  }
+
+  return createClient(url, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
 export async function GET(request: Request) {
   try {
+    const supabase = getSupabaseAdmin();
     const { searchParams } = new URL(request.url);
     const serviceType = searchParams.get("service_type");
 
-    // Build the query
     let query = supabase
       .from("employee_profiles")
       .select("*")
@@ -30,7 +34,6 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: empError.message }, { status: 500 });
     }
 
-    // If service type is specified, get pricing for each employee
     let result = employees || [];
 
     if (serviceType) {
@@ -46,7 +49,6 @@ export async function GET(request: Request) {
         .select("*")
         .eq("is_available", true);
 
-      // Merge pricing into employees
       result = (employees || []).map((emp: any) => {
         const empPricing = (pricing || []).filter((p: any) => p.employee_id === emp.id);
         const packagesWithPrice = (packages || []).map((pkg: any) => {
@@ -67,6 +69,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ employees: result });
   } catch (err: any) {
     console.error("Employees API error:", err);
-    return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }

@@ -44,11 +44,58 @@ interface BookingFormData {
 }
 
 const SERVICE_TYPES = [
-  { value: "sports", label: "Sports Coverage", icon: "🏆", description: "Dynamic action shots and highlight reels" },
-  { value: "concert", label: "Concert & Event Coverage", icon: "🎵", description: "Live music and event photography" },
-  { value: "wedding", label: "Wedding Coverage", icon: "💍", description: "Timeless wedding photography and films" },
-  { value: "portrait", label: "Photo Sessions", icon: "📸", description: "Professional portraits and headshots" },
-  { value: "corporate", label: "Corporate Events", icon: "🏢", description: "Conference and corporate coverage" },
+  {
+    value: "sports",
+    label: "Sports Coverage",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    description: "Dynamic action shots and highlight reels",
+  },
+  {
+    value: "concert",
+    label: "Concert & Event Coverage",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+      </svg>
+    ),
+    description: "Live music and event photography",
+  },
+  {
+    value: "wedding",
+    label: "Wedding Coverage",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+    ),
+    description: "Timeless wedding photography and films",
+  },
+  {
+    value: "portrait",
+    label: "Photo Sessions",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    ),
+    description: "Professional portraits and headshots",
+  },
+  {
+    value: "corporate",
+    label: "Corporate Events",
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      </svg>
+    ),
+    description: "Conference and corporate coverage",
+  },
 ];
 
 const FALLBACK_PACKAGES: Record<string, ServicePackage[]> = {
@@ -378,7 +425,9 @@ export default function BookPage() {
                   }}
                   className={`text-left p-5 rounded-xl border-2 transition-all ${formData.serviceType === service.value ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10" : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600"}`}
                 >
-                  <div className="text-3xl mb-3">{service.icon}</div>
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 mb-3">
+                    {service.icon}
+                  </div>
                   <h3 className="font-semibold text-slate-900 dark:text-white mb-1">{service.label}</h3>
                   <p className="text-sm text-slate-500 dark:text-slate-400">{service.description}</p>
                 </button>

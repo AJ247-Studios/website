@@ -1,17 +1,27 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error(
+      "Missing Supabase environment variables. Ensure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set."
+    );
+  }
+
+  return createClient(url, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = getSupabaseAdmin();
     const { id } = await params;
     const { data, error } = await supabase
       .from("bookings")
@@ -25,7 +35,10 @@ export async function GET(
 
     return NextResponse.json({ booking: data });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -34,10 +47,10 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const supabase = getSupabaseAdmin();
     const { id } = await params;
     const body = await request.json();
 
-    // Get auth token from header
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.replace("Bearer ", "");
 
@@ -45,13 +58,11 @@ export async function PATCH(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verify user
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get user's role
     const { data: profile } = await supabase
       .from("user_profiles")
       .select("role")
@@ -60,12 +71,10 @@ export async function PATCH(
 
     const role = profile?.role || "user";
 
-    // Only admin or assigned employee can update
     if (role !== "admin" && role !== "team") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // If team member, verify they own this booking
     if (role === "team") {
       const { data: booking } = await supabase
         .from("bookings")
@@ -78,7 +87,6 @@ export async function PATCH(
       }
     }
 
-    // Update allowed fields
     const { data, error } = await supabase
       .from("bookings")
       .update(body)
@@ -92,6 +100,9 @@ export async function PATCH(
 
     return NextResponse.json({ booking: data });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }

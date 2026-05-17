@@ -1,11 +1,24 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { autoRefreshToken: false, persistSession: false } }
-);
+/**
+ * Lazily create Supabase admin client with env validation.
+ * This prevents the module from crashing at import time if env vars are missing.
+ */
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error(
+      "Missing Supabase environment variables. Ensure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set."
+    );
+  }
+
+  return createClient(url, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
 
 /**
  * POST /api/bookings
@@ -13,6 +26,7 @@ const supabase = createClient(
  */
 export async function POST(request: Request) {
   try {
+    const supabase = getSupabaseAdmin();
     const body = await request.json();
 
     const {
@@ -66,25 +80,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // TODO: Send email notification to admin/employee
-    // This can be added later with a simple nodemailer setup
-
     return NextResponse.json({ booking: data }, { status: 201 });
   } catch (err: any) {
     console.error("Booking API error:", err);
-    return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
 /**
  * GET /api/bookings
  * List bookings (requires authentication)
- * - Admins: see all
- * - Team: see assigned
- * - Clients: see own
  */
 export async function GET(request: Request) {
   try {
+    const supabase = getSupabaseAdmin();
+
     // Get auth token from header
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.replace("Bearer ", "");
@@ -116,7 +129,6 @@ export async function GET(request: Request) {
     } else if (role === "client" || role === "user") {
       query = query.eq("client_id", user.id);
     }
-    // admin sees all (no filter)
 
     const { data, error } = await query;
 
@@ -126,6 +138,10 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ bookings: data || [] });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 });
+    console.error("Booking API GET error:", err);
+    return NextResponse.json(
+      { error: err.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }
