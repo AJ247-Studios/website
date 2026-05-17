@@ -52,6 +52,12 @@ export async function POST(request: Request) {
       );
     }
 
+    // Helper: check if string is a valid UUID
+    const isValidUUID = (str: string | null | undefined) => {
+      if (!str) return false;
+      return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+    };
+
     // Insert booking
     const { data, error } = await supabase
       .from("bookings")
@@ -60,8 +66,8 @@ export async function POST(request: Request) {
         client_name,
         client_email,
         client_phone: client_phone || null,
-        employee_id: employee_id || null,
-        package_id: package_id || null,
+        employee_id: isValidUUID(employee_id) ? employee_id : null,
+        package_id: isValidUUID(package_id) ? package_id : null,
         service_type,
         event_date,
         event_location: event_location || null,

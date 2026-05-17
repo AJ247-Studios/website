@@ -98,28 +98,29 @@ const SERVICE_TYPES = [
   },
 ];
 
+// Fallback packages using actual database UUIDs
 const FALLBACK_PACKAGES: Record<string, ServicePackage[]> = {
   sports: [
-    { id: "sports-1", service_type: "sports", name: "Customized", description: "Essential coverage for local sports events", base_price_pln: 1499, duration_hours: 3.5, photo_count: "80-100+", video_length: "1-2 min", delivery_days: 16, features: ["3-4 hours coverage", "80-100+ edited photos", "Online gallery", "1-2 min highlight reel", "16 business day delivery"] },
-    { id: "sports-2", service_type: "sports", name: "Premium", description: "Comprehensive coverage with cinematic highlights", base_price_pln: 3499, duration_hours: 5, photo_count: "150-200+", video_length: "5 min cinematic", delivery_days: 16, features: ["5+ hours coverage", "150-200+ edited photos", "Online gallery + USB", "5-min highlight film", "Second photographer", "3 social media cuts"] },
+    { id: "c01e19d2-1ef8-4b69-a744-c67b58609662", service_type: "sports", name: "Customized", description: "Essential coverage for local sports events", base_price_pln: 1499, duration_hours: 3.5, photo_count: "80-100+", video_length: "1-2 min", delivery_days: 16, features: ["3-4 hours coverage", "80-100+ edited photos", "Online gallery", "1-2 min highlight reel", "16 business day delivery"] },
+    { id: "5a7f36b7-89a8-416a-bec0-525132e3da22", service_type: "sports", name: "Premium", description: "Comprehensive coverage with cinematic highlights", base_price_pln: 3499, duration_hours: 5, photo_count: "150-200+", video_length: "5 min cinematic", delivery_days: 16, features: ["5+ hours coverage", "150-200+ edited photos", "Online gallery + USB", "5-min highlight film", "Second photographer", "3 social media cuts"] },
   ],
   concert: [
-    { id: "concert-1", service_type: "concert", name: "Customized", description: "Professional coverage for concerts and live events", base_price_pln: 1999, duration_hours: 4, photo_count: "100-150+", video_length: "2 min", delivery_days: 16, features: ["4 hours coverage", "100-150+ edited photos", "Online gallery", "2-min highlight reel", "16 business day delivery"] },
-    { id: "concert-2", service_type: "concert", name: "Premium", description: "Full cinematic production for major events", base_price_pln: 4999, duration_hours: 6, photo_count: "200-250+", video_length: "5 min cinematic", delivery_days: 16, features: ["6+ hours coverage", "200-250+ edited photos", "Online gallery + USB + prints", "5-min cinematic film", "Two photographers", "Multi-camera video", "Backstage & VIP coverage"] },
+    { id: "ba0a1346-4095-4524-9d4b-e79eb0897b85", service_type: "concert", name: "Customized", description: "Professional coverage for concerts and live events", base_price_pln: 1999, duration_hours: 4, photo_count: "100-150+", video_length: "2 min", delivery_days: 16, features: ["4 hours coverage", "100-150+ edited photos", "Online gallery", "2-min highlight reel", "16 business day delivery"] },
+    { id: "941cbb67-b3ac-4fe5-9e9a-11d341900d3b", service_type: "concert", name: "Premium", description: "Full cinematic production for major events", base_price_pln: 4999, duration_hours: 6, photo_count: "200-250+", video_length: "5 min cinematic", delivery_days: 16, features: ["6+ hours coverage", "200-250+ edited photos", "Online gallery + USB + prints", "5-min cinematic film", "Two photographers", "Multi-camera video", "Backstage & VIP coverage"] },
   ],
   wedding: [
-    { id: "wedding-1", service_type: "wedding", name: "Customized", description: "Beautiful coverage for intimate celebrations", base_price_pln: 3499, duration_hours: 6, photo_count: "150-200+", video_length: "4-5 min highlight", delivery_days: 16, features: ["6 hours coverage", "150-200+ edited photos", "Online gallery", "4-5 min highlight film", "16 business day delivery"] },
-    { id: "wedding-2", service_type: "wedding", name: "Premium", description: "Complete cinematic wedding experience", base_price_pln: 5599, duration_hours: 10, photo_count: "250-300+", video_length: "6-8 min cinematic", delivery_days: 16, features: ["Full day coverage (10+ hrs)", "250-300+ edited photos", "Online gallery + USB + album", "6-8 min cinematic film", "Second photographer included"] },
+    { id: "9dfe14de-f537-4039-895e-00cba2554561", service_type: "wedding", name: "Customized", description: "Beautiful coverage for intimate celebrations", base_price_pln: 3499, duration_hours: 6, photo_count: "150-200+", video_length: "4-5 min highlight", delivery_days: 16, features: ["6 hours coverage", "150-200+ edited photos", "Online gallery", "4-5 min highlight film", "16 business day delivery"] },
+    { id: "ef3e7dd8-f5c3-41b3-acb2-f35bd0a84b9f", service_type: "wedding", name: "Premium", description: "Complete cinematic wedding experience", base_price_pln: 5599, duration_hours: 10, photo_count: "250-300+", video_length: "6-8 min cinematic", delivery_days: 16, features: ["Full day coverage (10+ hrs)", "250-300+ edited photos", "Online gallery + USB + album", "6-8 min cinematic film", "Second photographer included"] },
   ],
   portrait: [
-    { id: "portrait-1", service_type: "portrait", name: "Mini Session", description: "Quick professional headshots", base_price_pln: 450, duration_hours: 1, photo_count: "10", video_length: null, delivery_days: 5, features: ["1 hour session", "10 edited photos", "Online gallery", "1 outfit/look", "5 business day delivery"] },
-    { id: "portrait-2", service_type: "portrait", name: "Customized", description: "Comprehensive portrait session", base_price_pln: 649, duration_hours: 1.5, photo_count: "20", video_length: null, delivery_days: 3, features: ["1.5 hour session", "20 edited photos", "Online gallery", "2-3 outfits/looks", "3 business day delivery", "Location of choice"] },
-    { id: "portrait-3", service_type: "portrait", name: "Premium", description: "VIP treatment with full styling consultation", base_price_pln: 949, duration_hours: 3, photo_count: "35+", video_length: null, delivery_days: 2, features: ["3 hour session", "35+ edited photos", "Online gallery + USB", "Unlimited outfits", "48-hour delivery", "Styling consultation", "Location of choice", "5 premium prints"] },
+    { id: "9f8d785e-ed48-4eae-b31d-6615bd849c6c", service_type: "portrait", name: "Mini Session", description: "Quick professional headshots", base_price_pln: 450, duration_hours: 1, photo_count: "10", video_length: null, delivery_days: 5, features: ["1 hour session", "10 edited photos", "Online gallery", "1 outfit/look", "5 business day delivery"] },
+    { id: "936cb60c-87be-442e-bac5-b6ff65785dcc", service_type: "portrait", name: "Customized", description: "Comprehensive portrait session", base_price_pln: 649, duration_hours: 1.5, photo_count: "20", video_length: null, delivery_days: 3, features: ["1.5 hour session", "20 edited photos", "Online gallery", "2-3 outfits/looks", "3 business day delivery", "Location of choice"] },
+    { id: "a750e3fe-073b-46b8-91ac-106bbc5bc372", service_type: "portrait", name: "Premium", description: "VIP treatment with full styling consultation", base_price_pln: 949, duration_hours: 3, photo_count: "35+", video_length: null, delivery_days: 2, features: ["3 hour session", "35+ edited photos", "Online gallery + USB", "Unlimited outfits", "48-hour delivery", "Styling consultation", "Location of choice", "5 premium prints"] },
   ],
   corporate: [
-    { id: "corporate-1", service_type: "corporate", name: "Half Day", description: "Conference or event coverage", base_price_pln: 1199, duration_hours: 4, photo_count: "80-100+", video_length: null, delivery_days: 16, features: ["4 hours coverage", "80-100+ edited photos", "Online gallery", "Corporate-ready edits", "16 business day delivery"] },
-    { id: "corporate-2", service_type: "corporate", name: "Full Day", description: "Comprehensive corporate coverage", base_price_pln: 2199, duration_hours: 8, photo_count: "150-200+", video_length: "2 min highlight", delivery_days: 16, features: ["8 hours coverage", "150-200+ edited photos", "Online gallery + USB", "Corporate-ready edits", "2-min highlight video"] },
-    { id: "corporate-3", service_type: "corporate", name: "Premium", description: "Full photo + video production", base_price_pln: 4499, duration_hours: 8, photo_count: "200-250+", video_length: "5 min cinematic", delivery_days: 16, features: ["Full day coverage", "200-250+ edited photos", "Online gallery + USB + prints", "5-min highlight film", "Multi-camera video", "Headshot station", "5 social media cuts"] },
+    { id: "eb65bfc9-f728-4165-ae2f-9b3f29a0e2f9", service_type: "corporate", name: "Half Day", description: "Conference or event coverage", base_price_pln: 1199, duration_hours: 4, photo_count: "80-100+", video_length: null, delivery_days: 16, features: ["4 hours coverage", "80-100+ edited photos", "Online gallery", "Corporate-ready edits", "16 business day delivery"] },
+    { id: "7b47c466-c53c-4d6a-8271-dfbf5c532b0c", service_type: "corporate", name: "Full Day", description: "Comprehensive corporate coverage", base_price_pln: 2199, duration_hours: 8, photo_count: "150-200+", video_length: "2 min highlight", delivery_days: 16, features: ["8 hours coverage", "150-200+ edited photos", "Online gallery + USB", "Corporate-ready edits", "2-min highlight video"] },
+    { id: "7d637253-76c2-43d0-9f21-27238a19a810", service_type: "corporate", name: "Premium", description: "Full photo + video production", base_price_pln: 4499, duration_hours: 8, photo_count: "200-250+", video_length: "5 min cinematic", delivery_days: 16, features: ["Full day coverage", "200-250+ edited photos", "Online gallery + USB + prints", "5-min highlight film", "Multi-camera video", "Headshot station", "5 social media cuts"] },
   ],
 };
 
@@ -207,17 +208,28 @@ export default function BookPage() {
         if (empRes.ok) {
           const empData = await empRes.json();
           if (empData.employees?.length > 0) {
+            // Group employees by service_type from their packages
             const grouped: Record<string, Employee[]> = {};
+            const groupedPkgs: Record<string, ServicePackage[]> = {};
+
             empData.employees.forEach((emp: Employee) => {
               (emp.packages || []).forEach((pkg: any) => {
                 if (!grouped[pkg.service_type]) grouped[pkg.service_type] = [];
                 if (!grouped[pkg.service_type].find((e) => e.id === emp.id)) {
                   grouped[pkg.service_type].push(emp);
                 }
+                if (!groupedPkgs[pkg.service_type]) groupedPkgs[pkg.service_type] = [];
+                if (!groupedPkgs[pkg.service_type].find((p) => p.id === pkg.id)) {
+                  groupedPkgs[pkg.service_type].push(pkg);
+                }
               });
             });
+
             if (Object.keys(grouped).length > 0) {
               setEmployees(grouped);
+            }
+            if (Object.keys(groupedPkgs).length > 0) {
+              setPackages(groupedPkgs);
             }
           }
         }

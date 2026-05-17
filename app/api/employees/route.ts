@@ -34,37 +34,38 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: empError.message }, { status: 500 });
     }
 
-    let result = employees || [];
+    // Always fetch all active packages and pricing
+    const { data: allPackages } = await supabase
+      .from("service_packages")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true });
 
+    const { data: pricing } = await supabase
+      .from("employee_pricing")
+      .select("*")
+      .eq("is_available", true);
+
+    let packages = allPackages || [];
     if (serviceType) {
-      const { data: packages } = await supabase
-        .from("service_packages")
-        .select("*")
-        .eq("service_type", serviceType)
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true });
+      packages = packages.filter((p: any) => p.service_type === serviceType);
+    }
 
-      const { data: pricing } = await supabase
-        .from("employee_pricing")
-        .select("*")
-        .eq("is_available", true);
-
-      result = (employees || []).map((emp: any) => {
-        const empPricing = (pricing || []).filter((p: any) => p.employee_id === emp.id);
-        const packagesWithPrice = (packages || []).map((pkg: any) => {
-          const custom = empPricing.find((p: any) => p.package_id === pkg.id);
-          return {
-            ...pkg,
-            final_price_pln: custom?.custom_price_pln || pkg.base_price_pln,
-            pricing_note: custom?.notes || null,
-          };
-        });
+    const result = (employees || []).map((emp: any) => {
+      const empPricing = (pricing || []).filter((p: any) => p.employee_id === emp.id);
+      const packagesWithPrice = packages.map((pkg: any) => {
+        const custom = empPricing.find((p: any) => p.package_id === pkg.id);
         return {
-          ...emp,
-          packages: packagesWithPrice,
+          ...pkg,
+          final_price_pln: custom?.custom_price_pln || pkg.base_price_pln,
+          pricing_note: custom?.notes || null,
         };
       });
-    }
+      return {
+        ...emp,
+        packages: packagesWithPrice,
+      };
+    });
 
     return NextResponse.json({ employees: result });
   } catch (err: any) {
