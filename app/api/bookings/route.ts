@@ -30,6 +30,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const {
+      client_id,
       client_name,
       client_email,
       client_phone,
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase
       .from("bookings")
       .insert({
-        client_id: null, // Anonymous booking - no auth required
+        client_id: isValidUUID(client_id) ? client_id : null,
         client_name,
         client_email,
         client_phone: client_phone || null,

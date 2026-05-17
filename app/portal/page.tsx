@@ -119,16 +119,22 @@ export default function ClientPortalDashboard() {
 
   // Fetch real data from Supabase
   useEffect(() => {
-    if (!session) return;
+    if (!session?.user?.id) return;
+    const userId = session.user.id;
 
     async function fetchData() {
       try {
         setDataLoading(true);
 
-        // Fetch bookings for this client
+        // Fetch bookings for this client only
         const { data: bookingsData, error: bookingsError } = await supabase
           .from("bookings")
-          .select("*")
+          .select(`
+            *,
+            employee:employee_id(display_name),
+            package:package_id(name)
+          `)
+          .eq("client_id", userId)
           .order("created_at", { ascending: false });
 
         if (bookingsError) {
@@ -138,8 +144,8 @@ export default function ClientPortalDashboard() {
           setBookings((bookingsData || []).map((b: any) => ({
             id: b.id,
             service_type: b.service_type,
-            package_name: b.package_id ? "Package" : "Custom",
-            employee_name: b.employee_id || "TBD",
+            package_name: b.package?.name || "Custom",
+            employee_name: b.employee?.display_name || "TBD",
             event_date: b.event_date,
             event_location: b.event_location || "",
             total_price_pln: b.total_price_pln,

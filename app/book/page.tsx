@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useSupabase } from "@/components/SupabaseProvider";
 
 type BookingStep = "service" | "employee" | "details" | "review";
 
@@ -170,6 +171,7 @@ export default function BookPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedEmployee = searchParams.get("employee");
+  const { session, isLoading: authLoading } = useSupabase();
 
   const [step, setStep] = useState<BookingStep>("service");
   // Map URL slug to employee UUID
@@ -199,6 +201,20 @@ export default function BookPage() {
   const [employees, setEmployees] = useState<Record<string, Employee[]>>(FALLBACK_EMPLOYEES);
   const [packages, setPackages] = useState<Record<string, ServicePackage[]>>(FALLBACK_PACKAGES);
   const [dataLoading, setDataLoading] = useState(true);
+
+  // Pre-fill user info when session loads
+  useEffect(() => {
+    if (session?.user) {
+      const user = session.user;
+      const fullName = user.user_metadata?.full_name || user.user_metadata?.name || "";
+      const email = user.email || "";
+      setFormData((prev) => ({
+        ...prev,
+        clientName: prev.clientName || fullName,
+        clientEmail: prev.clientEmail || email,
+      }));
+    }
+  }, [session]);
 
   // Fetch employees and packages from API
   useEffect(() => {
@@ -299,11 +315,18 @@ export default function BookPage() {
   }, [step, goToStep]);
 
   const handleSubmit = useCallback(async () => {
+    if (!session?.user) {
+      setError("Please sign in to submit a booking.");
+      router.push("/login?redirect=/book");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     try {
       const payload = {
+        client_id: session.user.id,
         client_name: formData.clientName,
         client_email: formData.clientEmail,
         client_phone: formData.clientPhone,
@@ -336,7 +359,7 @@ export default function BookPage() {
     } finally {
       setLoading(false);
     }
-  }, [formData, finalPrice]);
+  }, [formData, finalPrice, session, router]);
 
   if (submitted) {
     return (
