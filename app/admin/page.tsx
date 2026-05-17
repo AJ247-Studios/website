@@ -34,61 +34,28 @@ import type { ClientProfile, Project, Deliverable, Invoice } from "@/lib/types/p
  * - User role management
  */
 export default function AdminPage() {
-  const { supabase, session, role } = useSupabase();
+  const { supabase, session, role, isLoading } = useSupabase();
   const [error, setError] = useState("");
   const [users, setUsers] = useState<Array<{ id: string; email: string; role: string; display_name?: string }>>([]);
   const [search, setSearch] = useState("");
   const [roleUpdating, setRoleUpdating] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showSessionExpired, setShowSessionExpired] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "users">("overview");
-  
+
   // Quick client view state
   const [selectedClient, setSelectedClient] = useState<ClientProfile | null>(null);
   const [clientProjects, setClientProjects] = useState<Project[]>([]);
   const [clientDeliverables, setClientDeliverables] = useState<Deliverable[]>([]);
   const [clientInvoices, setClientInvoices] = useState<Invoice[]>([]);
-  
+
   const router = useRouter();
-
-  // Show "session expired" option after 2 seconds of loading
-  useEffect(() => {
-    if (loading) {
-      const timer = setTimeout(() => {
-        setShowSessionExpired(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    } else {
-      setShowSessionExpired(false);
-    }
-  }, [loading]);
-
-  // Function to clear cookies and redirect to login
-  const handleClearSession = () => {
-    // Clear all Supabase cookies by setting them to expire
-    const cookies = document.cookie.split(";");
-    for (const cookie of cookies) {
-      const cookieName = cookie.split("=")[0].trim();
-      if (cookieName.startsWith("sb-")) {
-        // Clear with multiple path variants to ensure removal
-        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
-      }
-    }
-    // Force a hard redirect to clear any cached state
-    window.location.href = "/login";
-  };
 
   // Redirect is handled by middleware, but we double-check here
   useEffect(() => {
-    if (session === null) {
-      // Small delay to ensure we're not redirecting during hydration
-      const timer = setTimeout(() => {
-        router.push("/login");
-      }, 100);
-      return () => clearTimeout(timer);
+    if (session === null && !isLoading) {
+      router.push("/login");
     }
-  }, [session, role, router]);
+  }, [session, isLoading, router]);
 
   // Load users on mount (middleware ensures user is admin)
   useEffect(() => {
@@ -184,25 +151,12 @@ export default function AdminPage() {
   };
 
   // Show loading state
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-slate-600 dark:text-slate-400">Loading admin dashboard...</p>
-          {showSessionExpired && (
-            <div className="mt-6">
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                Taking too long? Your session may have expired.
-              </p>
-              <button
-                onClick={handleClearSession}
-                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline text-sm font-medium"
-              >
-                Click here to re-login
-              </button>
-            </div>
-          )}
         </div>
       </div>
     );
