@@ -256,43 +256,43 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-12 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 max-w-4xl mx-auto">
             {team.map((member) => (
-              <div key={member.name} className="flex flex-col items-center text-center">
-                <div className="w-40 h-40 mb-6 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
+              <div key={member.name} className="flex flex-col items-center text-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800">
+                <div className="w-32 h-32 sm:w-40 sm:h-40 mb-4 sm:mb-6 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0">
                   {member.image ? (
                     <Image
                       src={member.image}
                       alt={member.name}
                       width={160}
                       height={160}
-                      className="w-40 h-40 rounded-full object-cover"
+                      className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover"
                     />
                   ) : (
-                    <span className="text-5xl font-bold text-slate-400 dark:text-slate-500">
+                    <span className="text-4xl sm:text-5xl font-bold text-slate-400 dark:text-slate-500">
                       {member.name.charAt(0)}
                     </span>
                   )}
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-1">
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-1">
                   {member.name}
                 </h3>
                 <div className="text-sm text-blue-600 dark:text-blue-400 mb-3">
                   {member.role}
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs mb-3">
+                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs mb-4">
                   {member.bio}
                 </p>
-                <div className="flex gap-2 mt-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto mt-auto">
                   <Link
                     href={`/team/${member.name.split(' ')[0].toLowerCase()}`}
-                    className="text-sm px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    className="text-sm px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-center"
                   >
                     View Portfolio
                   </Link>
                   <Link
                     href={`/book?employee=${member.name.split(' ')[0].toLowerCase()}`}
-                    className="text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
                   >
                     Book Now
                   </Link>
