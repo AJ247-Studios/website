@@ -237,7 +237,7 @@ export default function ChatWidget() {
                 <div className="min-w-0 flex-1">
                   <h3 className="font-semibold text-white text-sm sm:text-base truncate">AI Assistant</h3>
                   <p className="text-xs text-blue-100 truncate">
-                    {session ? `Welcome, ${session.user?.email}` : `Guest (${guestCount}/${GUEST_LIMIT} messages)`}
+                    {session ? `Welcome, ${session.user?.user_metadata?.full_name || session.user?.user_metadata?.name || session.user?.email}` : `Guest (${guestCount}/${GUEST_LIMIT} messages)`}
                   </p>
                 </div>
               </div>

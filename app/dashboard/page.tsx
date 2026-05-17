@@ -328,7 +328,9 @@ export default function EmployeeDashboard() {
               <h1 className="font-semibold text-slate-900 dark:text-white">Team Dashboard</h1>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-slate-500 dark:text-slate-400 hidden sm:block">{session.user?.email}</span>
+              <span className="text-sm text-slate-500 dark:text-slate-400 hidden sm:block">
+                {session.user?.user_metadata?.full_name || session.user?.user_metadata?.name || session.user?.email}
+              </span>
               <Link href="/portal" className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">Client View</Link>
             </div>
           </div>
@@ -803,10 +805,10 @@ function AdminPanel() {
                   .filter((u) => (u.email || "").toLowerCase().includes(search.toLowerCase()) || (u.display_name || "").toLowerCase().includes(search.toLowerCase()))
                   .map((u) => (
                     <tr key={u.id}>
-                      <td className="py-2 px-3">
-                        <div className="font-medium text-slate-900 dark:text-white">{u.display_name || "No name"}</div>
-                        <div className="text-xs text-slate-500">{u.email}</div>
-                      </td>
+                       <td className="py-2 px-3">
+                         <div className="font-medium text-slate-900 dark:text-white">{u.display_name || "Unnamed User"}</div>
+                         <div className="text-xs text-slate-500">{u.email || u.id}</div>
+                       </td>
                       <td className="py-2 px-3">
                         <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
                           u.role === "admin" ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300" :
