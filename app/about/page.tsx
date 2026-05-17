@@ -284,12 +284,24 @@ export default function AboutPage() {
                   {member.bio}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto mt-auto">
-                  <Link
-                    href={`/team/${member.name.split(' ')[0].toLowerCase()}`}
-                    className="text-sm px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-center"
-                  >
-                    View Portfolio
-                  </Link>
+                  {member.website && member.website.startsWith('http') && !member.website.includes('aj247studios.com') ? (
+                    <a
+                      href={member.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-center inline-flex items-center justify-center gap-1"
+                    >
+                      View Portfolio
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </a>
+                  ) : (
+                    <Link
+                      href={`/team/${member.name.split(' ')[0].toLowerCase()}`}
+                      className="text-sm px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-center"
+                    >
+                      View Portfolio
+                    </Link>
+                  )}
                   <Link
                     href={`/book?employee=${member.name.split(' ')[0].toLowerCase()}`}
                     className="text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
