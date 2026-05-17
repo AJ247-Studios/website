@@ -124,10 +124,11 @@ const FALLBACK_PACKAGES: Record<string, ServicePackage[]> = {
 };
 
 // Fallback employees using actual database UUIDs
-const ANTHONY_ID = "11111111-1111-1111-1111-111111111111";
-const JOSIAH_ID = "22222222-2222-2222-2222-222222222222";
-const TOMEK_ID = "33333333-3333-3333-3333-333333333333";
-const IVAN_ID = "44444444-4444-4444-4444-444444444444";
+// Verified from Supabase: Josiah=1111, Anthony=2222, Ivan=3333, Tomek=4444
+const JOSIAH_ID = "11111111-1111-1111-1111-111111111111";
+const ANTHONY_ID = "22222222-2222-2222-2222-222222222222";
+const IVAN_ID = "33333333-3333-3333-3333-333333333333";
+const TOMEK_ID = "44444444-4444-4444-4444-444444444444";
 
 const FALLBACK_EMPLOYEES: Record<string, Employee[]> = {
   sports: [
@@ -172,10 +173,10 @@ export default function BookPage() {
   const [step, setStep] = useState<BookingStep>("service");
   // Map URL slug to employee UUID
   const SLUG_TO_UUID: Record<string, string> = {
-    anthony: ANTHONY_ID,
     josiah: JOSIAH_ID,
-    tomek: TOMEK_ID,
+    anthony: ANTHONY_ID,
     ivan: IVAN_ID,
+    tomek: TOMEK_ID,
   };
 
   const [formData, setFormData] = useState<BookingFormData>({
