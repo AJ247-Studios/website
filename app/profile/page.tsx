@@ -82,7 +82,6 @@ export default function ProfilePage() {
           phone: form.phone || null,
           company: form.company || null,
           avatar_url: form.avatar_url || null,
-          updated_at: new Date().toISOString(),
         }, { onConflict: "id" });
 
       if (profileError) {
