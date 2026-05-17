@@ -113,6 +113,7 @@ export default function ClientPortalDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [selectedMessageClient, setSelectedMessageClient] = useState<string | null>(null);
+  const [showMobileChat, setShowMobileChat] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !session) {
@@ -280,16 +281,16 @@ export default function ClientPortalDashboard() {
       {/* Header */}
       <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Dashboard</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">My Dashboard</h1>
               <p className="text-slate-600 dark:text-slate-400 text-sm mt-0.5">
                 Manage your bookings, messages, and projects
               </p>
             </div>
             <Link
               href="/book"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium text-center shrink-0"
             >
               + New Booking
             </Link>
@@ -313,7 +314,7 @@ export default function ClientPortalDashboard() {
           ]).map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => { setActiveTab(tab.key); setShowMobileChat(false); }}
               className={`flex-shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                 activeTab === tab.key
                   ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
@@ -358,51 +359,60 @@ export default function ClientPortalDashboard() {
                 {bookings.map((booking) => (
                   <div
                     key={booking.id}
-                    className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6"
+                    className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <div className="flex items-center gap-3 mb-1">
-                          <h3 className="text-lg font-semibold text-slate-900 dark:text-white capitalize">
-                            {booking.service_type} — {booking.package_name}
-                          </h3>
-                          <StatusBadge status={booking.status} />
+                    {/* Card Header */}
+                    <div className="p-4 sm:p-6 pb-0 sm:pb-0">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white capitalize">
+                              {booking.service_type} — {booking.package_name}
+                            </h3>
+                            <StatusBadge status={booking.status} />
+                          </div>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">
+                            with {booking.employee_name}
+                          </p>
                         </div>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                          with {booking.employee_name}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-slate-900 dark:text-white">
-                          {booking.total_price_pln.toLocaleString()} PLN
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">
-                          {booking.deposit_paid ? "Deposit paid" : "Deposit pending"}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
-                      <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-3">
-                        <div className="text-slate-500 dark:text-slate-400 text-xs">Event Date</div>
-                        <div className="font-medium text-slate-900 dark:text-white">{booking.event_date}</div>
-                      </div>
-                      <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-3">
-                        <div className="text-slate-500 dark:text-slate-400 text-xs">Location</div>
-                        <div className="font-medium text-slate-900 dark:text-white">{booking.event_location}</div>
-                      </div>
-                      <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-3">
-                        <div className="text-slate-500 dark:text-slate-400 text-xs">Deposit (30%)</div>
-                        <div className={`font-medium ${booking.deposit_paid ? "text-emerald-600" : "text-amber-600"}`}>
-                          {Math.round(booking.total_price_pln * 0.3).toLocaleString()} PLN
+                        <div className="sm:text-right shrink-0">
+                          <div className="text-lg font-bold text-slate-900 dark:text-white">
+                            {booking.total_price_pln.toLocaleString()} PLN
+                          </div>
+                          <div className={`text-xs font-medium ${booking.deposit_paid ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
+                            {booking.deposit_paid ? "✓ Deposit paid" : "○ Deposit pending"}
+                          </div>
                         </div>
                       </div>
                     </div>
 
+                    {/* Info Grid */}
+                    <div className="px-4 sm:px-6 py-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-sm">
+                        <div className="flex items-center justify-between sm:flex-col sm:items-start sm:justify-center bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 sm:p-3">
+                          <div className="text-slate-500 dark:text-slate-400 text-xs">Event Date</div>
+                          <div className="font-medium text-slate-900 dark:text-white">{booking.event_date}</div>
+                        </div>
+                        <div className="flex items-center justify-between sm:flex-col sm:items-start sm:justify-center bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 sm:p-3">
+                          <div className="text-slate-500 dark:text-slate-400 text-xs">Location</div>
+                          <div className="font-medium text-slate-900 dark:text-white text-right sm:text-left">{booking.event_location}</div>
+                        </div>
+                        <div className="flex items-center justify-between sm:flex-col sm:items-start sm:justify-center bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 sm:p-3">
+                          <div className="text-slate-500 dark:text-slate-400 text-xs">Deposit (30%)</div>
+                          <div className={`font-medium ${booking.deposit_paid ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
+                            {Math.round(booking.total_price_pln * 0.3).toLocaleString()} PLN
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Notes */}
                     {booking.notes && (
-                      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Notes</div>
-                        <div className="text-sm text-slate-700 dark:text-slate-300">{booking.notes}</div>
+                      <div className="px-4 sm:px-6 pb-4 sm:pb-6 pt-0 sm:pt-0">
+                        <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+                          <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Notes</div>
+                          <div className="text-sm text-slate-700 dark:text-slate-300">{booking.notes}</div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -419,7 +429,7 @@ export default function ClientPortalDashboard() {
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-3 min-h-[500px]">
                 {/* Conversation List - Team Members */}
-                <div className="border-r border-slate-200 dark:border-slate-700">
+                <div className={`border-r border-slate-200 dark:border-slate-700 ${showMobileChat ? 'hidden md:block' : 'block'}`}>
                   <div className="p-4 border-b border-slate-200 dark:border-slate-700">
                     <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Your Team</h3>
                   </div>
@@ -460,7 +470,7 @@ export default function ClientPortalDashboard() {
                         const lastMsg = conv.messages[conv.messages.length - 1];
                         const hasUnread = conv.messages.some((m) => !m.is_read && m.sender_id !== userId);
                         return (
-                          <button key={partnerId} onClick={() => setSelectedMessageClient(partnerId)}
+                          <button key={partnerId} onClick={() => { setSelectedMessageClient(partnerId); setShowMobileChat(true); }}
                             className={`w-full text-left p-4 border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors ${selectedMessageClient === partnerId ? "bg-blue-50 dark:bg-blue-500/5" : ""}`}>
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
@@ -481,10 +491,17 @@ export default function ClientPortalDashboard() {
                   </div>
                 </div>
                 {/* Conversation */}
-                <div className="md:col-span-2 flex flex-col">
+                <div className={`md:col-span-2 flex flex-col ${!showMobileChat ? 'hidden md:flex' : 'flex'}`}>
                   {selectedMessageClient ? (
                     <>
-                      <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                      <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center gap-3">
+                        {/* Back button - mobile only */}
+                        <button
+                          onClick={() => setShowMobileChat(false)}
+                          className="md:hidden p-1 -ml-1 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                        </button>
                         <h3 className="font-semibold text-slate-900 dark:text-white">
                           {(() => {
                             const fromMsg = messages.find((m) => m.sender_id === selectedMessageClient && m.sender_name);
@@ -506,7 +523,7 @@ export default function ClientPortalDashboard() {
                             const isMe = msg.sender_id === userId;
                             return (
                               <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
-                                <div className={`max-w-[70%] px-4 py-2.5 rounded-2xl text-sm ${
+                                <div className={`max-w-[85%] sm:max-w-[70%] px-4 py-2.5 rounded-2xl text-sm ${
                                   isMe
                                     ? "bg-blue-600 text-white rounded-tr-sm"
                                     : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-tl-sm"
@@ -518,11 +535,11 @@ export default function ClientPortalDashboard() {
                           });
                         })()}
                       </div>
-                      <div className="p-4 border-t border-slate-200 dark:border-slate-700">
+                      <div className="p-3 sm:p-4 border-t border-slate-200 dark:border-slate-700">
                         <div className="flex gap-2">
                           <input type="text" value={replyText} onChange={(e) => setReplyText(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSendMessage()} placeholder="Type your message..."
                             className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
-                          <button onClick={handleSendMessage} className="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors text-sm font-medium">Send</button>
+                          <button onClick={handleSendMessage} className="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors text-sm font-medium shrink-0">Send</button>
                         </div>
                       </div>
                     </>
