@@ -211,6 +211,39 @@ export default function EmployeeDashboard() {
     fetchPeople();
   }, [session, supabase, role]);
 
+  // Mark messages as read when opening a conversation
+  useEffect(() => {
+    if (!selectedMessageClient || !session?.user?.id || !supabase) return;
+    const currentUserId = session.user.id;
+
+    async function markAsRead() {
+      // Find unread messages FROM selected client TO current user
+      const unreadIds = messages
+        .filter((m) => !m.is_read && m.sender_id === selectedMessageClient && m.receiver_id === currentUserId)
+        .map((m) => m.id);
+
+      if (unreadIds.length === 0) return;
+
+      // Update in database
+      const { error } = await supabase
+        .from("messages")
+        .update({ is_read: true })
+        .in("id", unreadIds);
+
+      if (error) {
+        console.error("Failed to mark messages as read:", error);
+        return;
+      }
+
+      // Update locally
+      setMessages((prev) =>
+        prev.map((m) => (unreadIds.includes(m.id) ? { ...m, is_read: true } : m))
+      );
+    }
+
+    markAsRead();
+  }, [selectedMessageClient, session, supabase, messages]);
+
   // ALL useCallback hooks must be before any conditional returns
   const handleSendReply = useCallback(async () => {
     if (!replyText.trim() || !selectedMessageClient || !session?.user?.id || !supabase) return;
@@ -306,8 +339,9 @@ export default function EmployeeDashboard() {
     return null;
   }
 
-  // Computed values
-  const unreadCount = messages.filter((m) => !m.is_read).length;
+  // Computed values — only count messages RECEIVED by current user as unread
+  const userId = session?.user?.id;
+  const unreadCount = messages.filter((m) => !m.is_read && m.receiver_id === userId).length;
   const upcomingBookings = bookings.filter((b) => b.status === "confirmed" || b.status === "in_progress").length;
   const pendingDeposits = bookings.filter((b) => b.status === "pending").length;
   const totalRevenue = bookings.reduce((sum, b) => sum + (b.deposit_paid ? b.total_price_pln : 0), 0);

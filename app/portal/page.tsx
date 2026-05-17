@@ -191,6 +191,36 @@ export default function ClientPortalDashboard() {
     fetchData();
   }, [session, supabase]);
 
+  // Mark messages as read when opening a conversation
+  useEffect(() => {
+    if (!selectedMessageClient || !session?.user?.id || !supabase) return;
+    const userId = session.user.id;
+
+    async function markAsRead() {
+      const unreadIds = messages
+        .filter((m) => !m.is_read && m.sender_id === selectedMessageClient && m.receiver_id === userId)
+        .map((m) => m.id);
+
+      if (unreadIds.length === 0) return;
+
+      const { error } = await supabase
+        .from("messages")
+        .update({ is_read: true })
+        .in("id", unreadIds);
+
+      if (error) {
+        console.error("Failed to mark messages as read:", error);
+        return;
+      }
+
+      setMessages((prev) =>
+        prev.map((m) => (unreadIds.includes(m.id) ? { ...m, is_read: true } : m))
+      );
+    }
+
+    markAsRead();
+  }, [selectedMessageClient, session, supabase, messages]);
+
   const handleSendMessage = useCallback(async () => {
     if (!replyText.trim() || !session || !supabase) return;
 
@@ -242,7 +272,8 @@ export default function ClientPortalDashboard() {
 
   if (!session) return null;
 
-  const unreadCount = messages.filter((m) => !m.is_read).length;
+  const userId = session.user.id;
+  const unreadCount = messages.filter((m) => !m.is_read && m.receiver_id === userId).length;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
