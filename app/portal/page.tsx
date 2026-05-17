@@ -23,6 +23,7 @@ interface Booking {
   service_type: string;
   package_name: string;
   employee_name: string;
+  employee_id?: string;
   event_date: string;
   event_location: string;
   total_price_pln: number;
@@ -146,6 +147,7 @@ export default function ClientPortalDashboard() {
             service_type: b.service_type,
             package_name: b.package?.name || "Custom",
             employee_name: b.employee?.display_name || "TBD",
+            employee_id: b.employee_id,
             event_date: b.event_date,
             event_location: b.event_location || "",
             total_price_pln: b.total_price_pln,
@@ -187,21 +189,42 @@ export default function ClientPortalDashboard() {
   }, [session, supabase]);
 
   const handleSendMessage = useCallback(async () => {
-    if (!replyText.trim() || !session) return;
+    if (!replyText.trim() || !session || !supabase) return;
 
-    // TODO: Send message via Supabase when receiver_id is known
-    // For now, add locally
-    const newMessage: Message = {
-      id: `msg-${Date.now()}`,
-      sender_name: "You",
-      sender_id: session.user.id,
-      content: replyText,
-      is_read: true,
-      created_at: new Date().toISOString(),
-    };
-    setMessages((prev) => [...prev, newMessage]);
-    setReplyText("");
-  }, [replyText, session]);
+    // Find the team member assigned to the most recent booking
+    const latestBooking = bookings[0];
+    const receiverId = latestBooking?.employee_id;
+    if (!receiverId) {
+      console.error("No team member assigned to message");
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from("messages").insert({
+        sender_id: session.user.id,
+        receiver_id: receiverId,
+        content: replyText.trim(),
+        sender_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email || "Client",
+      });
+      if (error) {
+        console.error("Failed to send message:", error);
+        return;
+      }
+      // Optimistically add to UI
+      const newMessage: Message = {
+        id: `msg-${Date.now()}`,
+        sender_name: "You",
+        sender_id: session.user.id,
+        content: replyText,
+        is_read: true,
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, newMessage]);
+      setReplyText("");
+    } catch (err) {
+      console.error("Send message error:", err);
+    }
+  }, [replyText, session, supabase, bookings]);
 
   if (isLoading || dataLoading) {
     return (
@@ -355,34 +378,34 @@ export default function ClientPortalDashboard() {
               <h3 className="font-semibold text-slate-900 dark:text-white">Messages</h3>
             </div>
             <div className="p-4 space-y-4 max-h-[500px] overflow-y-auto">
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex gap-3 ${msg.sender_id === "client" ? "flex-row-reverse" : ""}`}
-                >
-                  <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
-                    {msg.sender_avatar ? (
-                      <Image src={msg.sender_avatar} alt={msg.sender_name} width={40} height={40} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-sm font-medium text-slate-500">
-                        {msg.sender_name.charAt(0)}
+              {messages.map((msg) => {
+                const isMe = msg.sender_id === session?.user?.id;
+                return (
+                  <div key={msg.id} className={`flex gap-3 ${isMe ? "flex-row-reverse" : ""}`}>
+                    <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
+                      {msg.sender_avatar ? (
+                        <Image src={msg.sender_avatar} alt={msg.sender_name} width={40} height={40} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-sm font-medium text-slate-500">
+                          {msg.sender_name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div className={`max-w-[70%] ${isMe ? "text-right" : ""}`}>
+                      <div className={`inline-block px-4 py-2.5 rounded-2xl text-sm ${
+                        isMe
+                          ? "bg-blue-600 text-white rounded-tr-sm"
+                          : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-tl-sm"
+                      }`}>
+                        {msg.content}
                       </div>
-                    )}
-                  </div>
-                  <div className={`max-w-[70%] ${msg.sender_id === "client" ? "text-right" : ""}`}>
-                    <div className={`inline-block px-4 py-2.5 rounded-2xl text-sm ${
-                      msg.sender_id === "client"
-                        ? "bg-blue-600 text-white rounded-tr-sm"
-                        : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-tl-sm"
-                    }`}>
-                      {msg.content}
-                    </div>
-                    <div className="text-xs text-slate-400 mt-1">
-                      {msg.sender_name} · {new Date(msg.created_at).toLocaleString()}
+                      <div className="text-xs text-slate-400 mt-1">
+                        {isMe ? "You" : msg.sender_name} · {new Date(msg.created_at).toLocaleString()}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="p-4 border-t border-slate-200 dark:border-slate-700">
               <div className="flex gap-2">

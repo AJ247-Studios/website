@@ -181,16 +181,15 @@ export default function EmployeeDashboard() {
           (team || []).forEach((t: any) => people.push({ id: t.id, name: t.display_name || "Team Member", type: "team" }));
           (clients || []).forEach((c: any) => people.push({ id: c.id, name: c.display_name || "Client", type: "client" }));
         } else if (role === "team") {
-          // Team can message other team members + their assigned clients
+          // Team can message other team members + all clients (RLS allows viewing all bookings)
           const { data: team } = await supabase.from("employee_profiles").select("id, display_name");
-          const { data: myBookings } = await supabase
+          const { data: allBookings } = await supabase
             .from("bookings")
             .select("client_id, client_name")
-            .eq("employee_id", userId)
             .not("client_id", "is", null);
-          (team || []).filter((t: any) => t.id !== userId).forEach((t: any) => people.push({ id: t.id, name: t.display_name || "Team Member", type: "team" }));
+          (team || []).forEach((t: any) => people.push({ id: t.id, name: t.display_name || "Team Member", type: "team" }));
           const clientIds = new Set();
-          (myBookings || []).forEach((b: any) => {
+          (allBookings || []).forEach((b: any) => {
             if (b.client_id && !clientIds.has(b.client_id)) {
               clientIds.add(b.client_id);
               people.push({ id: b.client_id, name: b.client_name || "Client", type: "client" });
