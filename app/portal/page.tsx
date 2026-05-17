@@ -112,6 +112,7 @@ export default function ClientPortalDashboard() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
+  const [selectedMessageClient, setSelectedMessageClient] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && !session) {
@@ -375,56 +376,127 @@ export default function ClientPortalDashboard() {
 
         {/* Messages Tab */}
         {activeTab === "messages" && (
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="p-4 border-b border-slate-200 dark:border-slate-700">
-              <h3 className="font-semibold text-slate-900 dark:text-white">Messages</h3>
-            </div>
-            <div className="p-4 space-y-4 max-h-[500px] overflow-y-auto">
-              {messages.map((msg) => {
-                const isMe = msg.sender_id === session?.user?.id;
-                return (
-                  <div key={msg.id} className={`flex gap-3 ${isMe ? "flex-row-reverse" : ""}`}>
-                    <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden shrink-0">
-                      {msg.sender_avatar ? (
-                        <Image src={msg.sender_avatar} alt={msg.sender_name} width={40} height={40} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-sm font-medium text-slate-500">
-                          {msg.sender_name.charAt(0)}
-                        </div>
-                      )}
-                    </div>
-                    <div className={`max-w-[70%] ${isMe ? "text-right" : ""}`}>
-                      <div className={`inline-block px-4 py-2.5 rounded-2xl text-sm ${
-                        isMe
-                          ? "bg-blue-600 text-white rounded-tr-sm"
-                          : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-tl-sm"
-                      }`}>
-                        {msg.content}
-                      </div>
-                      <div className="text-xs text-slate-400 mt-1">
-                        {isMe ? "You" : msg.sender_name} · {new Date(msg.created_at).toLocaleString()}
-                      </div>
-                    </div>
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Messages</h2>
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-3 min-h-[500px]">
+                {/* Conversation List - Team Members */}
+                <div className="border-r border-slate-200 dark:border-slate-700">
+                  <div className="p-4 border-b border-slate-200 dark:border-slate-700">
+                    <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Your Team</h3>
                   </div>
-                );
-              })}
-            </div>
-            <div className="p-4 border-t border-slate-200 dark:border-slate-700">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  placeholder="Type your message..."
-                  className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors text-sm font-medium"
-                >
-                  Send
-                </button>
+                  <div className="overflow-y-auto max-h-[500px]">
+                    {(() => {
+                      const userId = session?.user?.id;
+                      const getName = (id: string) => {
+                        const fromMsg = messages.find((m) => m.sender_id === id && m.sender_name);
+                        if (fromMsg?.sender_name) return fromMsg.sender_name;
+                        const emp = bookings.find((b) => b.employee_id === id);
+                        if (emp?.employee_name) return emp.employee_name;
+                        return id.slice(0, 8) + "...";
+                      };
+                      // Get unique team members from bookings
+                      const teamMembers = new Map<string, { name: string; messages: Message[] }>();
+                      messages.forEach((msg) => {
+                        const partnerId = msg.sender_id === userId ? msg.receiver_id : msg.sender_id;
+                        if (!partnerId) return;
+                        if (!teamMembers.has(partnerId)) {
+                          teamMembers.set(partnerId, { name: getName(partnerId), messages: [] });
+                        }
+                        teamMembers.get(partnerId)!.messages.push(msg);
+                      });
+                      // Also add team members from bookings even if no messages yet
+                      bookings.forEach((b) => {
+                        if (b.employee_id && !teamMembers.has(b.employee_id)) {
+                          teamMembers.set(b.employee_id, { name: b.employee_name || getName(b.employee_id), messages: [] });
+                        }
+                      });
+                      if (teamMembers.size === 0) {
+                        return (
+                          <div className="p-8 text-center text-slate-500 dark:text-slate-400 text-sm">
+                            No team members yet. Book a shoot to start messaging.
+                          </div>
+                        );
+                      }
+                      return Array.from(teamMembers.entries()).map(([partnerId, conv]) => {
+                        const lastMsg = conv.messages[conv.messages.length - 1];
+                        const hasUnread = conv.messages.some((m) => !m.is_read && m.sender_id !== userId);
+                        return (
+                          <button key={partnerId} onClick={() => setSelectedMessageClient(partnerId)}
+                            className={`w-full text-left p-4 border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors ${selectedMessageClient === partnerId ? "bg-blue-50 dark:bg-blue-500/5" : ""}`}>
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">{(conv.name || "?").charAt(0)}</span>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-slate-900 dark:text-white text-sm truncate">{conv.name}</span>
+                                  {hasUnread && <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0" />}
+                                </div>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{lastMsg?.content || "No messages yet"}</p>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+                {/* Conversation */}
+                <div className="md:col-span-2 flex flex-col">
+                  {selectedMessageClient ? (
+                    <>
+                      <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                        <h3 className="font-semibold text-slate-900 dark:text-white">
+                          {(() => {
+                            const fromMsg = messages.find((m) => m.sender_id === selectedMessageClient && m.sender_name);
+                            if (fromMsg?.sender_name) return fromMsg.sender_name;
+                            const emp = bookings.find((b) => b.employee_id === selectedMessageClient);
+                            if (emp?.employee_name) return emp.employee_name;
+                            return "Conversation";
+                          })()}
+                        </h3>
+                      </div>
+                      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                        {(() => {
+                          const userId = session?.user?.id;
+                          const convMessages = messages.filter((m) =>
+                            (m.sender_id === userId && m.receiver_id === selectedMessageClient) ||
+                            (m.sender_id === selectedMessageClient && m.receiver_id === userId)
+                          );
+                          return convMessages.map((msg) => {
+                            const isMe = msg.sender_id === userId;
+                            return (
+                              <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
+                                <div className={`max-w-[70%] px-4 py-2.5 rounded-2xl text-sm ${
+                                  isMe
+                                    ? "bg-blue-600 text-white rounded-tr-sm"
+                                    : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-tl-sm"
+                                }`}>
+                                  {msg.content}
+                                </div>
+                              </div>
+                            );
+                          });
+                        })()}
+                      </div>
+                      <div className="p-4 border-t border-slate-200 dark:border-slate-700">
+                        <div className="flex gap-2">
+                          <input type="text" value={replyText} onChange={(e) => setReplyText(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSendMessage()} placeholder="Type your message..."
+                            className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
+                          <button onClick={handleSendMessage} className="px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors text-sm font-medium">Send</button>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex-1 flex items-center justify-center text-slate-400 dark:text-slate-500">
+                      <div className="text-center">
+                        <svg className="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                        <p className="text-sm">Select a team member to start messaging</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
