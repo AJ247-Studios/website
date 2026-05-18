@@ -196,6 +196,7 @@ export default function AboutPage() {
                   disablePictureInPicture
                 >
                   <source src="/portfolio/AJ_001.mp4" />
+                  <track kind="captions" src="/portfolio/showreel-captions.vtt" srcLang="en" label="English captions" />
                   Your browser does not support the video tag.
                 </video>
               </div>

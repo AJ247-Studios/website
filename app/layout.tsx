@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
-import { SupabaseProvider } from "@/components/SupabaseProvider";
+import { LazySupabaseProvider } from "@/components/LazySupabaseProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies } from "next/headers";
@@ -144,12 +144,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="flex flex-col min-h-screen">
         {/* Pass both session and role to provider for client-side state management */}
-        <SupabaseProvider initialSession={session} initialRole={role}>
+        <LazySupabaseProvider initialSession={session} initialRole={role}>
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
           <ChatWidget />
-        </SupabaseProvider>
+        </LazySupabaseProvider>
         <Analytics />
         <SpeedInsights />
       </body>
