@@ -56,7 +56,7 @@ const services = [
     title: "Corporate Events",
     description: "Professional coverage for conferences, launches, and corporate gatherings.",
     price: "From 1,199 PLN",
-    features: ["4 hours coverage", "80–100+ edited photos", "Corporate-ready edits", "16 business day delivery", "Online gallery delivery"],
+    features: ["4 hours coverage", "80–100+ edited photos", "Corporate-ready edits", "16 business day delivery"],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -67,8 +67,8 @@ const services = [
     id: "custom",
     title: "Custom Packages",
     description: "Tailored solutions combining photo, video, and more for your unique needs.",
-    price: "Get a Quote",
-    features: ["Mix & match services", "Add-ons available", "Flexible pricing"],
+    price: "Custom",
+    features: ["Mix & match services", "Add-ons available", "Flexible pricing", "Personalised quote"],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
@@ -93,11 +93,11 @@ export default function ServicesGrid() {
         </div>
 
         {/* Services grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {services.map((service) => (
             <div
               key={service.id}
-              className="group relative bg-white dark:bg-slate-800/50 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10"
+              className="group relative flex flex-col h-full bg-white dark:bg-slate-800/50 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10"
             >
               {/* Icon */}
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 mb-5 group-hover:scale-110 transition-transform duration-300">
@@ -113,7 +113,7 @@ export default function ServicesGrid() {
               </p>
 
               {/* Features */}
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-2 mb-6 flex-1">
                 {service.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                     <svg className="w-4 h-4 mr-2 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,18 +125,18 @@ export default function ServicesGrid() {
               </ul>
 
               {/* Price & CTA */}
-              <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+              <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700 mt-auto">
                 <span className="text-lg font-semibold text-slate-900 dark:text-white">
                   {service.price}
                 </span>
                 <Link
                   href={`/services#${service.id}`}
-                  className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 inline-flex items-center gap-1 group/link"
-                  aria-label={`View ${service.title} packages and pricing details`}
+                  className="text-sm font-semibold text-white bg-slate-900 dark:bg-white dark:text-slate-900 px-4 py-2 rounded-lg hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors inline-flex items-center gap-1.5"
+                  aria-label={`Book ${service.title}`}
                 >
-                  View {service.title} details
-                  <svg className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  Book now
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
               </div>
