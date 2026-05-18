@@ -50,8 +50,10 @@ export const organizationSchema = {
   ],
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Kraków",
     addressLocality: "Kraków",
     addressRegion: "Lesser Poland",
+    postalCode: "30-001",
     addressCountry: "PL",
   },
   contactPoint: {
@@ -73,7 +75,6 @@ export const localBusinessSchema = {
   "@id": `${BASE_URL}/#localbusiness`,
   name: "AJ247 Studios",
   image: `${BASE_URL}/og-image.jpg`,
-  url: BASE_URL,
   telephone: "+48-503-685-377",
   email: "contact@aj247studios.com",
   priceRange: "$$",
@@ -489,7 +490,7 @@ export const heroVideoSchema = {
   name: "AJ247 Studios Showreel",
   description: "Showreel of photo and video production work by AJ247 Studios in Kraków, Poland.",
   thumbnailUrl: `${BASE_URL}/og-image.jpg`,
-  uploadDate: "2024-01-01",
+  uploadDate: "2024-01-01T00:00:00+01:00",
   contentUrl: `${BASE_URL}/portfolio/AJ_001.mp4`,
   embedUrl: `${BASE_URL}`,
   author: { "@id": `${BASE_URL}/#organization` },
