@@ -86,6 +86,9 @@ export default function LeadCapture() {
                 Day 14: Exclusive 10% early-booking discount
               </li>
             </ul>
+            <p className="text-xs text-slate-500 dark:text-slate-500 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+              Changed your mind? <a href="/unsubscribe" className="underline hover:text-slate-700 dark:hover:text-slate-300">Unsubscribe here</a> anytime.
+            </p>
           </div>
         </div>
       </section>
@@ -109,7 +112,7 @@ export default function LeadCapture() {
           Plus 5 insider tips for better event photos — straight to your inbox.
         </p>
         <p className="text-sm text-slate-500 dark:text-slate-500 mb-8">
-          No spam. Unsubscribe anytime. 150+ people have downloaded this already.
+          No spam. <a href="/unsubscribe" className="underline hover:text-slate-700 dark:hover:text-slate-300">Unsubscribe anytime</a>. Join our early list for exclusive updates.
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
@@ -155,7 +158,7 @@ export default function LeadCapture() {
           </span>
           <span className="flex items-center gap-1.5">
             <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-            150+ downloads
+            Free PDF guide
           </span>
         </div>
       </div>
