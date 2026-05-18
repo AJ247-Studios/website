@@ -196,9 +196,12 @@ export default function AboutPage() {
                   disablePictureInPicture
                 >
                   <source src="/portfolio/AJ_001.mp4" />
-                  <track kind="captions" src="/portfolio/showreel-captions.vtt" srcLang="en" label="English captions" />
                   Your browser does not support the video tag.
                 </video>
+                {/* Hidden transcript for SEO / screen readers — not visible */}
+                <div className="sr-only">
+                  Video transcript: AJ247 Studios showreel showcasing photo and video production highlights including sports events, concerts, weddings, and corporate videography. Professional coverage in Kraków, Poland.
+                </div>
               </div>
               {/* Floating stat */}
               <div className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-800 rounded-xl p-4 shadow-xl border border-slate-200 dark:border-slate-700">
