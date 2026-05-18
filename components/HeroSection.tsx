@@ -11,7 +11,7 @@ export default function HeroSection() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           poster="/portfolio/background_photo.webp"
         >
           <source src="/portfolio/F_Weddings_ShowCase_720p@24fps.mp4" />
