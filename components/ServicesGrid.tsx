@@ -132,8 +132,9 @@ export default function ServicesGrid() {
                 <Link
                   href={`/services#${service.id}`}
                   className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 inline-flex items-center gap-1 group/link"
+                  aria-label={`View ${service.title} packages and pricing details`}
                 >
-                  Learn more
+                  View {service.title} details
                   <svg className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>

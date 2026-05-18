@@ -190,7 +190,8 @@ export default function AboutPage() {
                   muted
                   loop
                   playsInline
-                  preload="auto"
+                  preload="metadata"
+                  poster="/portfolio/background_photo.webp"
                   controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
                   disablePictureInPicture
                 >

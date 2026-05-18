@@ -74,6 +74,9 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   manifest: "/site.webmanifest",
+  alternates: {
+    canonical: "https://aj247studios.com",
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -134,6 +137,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" href="/portfolio/background_photo.webp" as="image" type="image/webp" />
+      </head>
       <body className="flex flex-col min-h-screen">
         {/* Pass both session and role to provider for client-side state management */}
         <SupabaseProvider initialSession={session} initialRole={role}>
