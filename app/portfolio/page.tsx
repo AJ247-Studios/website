@@ -1,161 +1,66 @@
-"use client";
+import { Metadata } from "next";
+import PortfolioPageClient from "./PortfolioPageClient";
+import { getBreadcrumbSchema } from "@/lib/schemas";
 
-import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import {
-  PortfolioHero,
-  FeaturedCaseStudies,
-  FilterBar,
-  PortfolioGrid,
-  Lightbox,
-} from "@/components/portfolio";
-import CTASection from "@/components/CTASection";
-import { 
-  mockProjects, 
-  filterOptions, 
-  getFeaturedProjects,
-  getCategoryCounts,
-} from "@/lib/portfolio-data";
-import { Project, ProjectCategory } from "@/lib/types/portfolio";
+export const metadata: Metadata = {
+  title: "Portfolio | AJ247 Studios",
+  description: "View 150+ photo and video projects by AJ247 Studios. Sports events, concerts, weddings, portraits, and corporate work in Kraków, Poland.",
+  keywords: [
+    "AJ247 Studios portfolio",
+    "photo portfolio Kraków",
+    "video portfolio Poland",
+    "wedding photography examples",
+    "sports photography portfolio",
+    "concert videography work",
+    "corporate video examples Kraków",
+  ],
+  openGraph: {
+    title: "Portfolio | AJ247 Studios",
+    description: "150+ projects delivered. See our best work in sports, weddings, concerts, and corporate video.",
+    url: "https://aj247studios.com/portfolio",
+    type: "website",
+    images: [{
+      url: "https://aj247studios.com/portfolio/Concert1.webp",
+      width: 1200,
+      height: 630,
+      alt: "AJ247 Studios Portfolio - Concert Photography",
+    }],
+  },
+};
 
-/**
- * Portfolio Page
- * 
- * Visual-first, performance-obsessed, and story-driven portfolio.
- * Follows UX research: large hero, filterable grid, case studies with results,
- * lightbox with context, and persuasive CTAs that push to booking.
- */
+const portfolioBreadcrumb = getBreadcrumbSchema([
+  { name: "Home", url: "/" },
+  { name: "Portfolio", url: "/portfolio" },
+]);
+
+// Image gallery schema for portfolio
+const imageGallerySchema = {
+  "@type": "ImageGallery",
+  name: "AJ247 Studios Portfolio",
+  description: "Photo and video portfolio showcasing work across sports, concerts, weddings, portraits, and corporate events.",
+  url: "https://aj247studios.com/portfolio",
+  image: [
+    "https://aj247studios.com/portfolio/Concert1.webp",
+    "https://aj247studios.com/portfolio/Sport1.webp",
+    "https://aj247studios.com/portfolio/Wedding1.webp",
+  ],
+};
+
 export default function PortfolioPage() {
-  const router = useRouter();
-  
-  // State
-  const [activeFilter, setActiveFilter] = useState<ProjectCategory | "all">("all");
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [activeMediaIndex, setActiveMediaIndex] = useState(0);
-
-  // Data - show all projects
-  const liveProjects = mockProjects;
-  const featuredProjects = getFeaturedProjects();
-  const categoryCounts = getCategoryCounts(liveProjects);
-  
-  // Enrich filter options with counts
-  const filtersWithCounts = filterOptions.map(f => ({
-    ...f,
-    count: categoryCounts[f.value] || 0,
-  }));
-
-  // Handlers
-  const handleProjectClick = useCallback((project: Project, index: number) => {
-    setActiveProject(project);
-    setActiveMediaIndex(0);
-    setLightboxOpen(true);
-    // Analytics: track project click
-  }, []);
-
-  const handleBookClick = useCallback((project: Project) => {
-    router.push(`/contact?project=${project.slug}&service=${project.categories[0]}`);
-  }, [router]);
-
-  const handleLightboxClose = useCallback(() => {
-    setLightboxOpen(false);
-    // Keep project in state briefly for exit animation
-    setTimeout(() => {
-      setActiveProject(null);
-      setActiveMediaIndex(0);
-    }, 300);
-  }, []);
-
-  const handleLightboxNavigate = useCallback((index: number) => {
-    setActiveMediaIndex(index);
-  }, []);
-
-  const handleFilterChange = useCallback((filter: ProjectCategory | "all") => {
-    setActiveFilter(filter);
-    // Analytics: track filter change
-  }, []);
-
-  // Analytics callbacks (stub for implementation)
-  const analyticsCallbacks = {
-    onMediaView: (projectId: string, mediaIndex: number) => {
-      // TODO: Implement analytics tracking
-      console.log("Media view:", projectId, mediaIndex);
-    },
-    onCtaClick: (ctaType: string, projectId: string) => {
-      // TODO: Implement analytics tracking
-      console.log("CTA click:", ctaType, projectId);
-    },
-  };
-
   return (
     <main>
-      {/* Hero Section - Big, contextual hero with striking visual */}
-      <PortfolioHero
-        headline="Our Work Speaks for Itself"
-        subheadline="150+ projects delivered across sports, concerts, weddings, and corporate events. See what we can create for you."
-        imageUrl="/portfolio/Concert1.webp"
-        ctaText="Get a Free Quote"
-        ctaHref="/contact"
-        secondaryCtaText="View Case Studies"
-        secondaryCtaHref="#featured"
-        onCtaClick={(type) => {
-          // Analytics: track hero CTA click
-          console.log("Hero CTA click:", type);
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            { "@context": "https://schema.org", ...portfolioBreadcrumb },
+            { "@context": "https://schema.org", ...imageGallerySchema },
+          ]),
         }}
       />
 
-      {/* Featured Case Studies - 1-3 rotating projects with metrics */}
-      <FeaturedCaseStudies
-        projects={featuredProjects}
-        onProjectClick={(projectId) => {
-          const project = mockProjects.find(p => p.id === projectId);
-          if (project) {
-            handleProjectClick(project, 0);
-          }
-        }}
-        onCtaClick={(projectId) => {
-          const project = mockProjects.find(p => p.id === projectId);
-          if (project) {
-            handleBookClick(project);
-          }
-        }}
-      />
-
-      {/* Filter Bar - Sticky, reduces friction to find relevant work */}
-      <FilterBar
-        filters={filtersWithCounts}
-        activeFilter={activeFilter}
-        onFilterChange={handleFilterChange}
-        totalCount={liveProjects.length}
-        sticky={false}
-        onAnalytics={(filter) => {
-          // Analytics: track filter selection
-          console.log("Filter selected:", filter);
-        }}
-      />
-
-      {/* Portfolio Grid - Clean, image-first grid with hover states */}
-      <PortfolioGrid
-        projects={liveProjects}
-        activeFilter={activeFilter}
-        onProjectClick={handleProjectClick}
-        onBookClick={handleBookClick}
-        showAll
-      />
-
-      {/* Secondary CTA Section */}
-      <CTASection />
-
-      {/* Lightbox - Photo/video viewer with context panel */}
-      <Lightbox
-        isOpen={lightboxOpen}
-        onClose={handleLightboxClose}
-        project={activeProject}
-        currentIndex={activeMediaIndex}
-        onNavigate={handleLightboxNavigate}
-        onBookClick={handleBookClick}
-        analytics={analyticsCallbacks}
-      />
+      <PortfolioPageClient />
     </main>
   );
 }

@@ -1,10 +1,31 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { getBreadcrumbSchema } from "@/lib/schemas";
 
 export const metadata: Metadata = {
   title: "FAQ | AJ247 Studios",
-  description: "Frequently asked questions about AJ247 Studios photo and video services. Learn about pricing, delivery, booking, and what to expect.",
+  description: "Frequently asked questions about AJ247 Studios photo and video services in Kraków. Pricing, delivery times, booking process, equipment, and more.",
+  keywords: [
+    "AJ247 Studios FAQ",
+    "photo studio Kraków questions",
+    "video production pricing Poland",
+    "wedding photographer Kraków FAQ",
+    "how to book photographer Kraków",
+    "photo delivery time Kraków",
+    "event photography deposit",
+  ],
+  openGraph: {
+    title: "FAQ | AJ247 Studios",
+    description: "Answers to common questions about our photo and video services in Kraków.",
+    url: "https://aj247studios.com/faq",
+    type: "website",
+  },
 };
+
+const faqBreadcrumb = getBreadcrumbSchema([
+  { name: "Home", url: "/" },
+  { name: "FAQ", url: "/faq" },
+]);
 
 // FAQ data for both display and JSON-LD schema
 const faqCategories = [
@@ -151,14 +172,19 @@ function generateFaqSchema() {
 }
 
 export default function FAQPage() {
-  const faqSchema = generateFaqSchema();
-  
+  const faqSchemaData = generateFaqSchema();
+
   return (
     <main>
-      {/* JSON-LD Schema for Google Rich Snippets */}
+      {/* JSON-LD Schema for Google Rich Snippets & AI bots */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            { "@context": "https://schema.org", ...faqBreadcrumb },
+            faqSchemaData,
+          ]),
+        }}
       />
       
       {/* Hero */}

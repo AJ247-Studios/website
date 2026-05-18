@@ -1,0 +1,36 @@
+User-agent: *
+Allow: /
+
+# Crawl-delay for politeness
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://aj247studios.com/sitemap.xml
+
+# Disallow auth pages from indexing
+Disallow: /login
+Disallow: /signup
+Disallow: /dashboard
+Disallow: /portal
+Disallow: /admin
+Disallow: /profile
+Disallow: /api/
+
+# Allow search engines to index everything else
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /

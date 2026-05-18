@@ -2,11 +2,38 @@ import { Metadata } from "next";
 import Link from "next/link";
 import PricingTable, { FeatureComparison } from "@/components/PricingTable";
 import AddOnsSection from "@/components/AddOnsSection";
+import {
+  servicesSchema,
+  faqSchema,
+  howToBookSchema,
+  getBreadcrumbSchema,
+} from "@/lib/schemas";
 
 export const metadata: Metadata = {
   title: "Services & Pricing | AJ247 Studios",
-  description: "Premium photo and video production packages for sports, concerts, weddings, and corporate events in Kraków. Transparent pricing with Standard and Premium options.",
+  description: "Premium photo and video production packages for sports, concerts, weddings, and corporate events in Kraków. Transparent pricing with Standard and Premium options. Starting at 599 PLN.",
+  keywords: [
+    "photo production Kraków pricing",
+    "video production Kraków cost",
+    "wedding photographer Kraków price",
+    "sports photography Poland rates",
+    "corporate video production Kraków",
+    "event coverage Kraków pricing",
+    "portrait photographer Kraków cost",
+    "concert videographer Poland",
+  ],
+  openGraph: {
+    title: "Services & Pricing | AJ247 Studios",
+    description: "Professional photo and video packages starting at 599 PLN. Sports, weddings, concerts, portraits & corporate.",
+    url: "https://aj247studios.com/services",
+    type: "website",
+  },
 };
+
+const servicesBreadcrumb = getBreadcrumbSchema([
+  { name: "Home", url: "/" },
+  { name: "Services & Pricing", url: "/services" },
+]);
 
 // ============================================================================
 // PRICING DATA - Based on Kraków market research
@@ -257,6 +284,19 @@ const corporatePackages = [
 export default function ServicesPage() {
   return (
     <main>
+      {/* Structured Data — Services, FAQ, HowTo, Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            { "@context": "https://schema.org", ...servicesBreadcrumb },
+            { "@context": "https://schema.org", ...servicesSchema },
+            { "@context": "https://schema.org", ...faqSchema },
+            { "@context": "https://schema.org", ...howToBookSchema },
+          ]),
+        }}
+      />
+
       {/* Hero section */}
       <section className="relative py-20 sm:py-28 bg-linear-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

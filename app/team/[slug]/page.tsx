@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getPersonSchema, getBreadcrumbSchema } from "@/lib/schemas";
 
 // ============================================================================
 // TEAM MEMBER DATA (would come from Supabase in production)
@@ -147,8 +148,33 @@ export default async function TeamMemberPage({ params }: { params: Promise<{ slu
     notFound();
   }
 
+  const personSchema = getPersonSchema({
+    name: member.name,
+    role: member.role,
+    bio: member.bio,
+    image: member.avatar,
+    url: `/team/${member.slug}`,
+  });
+
+  const teamBreadcrumb = getBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "About", url: "/about" },
+    { name: member.name, url: `/team/${member.slug}` },
+  ]);
+
   return (
     <main>
+      {/* JSON-LD Structured Data — Person + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            { "@context": "https://schema.org", ...teamBreadcrumb },
+            { "@context": "https://schema.org", ...personSchema },
+          ]),
+        }}
+      />
+
       {/* Hero */}
       <section className="relative">
         {/* Cover image */}

@@ -64,14 +64,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // TODO: Add dynamic portfolio project pages when implemented
-  // const portfolioProjects = await getPortfolioProjects();
-  // const projectPages = portfolioProjects.map(project => ({
-  //   url: `${baseUrl}/portfolio/${project.slug}`,
-  //   lastModified: project.updatedAt,
-  //   changeFrequency: "monthly" as const,
-  //   priority: 0.6,
-  // }));
+  // Team member pages
+  const teamMembers = ["anthony", "josiah", "ivan", "tomek"];
+  const teamPages = teamMembers.map((slug) => ({
+    url: `${baseUrl}/team/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
-  return [...staticPages];
+  // Booking page
+  const bookingPage = {
+    url: `${baseUrl}/book`,
+    lastModified: currentDate,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  };
+
+  return [...staticPages, bookingPage, ...teamPages];
 }

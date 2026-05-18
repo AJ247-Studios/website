@@ -2,11 +2,32 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import AboutStory from "../../components/AboutStory";
+import { organizationSchema, getPersonSchema, getBreadcrumbSchema } from "@/lib/schemas";
 
 export const metadata: Metadata = {
   title: "About Us | AJ247 Studios",
   description: "Meet the team behind AJ247 Studios. Premium photo and video production in Kraków, Poland. Learn about our story, values, and what makes us different.",
+  keywords: [
+    "AJ247 Studios team",
+    "Kraków photographers",
+    "Kraków videographers",
+    "photo studio Kraków",
+    "video production team Poland",
+    "wedding photographer Kraków team",
+    "about AJ247 Studios",
+  ],
+  openGraph: {
+    title: "About Us | AJ247 Studios",
+    description: "Meet the creative team behind AJ247 Studios. 4 professionals, 150+ projects delivered.",
+    url: "https://aj247studios.com/about",
+    type: "profile",
+  },
 };
+
+const aboutBreadcrumb = getBreadcrumbSchema([
+  { name: "Home", url: "/" },
+  { name: "About Us", url: "/about" },
+]);
 
 const stats = [
   { value: "150+", label: "Projects Delivered" },
@@ -103,8 +124,30 @@ const anthonyStory = [
   `From two friends with cameras to a growing creative studio, Josiah and I are proud of how far AJ247 Studios has come. We are thankful to everyone who has trusted us, and we’re excited to see what the future holds — more stories, more creativity, and more memories to capture.`,
 ];
 export default function AboutPage() {
+  const teamSchemas = team.map((member) =>
+    getPersonSchema({
+      name: member.name,
+      role: member.role,
+      bio: member.bio,
+      image: member.image,
+      url: `/team/${member.name.split(" ")[0].toLowerCase()}`,
+    })
+  );
+
   return (
     <main>
+      {/* Structured Data — Organization, Team, Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            { "@context": "https://schema.org", ...aboutBreadcrumb },
+            { "@context": "https://schema.org", ...organizationSchema },
+            ...teamSchemas.map((s) => ({ "@context": "https://schema.org", ...s })),
+          ]),
+        }}
+      />
+
       {/* Hero */}
       <section className="relative py-20 sm:py-28 bg-linear-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-950 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
