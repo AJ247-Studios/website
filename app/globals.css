@@ -43,9 +43,14 @@ body {
   display: none;
 }
 
-/* Smooth scroll behavior */
+/* Smooth scroll behavior + prevent horizontal overflow */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 /* Marquee animation for partner logos */
