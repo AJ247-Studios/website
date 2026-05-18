@@ -81,5 +81,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   };
 
-  return [...staticPages, bookingPage, ...teamPages];
+  // Service landing pages (high-intent SEO pages)
+  const serviceLandingPages = [
+    {
+      url: `${baseUrl}/wedding-photographer-krakow`,
+      lastModified: currentDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/sports-photographer-krakow`,
+      lastModified: currentDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/corporate-video-krakow`,
+      lastModified: currentDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/concert-videographer-poland`,
+      lastModified: currentDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+  ];
+
+  return [...staticPages, bookingPage, ...teamPages, ...serviceLandingPages];
 }

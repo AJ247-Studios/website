@@ -1,5 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import ServicesGrid from "@/components/ServicesGrid";
+import LeadCapture from "@/components/LeadCapture";
 import SocialProof from "@/components/SocialProof";
 import CTASection from "@/components/CTASection";
 import {
@@ -35,6 +36,9 @@ export default function Home() {
 
       {/* Services - What we offer with pricing anchors */}
       <ServicesGrid />
+
+      {/* Lead Capture - Email signup for pricing guide */}
+      <LeadCapture />
 
       {/* Social Proof - Testimonials, client logos, stats */}
       <SocialProof />
