@@ -131,6 +131,7 @@ const JOSIAH_ID = "11111111-1111-1111-1111-111111111111";
 const ANTHONY_ID = "22222222-2222-2222-2222-222222222222";
 const IVAN_ID = "33333333-3333-3333-3333-333333333333";
 const TOMEK_ID = "44444444-4444-4444-4444-444444444444";
+const DIANA_ID = "55555555-5555-5555-5555-555555555555";
 
 const FALLBACK_EMPLOYEES: Record<string, Employee[]> = {
   sports: [
@@ -144,9 +145,11 @@ const FALLBACK_EMPLOYEES: Record<string, Employee[]> = {
   wedding: [
     { id: JOSIAH_ID, display_name: "Josiah Ennis", role_title: "Co-Founder / Videographer", specialty: "Wedding Films & Cinematic Coverage", avatar_url: "/portfolio/Josiah-full-res.webp", packages: [] },
     { id: ANTHONY_ID, display_name: "Anthony Certeza", role_title: "Co-Founder / Photographer", specialty: "Wedding Photography & Couples Portraits", avatar_url: "/portfolio/Anthony-full-res.webp", packages: [] },
+    { id: DIANA_ID, display_name: "Diana Romanova", role_title: "Photographer", specialty: "Wedding & Couples Photography", avatar_url: "/portfolio/diana/avatar.jpg", packages: [] },
   ],
   portrait: [
     { id: ANTHONY_ID, display_name: "Anthony Certeza", role_title: "Co-Founder / Photographer", specialty: "Portrait Photography & Headshots", avatar_url: "/portfolio/Anthony-full-res.webp", packages: [] },
+    { id: DIANA_ID, display_name: "Diana Romanova", role_title: "Photographer", specialty: "Portrait, Couples & Studio Photography", avatar_url: "/portfolio/diana/avatar.jpg", packages: [] },
     { id: TOMEK_ID, display_name: "Tomek Dudzik", role_title: "Graphic Designer / Editor", specialty: "Creative Portraits & Styled Shoots", avatar_url: "/portfolio/Tomek Dudzik.jpeg", packages: [] },
   ],
   corporate: [
@@ -180,6 +183,7 @@ export default function BookPage() {
     anthony: ANTHONY_ID,
     ivan: IVAN_ID,
     tomek: TOMEK_ID,
+    diana: DIANA_ID,
   };
 
   const [formData, setFormData] = useState<BookingFormData>({
