@@ -33,7 +33,7 @@ const stats = [
   { value: "150+", label: "Projects Delivered" },
   { value: "150+", label: "Happy Clients" },
   { value: "4000+", label: "Photos & Clips Delivered" },
-  { value: "4", label: "Team Members" },
+  { value: "5", label: "Team Members" },
 ];
 
 const values = [
@@ -103,6 +103,13 @@ const team = [
     bio: "Graphic designer and video editor. Creates stunning visual designs and edits for all your media needs.",
     image: "/portfolio/Tomek Dudzik.jpeg",
     website: "https://www.instagram.com/tstudios.d",
+  },
+  {
+    name: "Diana Romanova",
+    role: "Photographer",
+    bio: "Portrait and couples photographer with a natural, emotive style. Specializes in capturing genuine connections and beautiful moments between people.",
+    image: "/portfolio/diana/avatar.jpg",
+    website: "https://aj247studios.com/team/diana",
   },
 ];
 

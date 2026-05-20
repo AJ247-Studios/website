@@ -117,6 +117,31 @@ const TEAM_MEMBERS: Record<string, TeamMember> = {
     ],
     social: { instagram: "https://www.instagram.com/tstudios.d" },
   },
+  diana: {
+    slug: "diana",
+    name: "Diana Romanova",
+    role: "Photographer",
+    bio: "Portrait and couples photographer with a natural, emotive style. Diana specializes in capturing genuine connections and beautiful moments between people. Her work brings warmth and authenticity to every shoot.",
+    specialty: "Couples Photography, Portrait Sessions, Studio Photography, Lifestyle",
+    avatar: "/portfolio/diana/avatar.jpg",
+    coverImage: "/portfolio/background_photo.webp",
+    portfolio: [
+      { id: "d1", title: "Couples Session", category: "Couples", image: "/portfolio/diana/DSC00469.jpg", aspect: "landscape" },
+      { id: "d2", title: "Portrait Work", category: "Portrait", image: "/portfolio/diana/DSC00557.jpg", aspect: "landscape" },
+      { id: "d3", title: "Couples Shoot", category: "Couples", image: "/portfolio/diana/DSC00758.jpg", aspect: "landscape" },
+      { id: "d4", title: "Studio Portrait", category: "Portrait", image: "/portfolio/diana/DSC00781.jpg", aspect: "landscape" },
+      { id: "d5", title: "Lifestyle Session", category: "Lifestyle", image: "/portfolio/diana/DSC00854.jpg", aspect: "landscape" },
+      { id: "d6", title: "Couples Photography", category: "Couples", image: "/portfolio/diana/DSC03294.jpg", aspect: "landscape" },
+      { id: "d7", title: "Portrait Series", category: "Portrait", image: "/portfolio/diana/DSC03305.jpg", aspect: "landscape" },
+      { id: "d8", title: "Studio Work", category: "Studio", image: "/portfolio/diana/DSC03368.jpg", aspect: "landscape" },
+    ],
+    stats: [
+      { value: "50+", label: "Sessions" },
+      { value: "3+", label: "Years Experience" },
+      { value: "2,000+", label: "Photos Delivered" },
+      { value: "40+", label: "Happy Clients" },
+    ],
+  },
 };
 
 // ============================================================================

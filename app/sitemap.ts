@@ -65,7 +65,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Team member pages
-  const teamMembers = ["anthony", "josiah", "ivan", "tomek"];
+  const teamMembers = ["anthony", "josiah", "ivan", "tomek", "diana"];
   const teamPages = teamMembers.map((slug) => ({
     url: `${baseUrl}/team/${slug}`,
     lastModified: currentDate,
