@@ -150,12 +150,7 @@ const TEAM_MEMBERS: Record<string, TeamMember> = {
       { id: "d22", title: "Portrait Collection", category: "Portrait", image: "/portfolio/diana/DSC08867.webp", aspect: "landscape" },
       { id: "d23", title: "Couples Portrait", category: "Couples", image: "/portfolio/diana/DSC08916.webp", aspect: "landscape" },
     ],
-    stats: [
-      { value: "50+", label: "Sessions" },
-      { value: "3+", label: "Years Experience" },
-      { value: "2,000+", label: "Photos Delivered" },
-      { value: "40+", label: "Happy Clients" },
-    ],
+    stats: [],
   },
 };
 
@@ -312,17 +307,19 @@ export default async function TeamMemberPage({ params }: { params: Promise<{ slu
             </div>
 
             {/* Stats */}
-            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6">
-              <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Statistics</h2>
-              <div className="grid grid-cols-2 gap-4">
-                {member.stats.map((stat) => (
-                  <div key={stat.label} className="text-center p-3 bg-white dark:bg-slate-800 rounded-xl">
-                    <div className="text-2xl font-bold text-slate-900 dark:text-white">{stat.value}</div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400">{stat.label}</div>
-                  </div>
-                ))}
+            {member.stats.length > 0 && (
+              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6">
+                <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Statistics</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {member.stats.map((stat) => (
+                    <div key={stat.label} className="text-center p-3 bg-white dark:bg-slate-800 rounded-xl">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white">{stat.value}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
