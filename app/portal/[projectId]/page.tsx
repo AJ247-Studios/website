@@ -137,7 +137,6 @@ export default function ClientPortalPage() {
       <section>
         <h2 className="text-2xl font-semibold mb-4">AI Assistant</h2>
         <p className="text-slate-600 mb-2">Chat with us about this project. Clients have full access.</p>
-        {/* The site’s ChatWidget can be used here if desired */}
       </section>
     </div>
   );
