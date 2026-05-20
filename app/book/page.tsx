@@ -263,7 +263,24 @@ export default function BookPage() {
             });
 
             if (Object.keys(grouped).length > 0) {
-              setEmployees(grouped);
+              // Merge API employees with fallback employees (so Diana always shows)
+              const merged: Record<string, Employee[]> = {};
+              const allServiceTypes = new Set([
+                ...Object.keys(FALLBACK_EMPLOYEES),
+                ...Object.keys(grouped),
+              ]);
+              allServiceTypes.forEach((serviceType) => {
+                const fallbackEmps = FALLBACK_EMPLOYEES[serviceType] || [];
+                const apiEmps = grouped[serviceType] || [];
+                const combined = [...apiEmps];
+                fallbackEmps.forEach((fallbackEmp) => {
+                  if (!combined.find((e) => e.id === fallbackEmp.id)) {
+                    combined.push(fallbackEmp);
+                  }
+                });
+                merged[serviceType] = combined;
+              });
+              setEmployees(merged);
             }
             if (Object.keys(groupedPkgs).length > 0) {
               setPackages(groupedPkgs);
