@@ -459,7 +459,7 @@ export default function BookPage() {
               className="inline-flex items-center justify-center w-full mt-3 px-6 py-3 text-base font-semibold text-slate-700 dark:text-slate-300 border-2 border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors gap-2"
             >
               <svg className="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.82 8.3l-1.1 5.2h-3.6v5.2H11.3v-5.2H7.7V8.3h4.6V5.9c0-2.1 1.7-3.8 3.8-3.8h2.1v3.2h-1.5c-.8 0-1.4.6-1.4 1.4v1.6h2.9l-.8 3z"/>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
               Review Us on Google
             </a>
