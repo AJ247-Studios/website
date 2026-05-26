@@ -1,14 +1,13 @@
 /**
  * Email Lead Capture Component
- * 
+ *
  * Collects emails from visitors in exchange for a free pricing guide.
- * Stores emails in Supabase for follow-up drip campaigns.
+ * Calls /api/subscribe which stores in Supabase and sends the welcome email.
  */
 
 "use client";
 
 import { useState, useCallback } from "react";
-import { createClientBrowser } from "@/utils/supabase-browser";
 
 export default function LeadCapture() {
   const [email, setEmail] = useState("");
@@ -26,25 +25,22 @@ export default function LeadCapture() {
     setStatus("loading");
 
     try {
-      const supabase = createClientBrowser();
-      const { error } = await supabase.from("email_subscribers").insert({
-        email: email.trim().toLowerCase(),
-        source: "homepage_lead_magnet",
-        tags: ["pricing_guide", "2026"],
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
       });
 
-      if (error) {
-        // If duplicate email, still show success
-        if (error.code === "23505") {
-          setStatus("success");
-          setMessage("You're already on the list! Check your inbox for the guide.");
-          return;
-        }
-        throw error;
+      const data = await res.json();
+
+      if (!res.ok) {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong. Please try again.");
+        return;
       }
 
       setStatus("success");
-      setMessage("Check your inbox! The pricing guide is on its way.");
+      setMessage(data.message || "Check your inbox! The pricing guide is on its way.");
       setEmail("");
     } catch (err) {
       console.error("Lead capture error:", err);
