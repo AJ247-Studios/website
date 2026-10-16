@@ -126,24 +126,19 @@ const FALLBACK_PACKAGES: Record<string, ServicePackage[]> = {
 };
 
 // Fallback employees using actual database UUIDs
-// Verified from Supabase: Josiah=1111, Anthony=2222, Ivan=3333, Tomek=4444
-const JOSIAH_ID = "11111111-1111-1111-1111-111111111111";
+// Verified from Supabase: Anthony=2222, Tomek=4444, Diana=5555
 const ANTHONY_ID = "22222222-2222-2222-2222-222222222222";
-const IVAN_ID = "33333333-3333-3333-3333-333333333333";
 const TOMEK_ID = "44444444-4444-4444-4444-444444444444";
 const DIANA_ID = "55555555-5555-5555-5555-555555555555";
 
 const FALLBACK_EMPLOYEES: Record<string, Employee[]> = {
   sports: [
-    { id: JOSIAH_ID, display_name: "Josiah Ennis", role_title: "Co-Founder / Videographer", specialty: "Sports Videography & Commercial Shoots", avatar_url: "/portfolio/Josiah-full-res.webp", packages: [] },
     { id: ANTHONY_ID, display_name: "Anthony Certeza", role_title: "Co-Founder / Photographer", specialty: "Sports Photography & Action Shots", avatar_url: "/portfolio/Anthony-full-res.webp", packages: [] },
   ],
   concert: [
-    { id: JOSIAH_ID, display_name: "Josiah Ennis", role_title: "Co-Founder / Videographer", specialty: "Concert Videography & Live Events", avatar_url: "/portfolio/Josiah-full-res.webp", packages: [] },
     { id: ANTHONY_ID, display_name: "Anthony Certeza", role_title: "Co-Founder / Photographer", specialty: "Concert Photography & Press Coverage", avatar_url: "/portfolio/Anthony-full-res.webp", packages: [] },
   ],
   wedding: [
-    { id: JOSIAH_ID, display_name: "Josiah Ennis", role_title: "Co-Founder / Videographer", specialty: "Wedding Films & Cinematic Coverage", avatar_url: "/portfolio/Josiah-full-res.webp", packages: [] },
     { id: ANTHONY_ID, display_name: "Anthony Certeza", role_title: "Co-Founder / Photographer", specialty: "Wedding Photography & Couples Portraits", avatar_url: "/portfolio/Anthony-full-res.webp", packages: [] },
     { id: DIANA_ID, display_name: "Diana Romanova", role_title: "Photographer", specialty: "Wedding & Couples Photography", avatar_url: "/portfolio/diana/avatar.jpg", packages: [] },
   ],
@@ -153,9 +148,7 @@ const FALLBACK_EMPLOYEES: Record<string, Employee[]> = {
     { id: TOMEK_ID, display_name: "Tomek Dudzik", role_title: "Graphic Designer / Editor", specialty: "Creative Portraits & Styled Shoots", avatar_url: "/portfolio/Tomek Dudzik.jpeg", packages: [] },
   ],
   corporate: [
-    { id: JOSIAH_ID, display_name: "Josiah Ennis", role_title: "Co-Founder / Videographer", specialty: "Corporate Video & Commercial Production", avatar_url: "/portfolio/Josiah-full-res.webp", packages: [] },
     { id: ANTHONY_ID, display_name: "Anthony Certeza", role_title: "Co-Founder / Photographer", specialty: "Corporate Photography & Event Coverage", avatar_url: "/portfolio/Anthony-full-res.webp", packages: [] },
-    { id: IVAN_ID, display_name: "Ivan Anthony Cabañero", role_title: "Editor", specialty: "Video Editing & Post-Production", avatar_url: "/portfolio/Ivan-full-res.jpeg", packages: [] },
   ],
 };
 
@@ -179,9 +172,7 @@ export default function BookPage() {
   const [step, setStep] = useState<BookingStep>("service");
   // Map URL slug to employee UUID
   const SLUG_TO_UUID: Record<string, string> = {
-    josiah: JOSIAH_ID,
     anthony: ANTHONY_ID,
-    ivan: IVAN_ID,
     tomek: TOMEK_ID,
     diana: DIANA_ID,
   };
@@ -615,7 +606,7 @@ export default function BookPage() {
                             </div>
                           </div>
                           <div className="mt-3 flex gap-2">
-                            <Link href={`/team/${emp.id === ANTHONY_ID ? "anthony" : emp.id === JOSIAH_ID ? "josiah" : emp.id === TOMEK_ID ? "tomek" : emp.id === IVAN_ID ? "ivan" : emp.id}`} target="_blank" onClick={(e) => e.stopPropagation()} className="text-xs px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                            <Link href={`/team/${emp.id === ANTHONY_ID ? "anthony" : emp.id === TOMEK_ID ? "tomek" : emp.id === DIANA_ID ? "diana" : emp.id}`} target="_blank" onClick={(e) => e.stopPropagation()} className="text-xs px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
                               View Portfolio →
                             </Link>
                           </div>

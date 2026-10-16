@@ -107,12 +107,6 @@ export default function ConcertVideographerPage() {
           role: "Poland",
         },
       ]}
-      teamMember={{
-        name: "Josiah Ennis",
-        role: "Event Videography Specialist",
-        image: "/portfolio/Josiah-full-res.webp",
-        slug: "josiah",
-      }}
     />
   );
 }

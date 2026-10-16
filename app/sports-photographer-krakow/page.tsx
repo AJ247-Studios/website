@@ -107,10 +107,10 @@ export default function SportsPhotographerPage() {
         },
       ]}
       teamMember={{
-        name: "Josiah Ennis",
-        role: "Sports Videography Specialist",
-        image: "/portfolio/Josiah-full-res.webp",
-        slug: "josiah",
+        name: "Anthony Certeza",
+        role: "Sports Photography Specialist",
+        image: "/portfolio/Anthony-full-res.webp",
+        slug: "anthony",
       }}
     />
   );

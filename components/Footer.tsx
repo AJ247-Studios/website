@@ -136,7 +136,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-500">
-            &copy; {currentYear} AJ247 Studios. All rights reserved.
+            &copy; {currentYear} AJ247 Studios. Founded by Anthony Certeza &amp; Josiah Ennis. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-slate-500">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>

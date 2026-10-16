@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "About Us | AJ247 Studios",
-    description: "Meet the creative team behind AJ247 Studios. 4 professionals, 150+ projects delivered.",
+    description: "Meet the creative team behind AJ247 Studios. 3 professionals, 150+ projects delivered.",
     url: "https://aj247studios.com/about",
     type: "profile",
   },
@@ -33,7 +33,7 @@ const stats = [
   { value: "150+", label: "Projects Delivered" },
   { value: "150+", label: "Happy Clients" },
   { value: "4000+", label: "Photos & Clips Delivered" },
-  { value: "5", label: "Team Members" },
+  { value: "3", label: "Team Members" },
 ];
 
 const values = [
@@ -77,25 +77,11 @@ const values = [
 
 const team = [
   {
-    name: "Josiah Ennis",
-    role: "Videographer / Co-founder",
-    bio: "2–3 years experience. Lead videographer for commercial shoots and social-video campaigns. Shot planning, DOP, final edit.",
-    image: "/portfolio/Josiah-full-res.webp",
-    website: "https://aj247studios.com/portfolio",
-  },
-  {
     name: "Anthony Certeza",
     role: "Photographer / Co-founder",
     bio: "2–3 years experience. Stills photographer focused on product, lifestyle, and event photography. Client liaison, studio setups.",
     image: "/portfolio/Anthony-full-res.webp",
     website: "https://aj247studios.com/portfolio",
-  },
-  {
-    name: "Ivan Anthony Cabañero",
-    role: "Editor",
-    bio: "Professional video editor. If you need media coverage in the Philippines, contact Ivan for rates and availability.",
-    image: "/portfolio/Ivan-full-res.jpeg",
-    website: "https://navifilms.my.canva.site/",
   },
   {
     name: "Tomek Dudzik",
@@ -123,12 +109,12 @@ const equipment = [
 ];
 
 const anthonyStory = [
-  `AJ247 Studios started in 2023, with just two cameras, big dreams, and a love for capturing life as it happens. Back then, Josiah and I didn’t know much about running a business — we just wanted to take photos and videos, learn, experiment, and have fun creating.`,
+  `AJ247 Studios started in 2023, with just two cameras, big dreams, and a love for capturing life as it happens. Back then, we didn’t know much about running a business — we just wanted to take photos and videos, learn, experiment, and have fun creating.`,
   `By the end of 2023, a limited people started asking us to take photos and videos for them. At first, it was surprising — we never imagined anyone would pay us for something we were doing just for fun. But seeing their excitement made us realize this could be something more. Something real. Something that could capture memories people would treasure forever.`,
-  `At the start of 2024, we decided to officially launch AJ247 Studios. We built a website, shared our work more widely, and started taking on more clients. Every project was different — sports events, lifestyle shoots, weddings, commercial work — and every project taught us something new. I focused on photography, capturing the perfect moments, while Josiah worked his magic with video, making sure the story came alive in motion. Together, we learned how to tell better stories with every shoot.`,
+  `At the start of 2024, we decided to officially launch AJ247 Studios. We built a website, shared our work more widely, and started taking on more clients. Every project was different — sports events, lifestyle shoots, weddings, commercial work — and every project taught us something new. I focused on photography, capturing the perfect moments and making sure every story came alive. Together, we learned how to tell better stories with every shoot.`,
   `2025 has been a year of growth and reflection. More clients are trusting us, and our main goal has always been simple: make every client happy. The best part of our work isn’t recognition or awards — it’s seeing the joy on someone’s face when they see their photos or videos for the first time. That’s what keeps us going.`,
   `Looking ahead to 2026, 2027, and beyond, we hope to work with even more clients across Poland, continue improving our craft, and create amazing memories for people to look back on. Our mission is clear: turn our passion into professionalism, and capture moments people will remember forever.`,
-  `From two friends with cameras to a growing creative studio, Josiah and I are proud of how far AJ247 Studios has come. We are thankful to everyone who has trusted us, and we’re excited to see what the future holds — more stories, more creativity, and more memories to capture.`,
+  `From two friends with cameras to a growing creative studio, we are proud of how far AJ247 Studios has come. We are thankful to everyone who has trusted us, and we’re excited to see what the future holds — more stories, more creativity, and more memories to capture.`,
 ];
 export default function AboutPage() {
   const teamSchemas = team.map((member) =>

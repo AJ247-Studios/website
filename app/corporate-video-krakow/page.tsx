@@ -108,12 +108,6 @@ export default function CorporateVideoPage() {
           role: "Kraków",
         },
       ]}
-      teamMember={{
-        name: "Josiah Ennis",
-        role: "Commercial Video Specialist",
-        image: "/portfolio/Josiah-full-res.webp",
-        slug: "josiah",
-      }}
     />
   );
 }
